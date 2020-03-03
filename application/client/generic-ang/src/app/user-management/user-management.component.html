@@ -1,0 +1,80 @@
+<section id="user-management">
+  <h3>User Management Page</h3>
+  <mat-tab-group (selectedIndexChange)="loadUserList($event)">
+    <mat-tab label="Manage Users">
+      <table mat-table [dataSource]="allUsers" multiTemplateDataRows class="mat-elevation-z8">
+        <!--
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+          <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+        </ng-container>
+        -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="approle">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+          <td mat-cell *matCellDef="let element"> {{element.approle}} </td>
+        </ng-container>
+        <ng-container matColumnDef="registered">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered </th>
+          <td mat-cell *matCellDef="let element"> {{element.registered}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"></tr>
+      </table>
+    </mat-tab>
+    <mat-tab label="Create New User">
+      <div style="display: table-cell; width: 100vw">
+        <div class="formstyle">
+          <h3>New User Form</h3>
+          <form [formGroup]="newUserForm" (ngSubmit)="onSubmit()">
+
+            <label style="text-align:left">
+              ID:
+              <input type="text" formControlName="id">
+              <div *ngIf="submitted && newUserForm.controls.id.errors" class="error">
+                <div *ngIf="newUserForm.controls.id.errors.required">ID is required</div>
+              </div>
+            </label>
+
+            <label style="text-align:left">
+              Password:
+              <input type="password" formControlName="password">
+              <div *ngIf="submitted && newUserForm.controls.password.errors" class="error">
+                <div *ngIf="newUserForm.controls.password.errors.required">Password is required</div>
+              </div>
+            </label>
+
+            <label style="text-align:left">
+              Confirm Password:
+              <input type="password" formControlName="confirm_password">
+              <div *ngIf="submitted && newUserForm.controls.confirm_password.errors" class="error">
+                <div *ngIf="newUserForm.controls.confirm_password.errors.required">Password confirmation is required
+                </div>
+              </div>
+            </label>
+
+            <label style="text-align:left">
+              Role:
+              <select class="form-control" formControlName="approle" required>
+                <option *ngFor="let r of roles" [ngValue]="r">{{ r }}</option>
+              </select>
+              <div *ngIf="submitted && newUserForm.controls.approle.errors" class="error">
+                <div *ngIf="newUserForm.controls.approle.errors.required">Role is required</div>
+              </div>
+            </label>
+
+            <input type="submit" style="width:100%" value="Create User" class="form-button">
+
+          </form>
+          <div *ngIf="submitted" class="results">
+            <p *ngIf="newUser.errorCode; else elseBlock">User Created Successfully!</p>
+            <ng-template #elseBlock>ERROR creating user please make sure the passwords match.</ng-template>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>

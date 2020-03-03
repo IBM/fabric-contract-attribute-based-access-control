@@ -1,0 +1,62 @@
+# Generic supply chain:  yaml file for 
+#  2 services exposing frontend application and backend:  generic-ng-service +  generic-backend-service + 
+#  Frontend application and backend:  generic-ng + generic-fabclient +
+#  generic-backend-deployment
+#  
+#  Service to expose frontend application
+#  Dependencies:  
+kind: Service
+apiVersion: v1
+metadata:
+  name: generic-ng-service
+spec:
+  selector:
+    name: generic-ng
+  ports:
+  - protocol: TCP
+    port: 4200
+    targetPort: 4200
+---
+#  Service to expose backend
+#  Dependencies:  
+kind: Service
+apiVersion: v1
+metadata:
+  name: generic-backend-service
+spec:
+  selector:
+    name: generic-fabclient
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+--- 
+#  yaml for deployment of backend node.js server and frontend angular app
+# 2 containers:  generic-fabclient = container for backend 
+#                generic-ng        = container for frontend angular app
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: generic-deployment  
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: generic-fabclient
+    spec:
+      containers:
+      - name: generic-fabclient
+        image: registry.ng.bluemix.net/customer_success/fabclient-gensupplychain:1
+        # image: us.icr.io/customer_success/fabclient-gensupplychain:1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PLATFORM
+          value: "IBP"
+      - name: generic-ng
+        image: registry.ng.bluemix.net/customer_success/bc-generic-ng:1
+        ports:
+        - containerPort: 4200
+        
+        

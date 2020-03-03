@@ -1,0 +1,36 @@
+<h4>Order History</h4>
+<mat-form-field *ngIf="!orderId" class="mat-form-field ng-tns-c26-530 mat-primary mat-form-field-type-mat-input mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder">
+  <input matInput #order placeholder="Enter Order ID" (keydown.enter)="getHistory(order.value)">
+  <mat-icon matSuffix (click)=getHistory(order.value)>search</mat-icon>
+</mat-form-field>
+<table mat-table [dataSource]="history" class="mat-elevation-z8">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+  <!-- Product ID Column -->
+  <ng-container matColumnDef="ProductId">
+    <th mat-header-cell *matHeaderCellDef> Product ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.Value.productId}} </td>
+  </ng-container>
+
+  <!-- Modified By Column -->
+  <ng-container matColumnDef="ModifiedBy">
+    <th mat-header-cell *matHeaderCellDef> Modified By </th>
+    <td mat-cell *matCellDef="let element"> {{element.Value.modifiedBy}} </td>
+  </ng-container>
+
+  <!-- currentState Column -->
+  <ng-container matColumnDef="CurrentOrderState">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let element">{{ statuses[element.Value.currentOrderState] }}</td>
+  </ng-container>
+
+  <!-- Timestamp Column -->
+  <ng-container matColumnDef="Timestamp">
+    <th mat-header-cell *matHeaderCellDef> Time </th>
+    <td mat-cell *matCellDef="let element"> {{element.Timestamp}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

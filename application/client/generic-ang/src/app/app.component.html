@@ -1,0 +1,25 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<header>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <span>{{title}}</span>
+        <span class="spacer"></span>
+        <mat-icon aria-hidden="false" aria-label="account circle icon" (click)="logout()">account_circle</mat-icon>
+      </mat-toolbar-row>
+    </mat-toolbar>
+</header>
+
+<div>
+  <router-outlet></router-outlet>
+</div>
+
+<!-- This Div is to reserve space for status message -->
+<div style="height:40px"></div>
+<!--
+<div style="text-align:center">
+    <button style="font-size: 100%; margin: 0px 50px 0px 50px" routerLink="../producer" class="nav-button">Producer Dashboard</button>
+    <button style="font-size: 100%; margin: 0px 50px 0px 50px" routerLink="../customer" class="nav-button">Customer Dashboard</button>
+    <button style="font-size: 100%; margin: 0px 50px 0px 50px" routerLink="../retailer" class="nav-button">Retailer Dashboard</button>
+    <button style="font-size: 100%; margin: 0px 50px 0px 50px" routerLink="../regulator" class="nav-button">Regulator Dashboard</button>
+    <button style="font-size: 100%; margin: 0px 50px 0px 50px" routerLink="../shipper" class="nav-button">Shipper Dashboard</button>
+</div> -->

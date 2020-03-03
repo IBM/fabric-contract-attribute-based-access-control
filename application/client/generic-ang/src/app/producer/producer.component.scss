@@ -1,0 +1,94 @@
+@import './../colors.scss';
+#producer {
+  color: $dark-grey;
+  label {
+      display: block;
+
+      input, textarea {
+          display: block;
+          width: 100%;
+          height: 25px;
+          margin-bottom: 20px;
+          padding: 1em;
+      }
+
+      .error {
+          margin-top: -20px;
+          background: yellow;
+          padding: .5em;
+          display: inline-block;
+          font-size: .9em;
+          margin-bottom: 20px;
+      }
+  }
+
+  button:disabled {
+      background: #bfd7f0 ;
+  }
+
+  .formstyle {
+      width: 50%;
+      min-height: 415px;
+      float: left;
+  }
+
+  .messageareastyle {
+
+      display: block;
+      border-radius: 5px;
+      height: 415px;
+      width: 50%;
+      padding: 5px;
+      float: left;
+      overflow-y:scroll;
+      p {
+          display: block;
+          width: 100%;
+          margin: 5px;
+          padding: 5px;
+          text-align: left;
+      }
+  }
+
+  .product-change-button {
+    background: $pastel-blue;
+    color: $dark-grey;
+    width: 125px;
+
+    border: 1px white solid;
+    // border-style: outset;
+    width: 250px;
+    font-size: 75%;
+
+    text-transform: uppercase;
+    // border-radius: 4px;
+    padding: 1em;
+    cursor: pointer;
+    font-family: 'Montserrat';
+  }
+
+  .product-change-button:hover {
+    background: $bright-green;
+  }
+
+  table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  table, th, td {
+      border: 1px solid black;
+  }
+
+  th {
+      text-align: center;
+      background-color: #F7F7F7;
+      color: black;
+  }
+
+  th, td {
+      padding: 5px;
+      text-align: center;
+  }
+
+}

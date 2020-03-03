@@ -1,0 +1,149 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import './../../colors.scss';
+
+#orders-table{
+  width: 100% !important;
+  color: $dark-grey;
+
+  .table-div{
+    overflow:scroll;
+    min-height:400px;
+  }
+
+  table {
+    width: 100%;
+  }
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  tr.example-detail-row {
+    height: 0;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: #f5f5f5;
+  }
+
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+
+  .example-element-detail {
+    overflow: hidden;
+    // display: flex;
+    // height: 145px;
+    text-align: right;
+    margin: 0px 0px 4px 0px;
+  }
+
+  .example-element-button {
+    min-height: 40px;
+    background: $ghost-white;
+    min-width: 150px;
+    font-size: 50;
+    // margin: 10px;
+    color: $dark-grey;
+    // border: 1px solid $ghost-white;
+    cursor: pointer;
+  }
+  .example-element-button:hover {
+    background: $bright-green;
+    border: none;
+  }
+  .example-element-button:disabled {
+    background: $pastel-blue;
+  }
+  .status-stage{
+    width:20%;
+    text-align: center;
+    border: 1px solid $ghost-white;
+    padding: 8px;
+    // font-weight: 300;
+    background: $pastel-blue;
+
+    span{
+      display: inline-block
+    }
+  }
+  .status-complete{
+    background: $bright-green;
+  }
+
+  .delete-order{
+    display: flex;
+    justify-content: center;
+  }
+
+  .delete-button{
+    margin: 4px;
+    min-height: 40px;
+    background: $dark-grey;
+    min-width: 150px;
+    font-size: 50;
+    color: $ghost-white;
+    cursor: pointer;
+    border:none;
+  }
+  .delete-button:hover {
+    background: $bright-red;
+    color: $ghost-white;
+  }
+
+  order-history{
+    width:100%;
+  }
+}
+
+#shipper-dialog{
+  button{
+    min-height: 40px;
+    background: $ghost-white;
+    min-width: 150px;
+    font-size: 50;
+    // margin: 10px;
+    color: $dark-grey;
+    // border: 1px solid $ghost-white;
+    cursor: pointer;
+  }
+  button:hover{
+    background: $bright-green;
+    // border: none;
+  }
+  button:disabled{
+    background: $pastel-blue;
+  }
+}
+
+#delete-order-dialog{
+  button{
+    min-height: 40px;
+    background: $ghost-white;
+    min-width: 150px;
+    font-size: 50;
+    color: $dark-grey;
+    cursor: pointer;
+    margin:8px;
+  }
+  .delete{
+    background: $dark-grey;
+    color: $ghost-white;
+  }
+  .delete:hover{
+    background: $bright-red;
+  }
+
+  .cancel{
+    background: $light-grey;
+    color: $dark-grey;
+  }
+  .cancel:hover{
+    background: $dark-grey;
+    color: $ghost-white;
+  }
+}

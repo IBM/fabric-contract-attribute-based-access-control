@@ -1,0 +1,47 @@
+<h3>Order Form</h3>
+<div style="display: table-cell; width: 100vw">
+  <div class="formstyle">
+
+    <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+      <label style="text-align:left">
+        Product ID:
+        <input type="text" formControlName="productid">
+        <div *ngIf="submitted && messageForm.controls.productid.errors" class="error">
+          <div *ngIf="messageForm.controls.productid.errors.required">Product ID is required</div>
+        </div>
+      </label>
+
+      <label style="text-align:left">
+        Price:
+        <input type="text" formControlName="price">
+        <div *ngIf="submitted && messageForm.controls.price.errors" class="error">
+          <div *ngIf="messageForm.controls.price.errors.required">Price is required</div>
+        </div>
+      </label>
+
+      <label style="text-align:left">
+        Quantity:
+        <input type="text" formControlName="quantity">
+        <div *ngIf="submitted && messageForm.controls.quantity.errors" class="error">
+          <div *ngIf="messageForm.controls.quantity.errors.required">Quantity is required</div>
+        </div>
+      </label>
+
+     <label style="text-align:left">
+        Producer ID:
+        <select class="form-control" formControlName="producerid" id="producerid">
+          <option *ngFor="let producer of producers; let i = index" [value]="producers[i].id">
+            {{producers[i].id}}
+          </option>
+        </select> 
+     </label>
+
+      <input type="submit" style="width:100%" value="Create Order" class="form-button">
+
+    </form>
+  </div>
+
+  <div class="messageareastyle"><label style="text-align:center">Notifications</label>
+    <p *ngFor="let messageItr of messages">{{messageItr}}</p>
+  </div>
+</div>
