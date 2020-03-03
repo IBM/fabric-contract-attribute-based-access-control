@@ -7,6 +7,10 @@ const { FileSystemWallet, Gateway, User, X509WalletMixin } = require('fabric-net
 const PubNub = require('pubnub')
 const FabricCAServices = require('fabric-ca-client');
 
+// global variables for pubnub
+var pubnub;
+var pubnubChannelName = "priceWatchChannel-gen";
+var bcChannelName = "bcEventsChannel-gen";
 
 //  global variables for HLFabric
 var gateway;
@@ -95,6 +99,7 @@ utils.connectGatewayFromConfig = async () => {
         network = await gateway.getNetwork(configdata["channel_name"]);
         console.log('Use ' + configdata["smart_contract_name"] + ' smart contract.');
         contract = await network.getContract(configdata["smart_contract_name"]);
+        console.log (contract);
         return contract;
 
     } catch (error) {
@@ -195,9 +200,9 @@ utils.shipId = () => {
 //  function registerUser
 //  Purpose: Utility function for registering users with HL Fabric CA.
 //  See POST api for details
-utils.registerUser = async (userid, pwd, usertype) => {
+utils.registerUser = async (userid, userpwd, userrole) => {
     console.log("\n------------  function registerUser ---------------");
-    console.log("\n userid: " + userid + ", pwd: " + pwd + ", usertype: " + usertype)
+    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + userrole)
 
     const gateway = new Gateway();
 
@@ -212,14 +217,14 @@ utils.registerUser = async (userid, pwd, usertype) => {
 
     var newUserDetails = {
         enrollmentID: userid,
-        enrollmentSecret: pwd,
+        enrollmentSecret: userpwd,
         role: "client",
         //affiliation: orgMSPID,
         //profile: 'tls',
         attrs: [
             {
                 "name": "role",
-                "value": usertype,
+                "value": userrole,
                 "ecert": true
             }],
         maxEnrollments: 5
@@ -245,9 +250,9 @@ utils.registerUser = async (userid, pwd, usertype) => {
         });
 }  //  end of function registerUser
 
-utils.enrollUser = async (userid, pwd, usertype) => {
+utils.enrollUser = async (userid, userpwd, userrole) => {
     console.log("\n------------  function enrollUser -----------------");
-    console.log("\n userid: " + userid + ", pwd: " + pwd + ", role:" + usertype);
+    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", role:" + userrole);
 
     // get certification authority
     console.log('Getting CA');
@@ -259,11 +264,11 @@ utils.enrollUser = async (userid, pwd, usertype) => {
 
     var newUserDetails = {
         enrollmentID: userid,
-        enrollmentSecret: pwd,
+        enrollmentSecret: userpwd,
         attrs: [
             {
                 "name": "role", // application role
-                "value": usertype,  // is Regulator
+                "value": userrole,  // is Regulator
                 "ecert": true
             }]
     };
@@ -389,7 +394,7 @@ utils.getUserRole = async (identity) => {
 var pubnubChannelName = "priceWatchChannel-gen";
 
 utils.pubnubSetup = () => {
-    var pubnub = new PubNub({
+    pubnub = new PubNub({
         publishKey: "***REMOVED***",
         subscribeKey: "***REMOVED***"
 });
@@ -429,8 +434,9 @@ utils.publishMessage = (title, message, channelName) => {
     }
 
     pubnub.publish(publishConfig, function (status, response) {
-        console.log("Last message published at " + getFormattedTime(response.timetoken));
+        console.log("Last message published at " + utils.getFormattedTime(response.timetoken));
     })
 }
 
 module.exports = utils;
+
