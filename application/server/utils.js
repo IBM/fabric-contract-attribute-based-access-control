@@ -99,7 +99,7 @@ utils.connectGatewayFromConfig = async () => {
         network = await gateway.getNetwork(configdata["channel_name"]);
         console.log('Use ' + configdata["smart_contract_name"] + ' smart contract.');
         contract = await network.getContract(configdata["smart_contract_name"]);
-        console.log (contract);
+        //console.log (contract);
         return contract;
 
     } catch (error) {

@@ -28,10 +28,12 @@ pubnub.subscribe({
     channels: [pubnubChannelName, bcChannelName]
 });
 
-var contract = utils.connectGatewayFromConfig().then(() => {
+var contract;
+utils.connectGatewayFromConfig().then((gateway_contract) => {
 
     console.log('Connected to Network.');
-
+    //console.log(gateway_contract);
+    contract = gateway_contract;
     //  Setup events and monitor for events from HLFabric
     utils.events();
 
@@ -42,7 +44,8 @@ var contract = utils.connectGatewayFromConfig().then(() => {
     process.exit(-1);
 });
 
-//console.log ("Contract: " + JSON.stringify(contract));
+//console.log ("Just finished utils.connectGatewayFromConfig");
+//console.log (contract);
 
 
 ///////////////////////  Express GET, POST handlers   ////////////////////
