@@ -3,6 +3,7 @@ src/gateway/ibp/ibp_connection_profile.json
 src/gateway/ibp/wallet/*
 src/gateway/local/wallet/*
 src/application/client/src/generic-ang/node_modules/*
+src/application/server/node_modules/*
 
 # IDE - VSCode
 .vscode/*
