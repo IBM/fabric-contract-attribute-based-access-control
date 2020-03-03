@@ -1,0 +1,15 @@
+@import './../../colors.scss';
+
+h4{
+  text-align: center;
+}
+
+table{
+  width: 100%;
+  text-align: left;
+  background-color: $pastel-blue;
+}
+
+mat-form-field{
+  width:100%;
+}

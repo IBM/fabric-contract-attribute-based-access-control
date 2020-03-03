@@ -1,0 +1,31 @@
+@import './../colors.scss';
+#login{
+  display: flex;
+
+  h2{
+    color:$dark-grey;
+  }
+
+  .how-to{
+    background-color: $off-white-grey;
+    padding: 24px;
+    color: $cool-teal;
+  }
+
+  .btn-primary{
+    color: $ghost-white;
+    background-color: $cool-teal;
+    border-color: $cool-teal;
+  }
+  .btn-primary:hover{
+
+    background-color: $bright-green;
+    border-color: $bright-green;
+  }
+
+  .btn-link{
+    color: $cool-teal;
+  }
+
+
+}

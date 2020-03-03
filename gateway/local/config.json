@@ -1,0 +1,7 @@
+{
+    "wallet":"../../gateway/local/wallet",
+    "connection_profile_filename":"../../gateway/local/fabric_connection.json",
+    "channel_name":"mychannel",
+    "smart_contract_name":"gensupplychainnet",
+    "peerForEventsSubscription": "peer0.org1.example.com:17051"
+}

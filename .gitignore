@@ -1,0 +1,17 @@
+src/gateway/local_fabric/local_fabric_connection.json
+src/gateway/ibp/ibp_connection_profile.json
+src/gateway/ibp/wallet/*
+src/gateway/local/wallet/*
+src/application/client/src/generic-ang/node_modules/*
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# System Files
+**/.DS_Store
+
