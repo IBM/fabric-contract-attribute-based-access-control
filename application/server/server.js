@@ -20,7 +20,7 @@ var pubnubChannelName = "priceWatchChannel-gen";
 var bcChannelName = "bcEventsChannel-gen";
 
 console.log("Setting up pubnub...");
-//const PubNub = require('./pubnub.js')
+//const pubnub = require('./pubnub.js').pubnub
 var pubnub = utils.pubnubSetup();
 
 console.log("Subscribing...");
@@ -41,6 +41,9 @@ var contract = utils.connectGatewayFromConfig().then(() => {
     console.log(e.stack);
     process.exit(-1);
 });
+
+//console.log ("Contract: " + JSON.stringify(contract));
+
 
 ///////////////////////  Express GET, POST handlers   ////////////////////
 // Start up the Express functions to listen on server side
@@ -270,16 +273,16 @@ app.delete('/api/orders/:id', (req, res) => {
 //  Usage 2:    "smith", "",        "producer"
 app.post('/api/register-user/', (request, response) => {
     console.log("\n--------------  api/registeruser --------------------------");
-    let newUserId = request.body.userid;
-    let newPassword = request.body.password;
-    let approle = request.body.approle;
-    console.log("\n userid: " + newUserId);
-    console.log("\n pwd: " + newPassword);
-    console.log("\n attributes: " + approle);
+    let userId = request.body.userid;
+    let userPwd = request.body.password;
+    let userRole = request.body.role;
+    console.log("\n userid: " + userId);
+    console.log("\n pwd: " + userPwd);
+    console.log("\n role: " + userRole);
 
     //  Note: On the UI, only admin sees the page "Manage Users"
     //  So, it is assumed that only the admin has access to this api
-    utils.registerUser(newUserId, newPassword, approle).then((result) => {
+    utils.registerUser(userId, userPwd, userRole).then((result) => {
         console.log("\n result from registerUser = ", result)
         console.log("\n----------------- api/registeruser --------------------------");
         response.send(result);
