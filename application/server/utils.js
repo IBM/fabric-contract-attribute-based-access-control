@@ -25,7 +25,7 @@ const EVENT_TYPE = "bcpocevent";  //  HLFabric EVENT
 const SUCCESS = 0;
 
 //  connectionOptions
-var contract;
+var contract = null;
 
 const utils = {};
 
@@ -36,7 +36,6 @@ utils.connectGatewayFromConfig = async () => {
     // A gateway defines the peers used to access Fabric networks
     gateway = new Gateway();
 
-    // Main try/catch block
     try {
 
         // Read configuration file which gives
@@ -63,10 +62,10 @@ utils.connectGatewayFromConfig = async () => {
         // Parse the connection profile. This would be the path to the file downloaded
         // from the IBM Blockchain Platform operational console.
         const ccpPath = path.resolve(__dirname, configdata["connection_profile_filename"]);
-        const user = process.env.FABRIC_USER_ID || "admin";
-        const pwd = process.env.FABRIC_USER_SECRET || "adminpw";
-        const usertype = process.env.FABRIC_USER_TYPE || "admin";
-        console.log('user: ' + user + ", pwd: ", pwd);
+        var userid = process.env.FABRIC_USER_ID || "admin";
+        var pwd = process.env.FABRIC_USER_SECRET || "adminpw";
+        var usertype = process.env.FABRIC_USER_TYPE || "admin";
+        console.log('user: ' + userid + ", pwd: ", pwd + ", usertype: ", usertype);
 
         // Load connection profile; will be used to locate a gateway
         ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
@@ -78,18 +77,17 @@ utils.connectGatewayFromConfig = async () => {
         // Open path to the identity wallet
         wallet = new FileSystemWallet(walletpath);
 
-        // user enroll and import if identity not found in wallet
-        const idExists = await wallet.exists(user);
+        const idExists = await wallet.exists(userid);
         if (!idExists) {
             // Enroll identity in the wallet
-            console.log(`Enrolling and importing ${user} into wallet`);
-            await utils.enrollUser(user, pwd, usertype)
+            console.log(`Enrolling and importing ${userid} into wallet`);
+            await utils.enrollUser(userid, pwd, usertype);
         }
 
         // Connect to gateway using application specified parameters
         console.log('Connect to Fabric gateway.');
         await gateway.connect(ccp, {
-            identity: user, wallet: wallet, discovery: { enabled: true, asLocalhost: bLocalHost }
+            identity: userid, wallet: wallet, discovery: { enabled: true, asLocalhost: bLocalHost }
         });
 
         // Access channel: channel_name
@@ -99,7 +97,6 @@ utils.connectGatewayFromConfig = async () => {
         network = await gateway.getNetwork(configdata["channel_name"]);
         console.log('Use ' + configdata["smart_contract_name"] + ' smart contract.');
         contract = await network.getContract(configdata["smart_contract_name"]);
-        return contract;
 
     } catch (error) {
 
@@ -108,6 +105,7 @@ utils.connectGatewayFromConfig = async () => {
 
     } finally {
     }
+    return contract;
 }
 
 utils.events = async () => {
@@ -278,7 +276,7 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
 
         var identity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
 
-        wallet.import(userid, identity).then(notused => {
+        return wallet.import(userid, identity).then(notused => {
             let result = 'msg: Successfully enrolled user, ' + userid + ' and imported into the wallet';
             console.log(result);
             return result;
