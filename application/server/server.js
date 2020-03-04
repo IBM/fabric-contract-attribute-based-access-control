@@ -19,8 +19,11 @@ const utils = require('./utils.js');
 var pubnubChannelName = "priceWatchChannel-gen";
 var bcChannelName = "bcEventsChannel-gen";
 
-console.log("Setting up pubnub...");
+var contract;
+
 //const pubnub = require('./pubnub.js').pubnub
+
+console.log("Setting up pubnub...");
 var pubnub = utils.pubnubSetup();
 
 console.log("Subscribing...");
@@ -28,12 +31,12 @@ pubnub.subscribe({
     channels: [pubnubChannelName, bcChannelName]
 });
 
-var contract;
+// Set up and connect to Fabric Gateway
 utils.connectGatewayFromConfig().then((gateway_contract) => {
 
     console.log('Connected to Network.');
-    //console.log(gateway_contract);
     contract = gateway_contract;
+
     //  Setup events and monitor for events from HLFabric
     utils.events();
 
@@ -43,7 +46,6 @@ utils.connectGatewayFromConfig().then((gateway_contract) => {
     console.log(e.stack);
     process.exit(-1);
 });
-
 
 ///////////////////////  Express GET, POST handlers   ////////////////////
 // Start up the Express functions to listen on server side
@@ -112,49 +114,49 @@ app.get('/api/orders/:id', (req, res) => {
 
 app.get('/api/orders', (req, res) => {
 
-    let userid = req.query.userid;    
-    
+    let userid = req.query.userid;
+    let password = req.query.password;
+
     // If userid is not passed in get current user id
     if (typeof userid == "undefined") {
-        console.log ("userid is undefined")
-        userid = contract.submitTransaction('getCurrentUserId').then(id => {
-            // process response
-            console.log(id);
-            return (id);
+        console.log("userid is undefined")
+        console.log(contract);
+        contract.submitTransaction('getCurrentUserId').then(userid => {
+
+            // process response from getCurrentUserId: convert to string and remove quotes and
+            userid = userid.toString().slice(1, -1);
+
+            console.log('GET orders, userid = ' + userid + ', pwd = ' + password);
+
+            //  set current user in "contract"
+            return utils.setUserContext(userid, password)
+                .then(gateway_contract => {
+                    let orders;
+                    return gateway_contract.submitTransaction('queryAllOrders', '')
+                        .then((queryOrderResponse) => {
+                            // process response
+                            orders = queryOrderResponse;
+                            orders.errorCode = 1;
+                            res.send(orders);
+                        }, (error) => {
+                            // handle error if transaction failed
+                            error.errorCode = 0;
+                            console.log('Error thrown from tx promise', error);
+                            res.send(error);
+                        });
+                }, (error) => {
+                    console.log("Error in setUserContext:  \n " + error);
+                    res.send(error);
+                });
         }, (error) => {
             //  handle error if transaction failed
             error.errorCode = 0;
             console.log('Error thrown from getCurrentUserId: ', error);
             return ("");
-        });    
+        });
     }
 
-    console.log(userid);
-    let password = req.query.password;
 
-    console.log('GET orders, userid = ' + userid);
-
-    //  set current user in "contract"
-    utils.setUserContext(userid, password)
-        .then(gateway_contract => {
-            let orders;
-            gateway_contract.submitTransaction('queryAllOrders', '')
-                .then((queryOrderResponse) => {
-                    // process response
-                    orders = queryOrderResponse;
-                    orders.errorCode = 1;
-                    res.send(orders);
-                }, (error) => {
-                    // handle error if transaction failed
-                    error.errorCode = 0;
-                    console.log('Error thrown from tx promise', error);
-                    res.send(error);
-                });
-        },
-            (error) => {
-                console.log("Error in setUserContext:  \n " + error);
-                res.send(error);
-            });
 });  //  process route queryorders/
 
 app.get('/api/order-history/:id', (req, res) => {
