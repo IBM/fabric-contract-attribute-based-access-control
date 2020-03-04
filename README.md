@@ -189,7 +189,7 @@ The value of running this network on the IBM Blockchain Platform is that one can
 
 #### Output:
 
- - returns an array of JSON objects with **Order** details of readable **Orders**.
+ - returns an array of **order** assets accessible by current active identity with details in JSON format.
 
 #### Access Control:
 
