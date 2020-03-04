@@ -99,7 +99,6 @@ utils.connectGatewayFromConfig = async () => {
         network = await gateway.getNetwork(configdata["channel_name"]);
         console.log('Use ' + configdata["smart_contract_name"] + ' smart contract.');
         contract = await network.getContract(configdata["smart_contract_name"]);
-        //console.log (contract);
         return contract;
 
     } catch (error) {
@@ -200,9 +199,9 @@ utils.shipId = () => {
 //  function registerUser
 //  Purpose: Utility function for registering users with HL Fabric CA.
 //  See POST api for details
-utils.registerUser = async (userid, userpwd, userrole) => {
+utils.registerUser = async (userid, userpwd, usertype) => {
     console.log("\n------------  function registerUser ---------------");
-    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + userrole)
+    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + usertype)
 
     const gateway = new Gateway();
 
@@ -223,8 +222,8 @@ utils.registerUser = async (userid, userpwd, userrole) => {
         //profile: 'tls',
         attrs: [
             {
-                "name": "role",
-                "value": userrole,
+                "name": "usertype",
+                "value": usertype,
                 "ecert": true
             }],
         maxEnrollments: 5
@@ -250,9 +249,9 @@ utils.registerUser = async (userid, userpwd, userrole) => {
         });
 }  //  end of function registerUser
 
-utils.enrollUser = async (userid, userpwd, userrole) => {
+utils.enrollUser = async (userid, userpwd, usertype) => {
     console.log("\n------------  function enrollUser -----------------");
-    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", role:" + userrole);
+    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype:" + usertype);
 
     // get certification authority
     console.log('Getting CA');
@@ -267,8 +266,8 @@ utils.enrollUser = async (userid, userpwd, userrole) => {
         enrollmentSecret: userpwd,
         attrs: [
             {
-                "name": "role", // application role
-                "value": userrole,  // is Regulator
+                "name": "usertype", // application role
+                "value": usertype,
                 "ecert": true
             }]
     };
@@ -293,7 +292,7 @@ utils.enrollUser = async (userid, userpwd, userrole) => {
     });
 }
 
-utils.isUserEnrolled = async(userid) => {
+utils.isUserEnrolled = async (userid) => {
     console.log("\n---------------  function isUserEnrolled ------------------------------------");
     console.log("\n userid: " + userid);
     console.log("\n---------------------------------------------------");
@@ -343,11 +342,11 @@ utils.setUserContext = async (userid, pwd) => {
 
         // Get addressability to the smart contract as specified in config
         contract = await network.getContract(configdata["smart_contract_name"]);
-        console.log('Userid: ' + userid + ' connected to smartcontract: ' + 
-                    configdata["smart_contract_name"] + ' in channel: ' + configdata["channel_name"]);
+        console.log('Userid: ' + userid + ' connected to smartcontract: ' +
+            configdata["smart_contract_name"] + ' in channel: ' + configdata["channel_name"]);
 
         console.log('Leaving setUserContext: ' + userid);
-        return SUCCESS;
+        return contract;
     }
     catch (error) { throw (error); }
 }  //  end of UserContext(userid)
@@ -367,28 +366,29 @@ utils.getAllUsers = async () => {
     let identities = userList.result.identities;
     let result = [];
     let tmp;
+    let attributes;
 
+    // for all identities
     for (var i = 0; i < identities.length; i++) {
         tmp = {};
         tmp.id = identities[i].id;
-        tmp.role = await utils.getUserRole(identities[i]);
+        tmp.role = "";
+
+        if (tmp.id == "admin")
+            tmp.role = tmp.id;
+        else {
+            attributes = identities[i].attrs;
+            // look through all attributes for one called "usertype"
+            for (var i = 0; i < attributes.length; i++)
+                if (attributes[i].name == "usertype") {
+                    tmp.role = attributes[i].value;
+                    break;
+                }
+        }
         result.push(tmp);
     }
-
     return result;
 }  //  end of function getAllUsers
-
-utils.getUserRole = async (identity) => {
-    var attr = identity.attrs;
-    if (identity.id == "admin")
-        return "admin";
-
-    for (var i = 0; i < attr.length; i++) {
-        if (attr[i].name == "role")
-            return attr[i].value;
-    }
-    return "";
-}
 
 //  global variables for pubnub
 var pubnubChannelName = "priceWatchChannel-gen";
@@ -397,7 +397,7 @@ utils.pubnubSetup = () => {
     pubnub = new PubNub({
         publishKey: "pub-c-736b3de9-095f-4e98-8734-d6a36c6715a6",
         subscribeKey: "sub-c-8402da08-6ab9-11e9-81d5-56c3556875f9"
-});
+    });
 
     pubnub.addListener({
         status: function (statusEvent) {
