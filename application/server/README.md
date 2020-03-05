@@ -58,7 +58,7 @@ Determine if a user is enrolled
 curl -X GET "http://localhost:${PORT}/api/is-user-enrolled/<userid>"
 ```
 #### Order Management:
-Create an order:
+Create an order, status is set to ORDER_CREATED:
 ```
 curl -X POST "http://localhost:${PORT}/api/orders/" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"orderId\":\"Order-001\",\"productId\":\"tomato\",\"price\":3,\"quantity\":10,\"producerId\":\"farm_001\",\"retailerId\":\"Walmart\"}"
 ```
