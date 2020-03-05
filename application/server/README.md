@@ -84,23 +84,23 @@ curl -X PUT "http://localhost:${PORT}/api/receive-order/Order-001"
 ```
 Assign to a Shipper, status is changed to SHIPMENT_ASSIGNED:
 ```
-curl -X PUT "${API_URL}/api/assign-shipper/Order-001?shipperid=Fedex" 
+curl -X PUT "http://localhost:${PORT}/api/assign-shipper/Order-001?shipperid=Fedex" 
 ```
 Create a shipment for order (assign a tracking #), status is changed to SHIPMENT_CREATED:
 ```
-curl -X PUT "${API_URL}/api/create-shipment-for-order/Order-001" 
+curl -X PUT "http://localhost:${PORT}/api/create-shipment-for-order/Order-001" 
 ```
 Change order status to SHIPMENT_IN_TRANSIT:
 ```
-curl -X PUT "${API_URL}/api/transport-shipment/Order-001" 
+curl -X PUT "http://localhost:${PORT}/api/transport-shipment/Order-001" 
 ```
 Change order status to SHIPMENT_RECEIVED:
 ```
-curl -X PUT "${API_URL}/api/receive-shipment/Order-001" 
+curl -X PUT "http://localhost:${PORT}/api/receive-shipment/Order-001" 
 ```
 Delete order:
 ```
-curl -X DELETE "${API_URL}/api/orders/Order-001" 
+curl -X DELETE "http://localhost:${PORT}/api/orders/Order-001" 
 ```
 
 
