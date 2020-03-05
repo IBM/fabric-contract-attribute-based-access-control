@@ -70,10 +70,7 @@ app.get('/api', (req, res) => {
 
 app.post('/api/orders', (req, res) => {
 
-    //console.log (req.body.orderId +", "+ req.body.productId+", "+ req.body.price.toString()+", "+ req.body.quantity.toString()+", "+req.body.producerId+", "+ req.body.retailerId);
-
-    contract.submitTransaction('orderProduct', req.body.orderId, req.body.productId, req.body.price.toString(), req.body.quantity.toString(),
-        req.body.producerId, req.body.retailerId)
+    contract.submitTransaction('orderProduct', JSON.stringify(req.body))
         .then((orderProdResponse) => {
             // process response
             console.log('Process orderProduct transaction.');
@@ -273,7 +270,7 @@ app.delete('/api/orders/:id', (req, res) => {
         // process response
         console.log('Process DeleteOrder transaction.');
         console.log('Transaction complete.');
-        //res.send(deleteOrderResponse);
+        res.send(deleteOrderResponse);
     }, (error) => {
         //  handle error if transaction failed
         error.errorCode = 0;
@@ -421,9 +418,23 @@ app.get('/api/login', (req, res) => {
 });
 
 // Retrieve calling user id
-app.get('/api/current-user', (req, res) => {
+app.get('/api/current-user-id', (req, res) => {
 
     contract.submitTransaction('getCurrentUserId').then((result) => {
+        // process response
+        console.log('Transaction complete.');
+        res.send(result);
+    }, (error) => {
+        //  handle error if transaction failed
+        error.errorCode = 0;
+        console.log('Error thrown from tx promise: ', error);
+        res.send(error);
+    });
+});
+
+app.get('/api/current-user-type', (req, res) => {
+
+    contract.submitTransaction('getCurrentUserType').then((result) => {
         // process response
         console.log('Transaction complete.');
         res.send(result);

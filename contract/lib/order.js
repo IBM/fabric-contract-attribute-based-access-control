@@ -87,8 +87,6 @@ class Order extends State {
     }
 
     static fromBuffer(buffer) {
-        var order = Order.deserialize(Buffer.from(JSON.parse(buffer)));
-        console.log("In function, fromBuffer in order.js:  " + order.orderId + ";  " + order.productId);
         return Order.deserialize(Buffer.from(JSON.parse(buffer)));
     }
 
@@ -107,9 +105,8 @@ class Order extends State {
     /**
      * Factory method to create a order object
      */
-    static createInstance(orderId, productId, price, quantity, producerId, retailerId, modifiedBy) {
-        var currentOrderState = orderState.ORDER_CREATED;
-        return new Order({ orderId, productId, price, quantity, producerId, retailerId, modifiedBy, currentOrderState});
+    static createInstance(orderId) {
+        return new Order({orderId});
     }
 
     static getClass() {

@@ -61,7 +61,7 @@ class SupplychainContract extends Contract {
      * @param {Context} ctx the transaction context
      * @param {String} orderId
      * @param {String} productId
-     * @param {float} price
+     * @param {Float} price
      * @param {Integer} quantity
      * @param {String} producerId
      * @param {String} retailerId
@@ -69,27 +69,36 @@ class SupplychainContract extends Contract {
      * Usage: submitTransaction ('orderProduct', 'Order001', 'mango', 100.00, 100, 'farm1', 'walmart')
      * Usage: ["Order100", "mango", "10.00", "102", "farm1", "walmart"]
     */
-    async orderProduct(ctx, orderId, productId, price, quantity, producerId, retailerId) {
+    async orderProduct(ctx, args) {
 
         // Access Control: This transaction should only be invoked by a Producer or Retailer
-        let userRole = await this.getCurrentUserType(ctx);
-        if ((userRole != "admin") // admin only has access as a precaution.
-            && (userRole != "producer")
-            && (userRole != "retailer"))
+        let userType = await this.getCurrentUserType(ctx);
+
+        if ((userType != "admin") && // admin only has access as a precaution.
+            (userType != "producer") &&
+            (userType != "retailer"))
             throw new Error(`This user does not have access to create an order`);
 
+        const order_details = JSON.parse(args);
+        const orderId = order_details.orderId;
+
+        console.log("incoming asset fields: " + JSON.stringify(order_details));
+        
         // Check if an order already exists with id=orderId
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (orderAsBytes && orderAsBytes.length > 0) {
-            throw new Error(`Error Message from orderProduct:\nOrder with orderId = ${orderId} already exists.`);
+            throw new Error(`Error Message from orderProduct. Order with orderId = ${orderId} already exists.`);
         }
 
         // Create a new Order object
-        const userId = await this.getCurrentUserId(ctx);
-        let order = Order.createInstance(orderId, productId, price, quantity, producerId, retailerId, userId);
-
-        // Change currentOrderState to ORDER_CREATED;
-        order.setStateToOrderCreated();
+        let order = Order.createInstance(orderId);
+        order.productId = order_details.productId;
+        order.price = order_details.price.toString();
+        order.quantity = order_details.quantity.toString();
+        order.producerId = order_details.producerId;
+        order.retailerId = order_details.retailerId;
+        order.modifiedBy = await this.getCurrentUserId(ctx);
+        order.currentOrderState = OrderStates.ORDER_CREATED;
         order.trackingInfo = '';
 
         // Update ledger
@@ -100,7 +109,7 @@ class SupplychainContract extends Contract {
         const bufferedOrder = order.toBuffer();
 
         try {
-            await ctx.stub.setEvent(asset.transaction, bufferedOrder);
+            await ctx.stub.setEvent(EVENT_TYPE, bufferedOrder);
         }
         catch (error) {
             console.log("Error in sending event");
@@ -122,6 +131,11 @@ class SupplychainContract extends Contract {
       * Usage:  receiveOrder ('Order001')
      */
     async receiveOrder(ctx, orderId) {
+        console.info('============= receiveOrder ===========');
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -134,8 +148,9 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by designated Producer
         let userId = await this.getCurrentUserId(ctx);
-        if ((userId != "admin") // admin only has access as a precaution.
-            && (userId != order.producerId))
+
+        if ((userId != "admin") && // admin only has access as a precaution.
+            (userId != order.producerId))
             throw new Error(`${userId} does not have access to receive order ${orderId}`);
 
         // Change currentOrderState
@@ -158,9 +173,18 @@ class SupplychainContract extends Contract {
      * @param {String}  orderId
      * @param {String}  newShipperId
      *
-     * Usage:  assignShipper ('Order001', 'ups')
+     * Usage:  assignShipper ('Order001', 'UPS')
     */
     async assignShipper(ctx, orderId, newShipperId) {
+        console.info('============= assignShipper ===========');
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
+
+        if (newShipperId.length < 1) {
+            throw new Error('shipperId is required as input')
+        }
 
         //  Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -173,8 +197,9 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by designated Producer
         let userId = await this.getCurrentUserId(ctx);
-        if ((userId != "admin") // admin only has access as a precaution.
-            && (userId != order.producerId))
+ 
+        if ((userId != "admin") && // admin only has access as a precaution.
+            (userId != order.producerId))
             throw new Error(`${userId} does not have access to assign a shipper to order ${orderId}`);
 
         // Change currentOrderState to SHIPMENT_ASSIGNED;
@@ -200,9 +225,18 @@ class SupplychainContract extends Contract {
      * Usage:  createShipment ('Order001', '34590279RKE9D339')
     */
     async createShipment(ctx, orderId, newTrackingInfo) {
+        console.info('============= createShipment ===========');
 
         //  NOTE: There is no shipment asset.  A shipment is created for each order.
         //  Shipment is tracked using order asset.
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
+
+        if (newTrackingInfo.length < 1) {
+            throw new Error('Tracking # is required as input')
+        }
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -215,8 +249,9 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by a designated Shipper
         let userId = await this.getCurrentUserId(ctx);
-        if ((userId != "admin") // admin only has access as a precaution.
-            && (userId != order.shipperId))
+ 
+        if ((userId != "admin") && // admin only has access as a precaution.
+            (userId != order.shipperId))
             throw new Error(`${userId} does not have access to create a shipment for order ${orderId}`);
 
         // Change currentOrderState to SHIPMENT_CREATED;
@@ -242,6 +277,11 @@ class SupplychainContract extends Contract {
      * Usage:  transportShipment ('Order001')
     */
     async transportShipment(ctx, orderId) {
+        console.info('============= transportShipment ===========');
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -254,6 +294,7 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by designated designated Shipper
         let userId = await this.getCurrentUserId(ctx);
+ 
         if ((userId != "admin") // admin only has access as a precaution.
             && (userId != order.shipperId)) // This transaction should only be invoked by
             throw new Error(`${userId} does not have access to transport shipment for order ${orderId}`);
@@ -279,6 +320,11 @@ class SupplychainContract extends Contract {
      * Usage:  receiveShipment ('Order001')
     */
     async receiveShipment(ctx, orderId) {
+        console.info('============= receiveShipment ===========');
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -291,6 +337,7 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by designated originating Retailer
         let userId = await this.getCurrentUserId(ctx);
+ 
         if ((userId != "admin") // admin only has access as a precaution.
             && (userId != order.retailerId)) // This transaction should only be invoked by
             throw new Error(`${userId} does not have access to receive shipment for order ${orderId}`);
@@ -312,10 +359,15 @@ class SupplychainContract extends Contract {
      *
      * @param {Context} ctx the transaction context
      * @param {String}  orderId
-     * Usage:  Tx_QueryOrder ('Order001')
+     * Usage:  queryOrder ('Order001')
      *
     */
     async queryOrder(ctx, orderId) {
+        console.info('============= queryOrder ===========');
+
+        if (orderId.length < 1) {
+            throw new Error('orderId is required as input')
+        }
 
         var orderAsBytes = await ctx.stub.getState(orderId);
 
@@ -335,6 +387,7 @@ class SupplychainContract extends Contract {
         // Access Control:
         var order = Order.deserialize(orderAsBytes);
         let userId = await this.getCurrentUserId(ctx);
+ 
         if ((userId != "admin") // admin only has access as a precaution.
             && (userId != order.producerId) // This transaction should only be invoked by
             && (userId != order.retailerId) //     Producer, Retailer, Shipper associated with order
@@ -348,17 +401,16 @@ class SupplychainContract extends Contract {
     /**
      * queryAllOrders
      *   New version of queryorders where ACLs are applied
-     * switch on
+     * 
      * "customer": customer does not have access this api
      * "regulator": return all orders
      * "producer", "shipper","retailer": return the list of orders in which the caller is part of
      * @param {Context} ctx the transaction context
      * @param {String}  args
-     * Usage:  Tx_QueryAllOrders ('ALL')
+     * Usage:  queryAllOrders ()
     */
-    async queryAllOrders(ctx, args) {
+    async queryAllOrders(ctx) {
         console.info('============= getOrderHistory ===========');
-        console.log("input, args = " + args);
 
         let userId = await this.getCurrentUserId(ctx);
         let userType = await this.getCurrentUserType(ctx);
@@ -408,7 +460,8 @@ class SupplychainContract extends Contract {
             }
         }
 
-        console.log("In queryAllOrders: queryString = " + queryString);
+        console.log("In queryAllOrders: queryString = ");
+        console.log(queryString);
         // Get all orders that meet queryString criteria
         const iterator = await ctx.stub.getQueryResult(JSON.stringify(queryString));
         const allOrders = [];
@@ -451,10 +504,10 @@ class SupplychainContract extends Contract {
 
     async getOrderHistory(ctx, orderId) {
         console.info('============= getOrderHistory ===========');
-        console.log("input, orderId = " + orderId);
         if (orderId.length < 1) {
-            throw new Error('Incorrect number of arguments. Expecting 1')
+            throw new Error('orderId is required as input')
         }
+        console.log("input, orderId = " + orderId);
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
@@ -482,7 +535,7 @@ class SupplychainContract extends Contract {
         if ((userType == "customer") && (order.currentOrderState != OrderStates.SHIPMENT_RECEIVED))
             throw new Error(`Information about order ${orderId} is not available to ${userId} yet`);
 
-        console.info('- start GetHistoryForOrder: %s\n', orderId);
+        console.info('start GetHistoryForOrder: %s\n', orderId);
 
         // Get list of transactions for order
         const iterator = await ctx.stub.getHistoryForKey(orderId);
@@ -531,21 +584,22 @@ class SupplychainContract extends Contract {
     async deleteOrder(ctx, orderId) {
 
         console.info('============= deleteOrder ===========');
-        console.log("input, orderId = " + orderId);
         if (orderId.length < 1) {
             throw new Error('Order Id required as input')
         }
+        console.log("orderId = " + orderId);
 
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
 
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from Tx_DeleteOrder:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from deleteOrder:\nOrder with orderId = ${orderId} does not exist.`);
         }
 
         // Access Control: This transaction should only be invoked by designated originating Retailer or Producer
         var order = Order.deserialize(orderAsBytes);
         let userId = await this.getCurrentUserId(ctx);
+
         if ((userId != "admin") // admin only has access as a precaution.
             && (userId != order.retailerId) // This transaction should only be invoked by Producer or Retailer of order
             && (userId != order.producerId))
@@ -555,9 +609,11 @@ class SupplychainContract extends Contract {
     }
 
     /**
-     * getCurrentUserId
-     *
-     * @param {Context} ctx the transaction context
+      * getCurrentUserId
+      * To be called by application to get the type for a user who is logged in
+      *
+      * @param {Context} ctx the transaction context
+      * Usage:  getCurrentUserId ()
      */
     async getCurrentUserId(ctx) {
 
@@ -571,24 +627,21 @@ class SupplychainContract extends Contract {
 
     /**
       * getCurrentUserType
-      * To be called by application to get the role for a user who is logged in
+      * To be called by application to get the type for a user who is logged in
       *
       * @param {Context} ctx the transaction context
-      * @param {String}  args
-      * Usage:  getCurrentUserType ('userId')
+      * Usage:  getCurrentUserType ()
      */
     async getCurrentUserType(ctx) {
-        //  check user id;  if admin, return type = admin;
-        //  else return value set for attribute "type" in certificate;
-        console.log("getCurrentUserType():  ctx = " + ctx);
 
         let userid = await this.getCurrentUserId(ctx);
 
+        //  check user id;  if admin, return type = admin;
+        //  else return value set for attribute "type" in certificate;
         if (userid == "admin") {
             return userid;
         }
         let usertype = ctx.clientIdentity.getAttributeValue("usertype");
-        console.log("usertype = " + usertype);
         return usertype;
     }
 }  //  Class SupplychainContract
