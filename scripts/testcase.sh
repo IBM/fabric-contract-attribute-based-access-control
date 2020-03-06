@@ -3,7 +3,7 @@
 # This script runs through a sample scenario of creating Launches, Payloads 
 # It then takes a Payload and Launch through the process
 #
-echo "What is the IP address for the API server (default is localhost:3000?"
+echo "What is the IP address for the API server (default is localhost:3000)?"
 read API_URL
 API_URL=${API_URL:-localhost:3000}
 
