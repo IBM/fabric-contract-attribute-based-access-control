@@ -7,7 +7,7 @@
 
 - Make sure you have a Hyperledger Fabric network up (either local or IBM Blockchain Platform service) and the https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds chaincode loaded. 
 
-- Download your 'common connection profile' JSON files and copy it into the *server/gateway/local/connection-profile.json. For instructions on how to do that on the IBM Blockchain Platform, see [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile).
+- Download your 'common connection profile' JSON file and copy it into the *server/gateway/local/connection-profile.json. For instructions on how to do that on the IBM Blockchain Platform, see [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile).
 
 - In *server/gateway/\<platform\>/config.json* where *platform* is either *ibp* or *local*, you will need to update the `wallet` field to your desired wallet location. 
 
