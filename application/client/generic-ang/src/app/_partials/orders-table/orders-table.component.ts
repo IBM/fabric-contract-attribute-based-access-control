@@ -58,7 +58,7 @@ export class OrdersTableComponent implements OnInit {
   // create dialog with shipper select menu
   chooseShipper(orderid){
     let shippers = [];
-    this.api.getAllUsers().subscribe(allUsers => {
+    this.user.getAllUsers().subscribe(allUsers => {
       console.log(allUsers);
       var userArray = Object.keys(allUsers).map(function(userIndex){
           let user = allUsers[userIndex];
@@ -67,7 +67,7 @@ export class OrdersTableComponent implements OnInit {
       });
 
       for(let u of userArray){
-        if(u['approle'] == "shipper"){
+        if(u['usertype'] == "shipper"){
           shippers.push(u);
         }
       }

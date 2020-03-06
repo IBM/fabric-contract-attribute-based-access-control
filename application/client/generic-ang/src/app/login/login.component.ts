@@ -30,14 +30,15 @@ export class LoginComponent{
     this.authService.login(this.model.userid, this.model.password).subscribe(res => {
       console.log(res);
       if (res['errorcode']==0) {
-        var user = {"userid": this.model.userid, "password": this.model.password, "approle": res['approle']};
+        var user = {"userid": this.model.userid, "password": this.model.password, "usertype": res['usertype']};
+        console.log (user)
         this.userService.setCurrentuser(user);
 
         localStorage.setItem('currentUser', JSON.stringify(user));
-        if (res['approle']=="admin") {
+        if (res['usertype']=="admin") {
           this.router.navigate(['users']);
         } else {
-          this.router.navigate([res['approle']]);
+          this.router.navigate([res['usertype']]);
         }
       } else if (res['errorcode']==402){
         // Enroll user!

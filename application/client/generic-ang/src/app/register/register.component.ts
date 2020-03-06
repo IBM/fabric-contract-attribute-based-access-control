@@ -12,10 +12,10 @@ import { AuthService } from '../_services/index';
 export class RegisterComponent{
   model: any = {};
   loading = false;
-  roles: any[];
+  types: any[];
 
   constructor (private router: Router,private authService: AuthService) {
-    this.roles = ["retailer", "producer", "shipper", "customer", "regulator"];
+    this.types = ["retailer", "producer", "shipper", "customer", "regulator"];
   }
 
   register() {

@@ -31,20 +31,22 @@ export class ApiService {
     return this.statuses;
   }
 
+  /*
   getAllUsers(){
-    return this.httpClient.get(this.baseUrl + '/api/getallusers/');
+    return this.httpClient.get(this.baseUrl + '/api/users/');
   }
 
   isUserEnrolled(){
-    return this.httpClient.get(this.baseUrl + '/api/isuserenrolled/' + this.id);
+    return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id);
   }
+  */
 
   queryOrder() {
-    return this.httpClient.get(this.baseUrl + '/api/queryorder/' + this.id)
+    return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id)
   }
 
   queryOrders(userid, password) {
-    this.httpClient.get<any[]>(this.baseUrl + '/api/queryorders?'+"userid=" + userid + "&password=" + password).subscribe (orders => {
+    this.httpClient.get<any[]>(this.baseUrl + '/api/orders?'+"userid=" + userid + "&password=" + password).subscribe (orders => {
       console.log (orders);
       // Add status to each order, based on this.statuses
       for (let i of orders) {
@@ -62,34 +64,34 @@ export class ApiService {
   }
 
   deleteOrder(){
-    return this.httpClient.delete(this.baseUrl + '/api/deleteorder/' + this.id)
+    return this.httpClient.delete(this.baseUrl + '/api/orders/' + this.id)
   }
 
   getOrderHistory() {
-     return this.httpClient.get(this.baseUrl + '/api/getorderhistory/' + this.id)
+     return this.httpClient.get(this.baseUrl + '/api/order-history/' + this.id)
   }
 
   orderProduct() {
-    return this.httpClient.post(this.baseUrl + '/api/orderproduct', this.body)
+    return this.httpClient.post(this.baseUrl + '/api/orders', this.body)
   }
 
   receiveOrder() {
-    return this.httpClient.put(this.baseUrl + '/api/receiveorder/' + this.id, {})
+    return this.httpClient.put(this.baseUrl + '/api/receive-order/' + this.id, {})
   }
 
   assignShipper() {
-    return this.httpClient.put(this.baseUrl + '/api/assignshipper/' + this.id + '?shipperid=' + this.shipperid, {})
+    return this.httpClient.put(this.baseUrl + '/api/assign-shipper/' + this.id + '?shipperid=' + this.shipperid, {})
   }
 
   createShipment() {
-    return this.httpClient.put(this.baseUrl + '/api/createshipment/' + this.id, {})
+    return this.httpClient.put(this.baseUrl + '/api/create-shipment-for-order/' + this.id, {})
   }
 
   transportShipment() {
-    return this.httpClient.put(this.baseUrl + '/api/transportshipment/' + this.id, {})
+    return this.httpClient.put(this.baseUrl + '/api/transport-shipment/' + this.id, {})
   }
 
   receiveShipment() {
-    return this.httpClient.put(this.baseUrl + '/api/receiveshipment/' + this.id, {})
+    return this.httpClient.put(this.baseUrl + '/api/receive-shipment/' + this.id, {})
   }
 }

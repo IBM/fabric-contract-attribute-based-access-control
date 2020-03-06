@@ -1,7 +1,7 @@
 export class User {
   userid: string;
   password: string;
-  approle: string;
+  usertype: string;
   // firstName: string;
   // lastName: string;
 }

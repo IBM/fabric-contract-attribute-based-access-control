@@ -88,7 +88,7 @@ export class OrderFormComponent implements OnInit{
   // Get the list of registered Producers
   getProducers() {
     this.producers = [];
-    this.api.getAllUsers().subscribe(allUsers => {
+    this.user.getAllUsers().subscribe(allUsers => {
       console.log(allUsers);
       var userArray = Object.keys(allUsers).map(function(userIndex){
           let user = allUsers[userIndex];
@@ -97,7 +97,7 @@ export class OrderFormComponent implements OnInit{
       });
 
       for (let u of userArray) {
-        if (u['approle'] == "producer") {
+        if (u['usertype'] == "producer") {
           this.producers.push(u);
         }
       }

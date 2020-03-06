@@ -12,12 +12,12 @@
         <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
       </div>
-      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !approle.valid }">
-        <label for="approle">Role</label>
-        <select class="form-control" name="approle" [(ngModel)]="model.approle" #approle="ngModel" required>
-          <option *ngFor="let r of roles" [ngValue]="r">{{ r }}</option>
+      <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !usertype.valid }">
+        <label for="usertype">Role</label>
+        <select class="form-control" name="usertype" [(ngModel)]="model.usertype" #usertype="ngModel" required>
+          <option *ngFor="let r of types" [ngValue]="r">{{ r }}</option>
         </select>
-        <div *ngIf="f.submitted && !approle.valid" class="help-block">Role is required</div>
+        <div *ngIf="f.submitted && !usertype.valid" class="help-block">Role is required</div>
       </div>
       <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary register-btn">Register</button>

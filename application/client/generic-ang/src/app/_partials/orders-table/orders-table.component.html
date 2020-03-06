@@ -38,7 +38,7 @@
                     <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
                   </p>
                 </span>
-                <button *ngIf="element.currentOrderState==1 && currentUser.approle=='producer'" [disabled]='element.currentOrderState==1?false:true' (click)="acceptOrder(element.orderId)" class="example-element-button">
+                <button *ngIf="element.currentOrderState==1 && currentUser.usertype=='producer'" [disabled]='element.currentOrderState==1?false:true' (click)="acceptOrder(element.orderId)" class="example-element-button">
                   Accept Order
                 </button>
                 <span *ngIf="element.currentOrderState>=2">
@@ -56,7 +56,7 @@
                     <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
                   </p>
                 </span>
-                <button *ngIf="element.currentOrderState==2 && currentUser.approle=='producer'" [disabled]='element.currentOrderState==2?false:true' (click)="chooseShipper(element.orderId)" class="example-element-button">
+                <button *ngIf="element.currentOrderState==2 && currentUser.usertype=='producer'" [disabled]='element.currentOrderState==2?false:true' (click)="chooseShipper(element.orderId)" class="example-element-button">
                   Assign Shipper
                 </button>
                 <span *ngIf="element.currentOrderState>=3">
@@ -74,7 +74,7 @@
                     <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
                   </p>
                 </span>
-                <button *ngIf="element.currentOrderState==3 && currentUser.approle=='shipper'" [disabled]='element.currentOrderState==3?false:true' (click)="createShipment(element.orderId)" class="example-element-button">
+                <button *ngIf="element.currentOrderState==3 && currentUser.usertype=='shipper'" [disabled]='element.currentOrderState==3?false:true' (click)="createShipment(element.orderId)" class="example-element-button">
                   Create Shipment
                 </button>
                 <span *ngIf="element.currentOrderState==4">
@@ -83,7 +83,7 @@
                     <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
                   </p>
                 </span>
-                <button *ngIf="element.currentOrderState==4 && currentUser.approle=='shipper'" [disabled]='element.currentOrderState==4?false:true' (click)="transportShipment(element.orderId)" class="example-element-button">
+                <button *ngIf="element.currentOrderState==4 && currentUser.usertype=='shipper'" [disabled]='element.currentOrderState==4?false:true' (click)="transportShipment(element.orderId)" class="example-element-button">
                   Transport Shipment
                 </button>
                 <span *ngIf="element.currentOrderState>=5">
@@ -101,7 +101,7 @@
                     <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
                   </p>
                 </span>
-                <button *ngIf="element.currentOrderState==5 && currentUser.approle=='retailer'" [disabled]='element.currentOrderState==5?false:true' (click)="receiveShipment(element.orderId)" class="example-element-button">
+                <button *ngIf="element.currentOrderState==5 && currentUser.usertype=='retailer'" [disabled]='element.currentOrderState==5?false:true' (click)="receiveShipment(element.orderId)" class="example-element-button">
                   Receive Shipment
                 </button>
                 <span *ngIf="element.currentOrderState>=6">

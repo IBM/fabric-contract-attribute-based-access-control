@@ -18,19 +18,22 @@ export class AuthService {
     // this.users = userService.getAll();
   }
 
+  baseUrl = "http://localhost:3000";
+
+
   register(user){
     // console.log("Inside Register: "+user);
-    return this.httpClient.post('http://localhost:3000/api/registeruser', user);
+    return this.httpClient.post(this.baseUrl + '/api/register-user', user);
   }
 
   enroll(user){
     // console.log("Inside Enroll: "+user);
-    return this.httpClient.post('http://localhost:3000/api/enrolluser', user);
+    return this.httpClient.post(this.baseUrl + '/api/enroll-user', user);
   }
 
   login(userid: string, password: string) {
     // console.log("Inside Login: "+userid);
-    return this.httpClient.get('http://localhost:3000/api/login?'+"userid=" + userid + "&password=" + password);
+    return this.httpClient.get(this.baseUrl + '/api/login?'+"userid=" + userid + "&password=" + password);
   }
 
   logout() {

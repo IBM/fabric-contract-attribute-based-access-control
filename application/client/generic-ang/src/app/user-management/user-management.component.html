@@ -13,9 +13,9 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
           <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
-        <ng-container matColumnDef="approle">
+        <ng-container matColumnDef="usertype">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-          <td mat-cell *matCellDef="let element"> {{element.approle}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.usertype}} </td>
         </ng-container>
         <ng-container matColumnDef="registered">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered </th>
@@ -58,11 +58,11 @@
 
             <label style="text-align:left">
               Role:
-              <select class="form-control" formControlName="approle" required>
-                <option *ngFor="let r of roles" [ngValue]="r">{{ r }}</option>
+              <select class="form-control" formControlName="usertype" required>
+                <option *ngFor="let r of types" [ngValue]="r">{{ r }}</option>
               </select>
-              <div *ngIf="submitted && newUserForm.controls.approle.errors" class="error">
-                <div *ngIf="newUserForm.controls.approle.errors.required">Role is required</div>
+              <div *ngIf="submitted && newUserForm.controls.usertype.errors" class="error">
+                <div *ngIf="newUserForm.controls.usertype.errors.required">Role is required</div>
               </div>
             </label>
 
