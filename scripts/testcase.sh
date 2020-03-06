@@ -3,9 +3,10 @@
 # This script runs through a sample scenario of creating Launches, Payloads 
 # It then takes a Payload and Launch through the process
 #
-# API_URL=${API_URL:-localhost:3000}
-echo "What is the IP address for the API server?"
+echo "What is the IP address for the API server (default is localhost:3000?"
 read API_URL
+API_URL=${API_URL:-localhost:3000}
+
 
 echo "************* Clean out all data"
 echo ""
@@ -13,27 +14,26 @@ echo ""
 echo ""
 echo ""
 set -x
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm001\",\"password\":\"Farm001\",\"usertype\":\"producer\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm002\",\"password\":\"Farm002\",\"usertype\":\"producer\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Customer1\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm001\",\"password\":\"Farm001\",\"usertype\":\"producer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm002\",\"password\":\"Farm002\",\"usertype\":\"producer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
+curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Customer1\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
 
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm001\",\"password\":\"Farm001\",\"usertype\":\"producer\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm002\",\"password\":\"Farm002\",\"usertype\":\"producer\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Customer1\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
-
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm001\",\"password\":\"Farm001\",\"usertype\":\"producer\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Farm002\",\"password\":\"Farm002\",\"usertype\":\"producer\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Customer1\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
 
 #**************************************
-echo "******* Create Orders"
+echo "Retailer Walmart logs in and create Order-001"
 echo ""
 curl -X GET "${API_URL}/api/current-user-id/" 
 curl -X GET "${API_URL}/api/login?userid=Walmart&password=Walmart"
@@ -41,46 +41,71 @@ curl -X POST "${API_URL}/api/orders/" -H "accept: application/json" -H "Content-
 curl -X GET "${API_URL}/api/orders/" 
 curl -X GET "${API_URL}/api/orders/Order-001" 
 
-
+echo "Retailer HEB logs in and create Order-002"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=HEB&password=HEB"
 curl -X POST "${API_URL}/api/orders/" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"orderId\":\"Order-002\",\"productId\":\"mango\",\"price\":5,\"quantity\":20,\"producerId\":\"Farm002\",\"retailerId\":\"HEB\"}"
+echo "HEB attempts to view orders associated with them"
+echo ""
 curl -X GET "${API_URL}/api/orders/" 
-curl -X GET "${API_URL}/api/orders/Order-002" 
-# This user can't see Order-001
+#curl -X GET "${API_URL}/api/orders/Order-002" 
+echo "HEB attempts to view Order-001. Shouldn't be able to"
+echo ""
 curl -X GET "${API_URL}/api/orders/Order-001" 
 
-# Producer logs in and receives order, assigns a shipper
+echo  "Producer logs in to view orders associated with them and receives Order-002"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=Farm002&password=Farm002"
-curl -X GET "${API_URL}/api/current-user-id/" 
-curl -X GET "${API_URL}/api/current-user-type/" 
-
+#curl -X GET "${API_URL}/api/current-user-id/" 
+#curl -X GET "${API_URL}/api/current-user-type/" 
 curl -X GET "${API_URL}/api/orders/"
+echo  "Producer receives Order-002 which changes status to ORDER_RECEIVED"
+echo ""
 curl -X PUT "${API_URL}/api/receive-order/Order-002" 
+echo  "Producer assigns a shipper"
+echo ""
 curl -X PUT "${API_URL}/api/assign-shipper/Order-002?shipperid=Fedex" 
-curl -X GET "${API_URL}/api/orders/Order-002" 
+#curl -X GET "${API_URL}/api/orders/Order-002" 
 
-# Shipper logs in to create a shipment by assigning a tracking number and transporting
+echo " Shipper logs in to view orders associated with them"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=Fedex&password=Fedex"
 curl -X GET "${API_URL}/api/orders/" 
+echo " Shipper creates a shipment for Order-002 by assigning a tracking number"
+echo ""
 curl -X PUT "${API_URL}/api/create-shipment-for-order/Order-002" 
+echo "Shipper transports Order-001 by changing status to ORDER_IN_TRANSPORT"
+echo ""
 curl -X PUT "${API_URL}/api/transport-shipment/Order-002" 
-curl -X GET "${API_URL}/api/orders/Order-002" 
+#curl -X GET "${API_URL}/api/orders/Order-002" 
 
-# Retailer logs back in and receives the shipment
+echo "Retailer logs back in to see orders associated with them"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=HEB&password=HEB"
+echo "Retailer receives the shipment for Order-002 by moving status to SHIPMENT_RECEIVED"
+echo ""
 curl -X PUT "${API_URL}/api/receive-shipment/Order-002" 
 
-# Customer can view history
+echo "Customer can now view history for Order-002, can't view history for Order-001 since it hasn't been produces and shipped back to Retailer"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=Customer1&password=Customer1"
 curl -X GET "${API_URL}/api/order-history/Order-002" 
+curl -X GET "${API_URL}/api/order-history/Order-001" 
 
-# Regulator can see all orders and their history
+echo  "Regulator can see all orders and their history"
+echo ""
 curl -X GET "${API_URL}/api/login?userid=FDA&password=FDA"
 curl -X GET "${API_URL}/api/orders/" 
 curl -X GET "${API_URL}/api/order-history/Order-001" 
 curl -X GET "${API_URL}/api/order-history/Order-002" 
 
+echo "Log in as Retailer Walmart and delete Order-001
+echo ""
+curl -X GET "${API_URL}/api/login?userid=Walmart&password=Walmart"
 curl -X DELETE "${API_URL}/api/orders/Order-001" 
+echo "Log in as Retailer HEB and delete Order-002
+echo ""
+curl -X GET "${API_URL}/api/login?userid=HEB&password=HEB"
 curl -X DELETE "${API_URL}/api/orders/Order-002" 
 
 
