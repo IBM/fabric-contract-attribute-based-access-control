@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService, AuthService } from '../_services/index';
+import { UserService } from '../_services/user.service';
 
 import {MatTableDataSource} from '@angular/material/table';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+// import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-user-management',
@@ -14,24 +15,24 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export class UserManagementComponent implements OnInit{
   newUser: Object;
-  roles: any[];
+  types: any[];
 
   newUserForm: FormGroup;
   submitted = false;
 
   allUsers: MatTableDataSource<EditUser[]>;
-  columnsToDisplay = ['id', 'approle', 'registered'];
+  columnsToDisplay = ['id', 'usertype', 'registered'];
 
-  constructor(private api: ApiService, private auth: AuthService, private formBuilder: FormBuilder){}
+  constructor(private api: ApiService, private auth: AuthService, private formBuilder: FormBuilder, private user: UserService ){}
 
   ngOnInit(){
-    this.roles = ["retailer", "producer", "shipper", "customer", "regulator"];
+    this.types = ["retailer", "producer", "shipper", "customer", "regulator"];
 
     this.newUserForm = this.formBuilder.group({
       id: ['', Validators.required],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
-      approle: ['', Validators.required]
+      usertype: ['', Validators.required]
     });
 
     // get all users
@@ -57,7 +58,7 @@ export class UserManagementComponent implements OnInit{
     var user = {
       userid: this.newUserForm.controls.id.value,
       password: this.newUserForm.controls.password.value,
-      approle: this.newUserForm.controls.approle.value,
+      usertype: this.newUserForm.controls.usertype.value,
     }
 
     this.auth.register(user).subscribe(res => {
@@ -73,7 +74,7 @@ export class UserManagementComponent implements OnInit{
 
   loadUserList(tab) {
     if (tab == 0) {
-      this.api.getAllUsers().subscribe(res => {
+      this.user.getAllUsers().subscribe(res => {
         // for debugging
         // console.log(res);
         var userArray = Object.keys(res).map(function (userIndex) {
@@ -83,7 +84,7 @@ export class UserManagementComponent implements OnInit{
         });
         for (let user of userArray) {
           this.api.id = user.id;
-          this.api.isUserEnrolled().subscribe(res => {
+          this.user.isUserEnrolled().subscribe(res => {
             // For debugging
             // console.log(res);
             // NOTE: adding a new user attribute called registered
@@ -103,5 +104,5 @@ export class UserManagementComponent implements OnInit{
 
 export interface EditUser {
   id: string;
-  approle: string;
+  usertype: string;
 }

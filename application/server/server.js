@@ -392,20 +392,28 @@ app.get('/api/login', (req, res) => {
     let userId = req.query.userid;
     let userPwd = req.query.password;
 
+    console.log ("in api/login. userId: " + userId + ", userPwd: " + userPwd);
+
     utils.setUserContext(userId, userPwd)
         .then(gateway_contract => {
             // New contract connection
             contract = gateway_contract;
-            var result = {};
-            result.errorcode = SUCCESS;   //  SUCCESS = 0
-            result.errormessage = "Connected to gateway as user: " + userId
-            console.log('Connected to gateway as user: ' + userId);
-            // Set this field for UI login to test on
-            if (userId == 'admin')
-                result.usertype = "admin";
-            else
+            contract.submitTransaction('getCurrentUserType').then((userType) => {
+                console.log("Successfully submitted getCurrentUserType:" + userType);
+                var result = {};
+                result.errorcode = SUCCESS;   //  SUCCESS = 0
+                result.errormessage = "User is enrolled and has an approle" + userType;
+                var tmp = userType.toString();
+                result.usertype = tmp.substring(1, tmp.length - 1);
+                res.send(result);
+            }, (error) => {  //  error in transaction submission
+                console.log("ERROR in getCurrentUserType:" + error);
+                var result = {};
+                result.errorcode = TRANSACTION_ERROR;
+                result.errormessage = "Error while invoking transaction in smart contract";
                 result.usertype = "";
-            res.send(result);
+                res.send(result);
+            });
         }, error => {  //  not enrolled
             var result = {};
             console.log("ERROR in setUserContext:" + error);
