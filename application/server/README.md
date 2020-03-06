@@ -104,4 +104,8 @@ Delete order:
 curl -X DELETE "http://localhost:${PORT}/api/orders/Order-001" 
 ```
 
+## Testcase scenario
+
+A test case scenario that runs through the process is available at 
+https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/scripts/testcase.sh
 
