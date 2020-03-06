@@ -44,7 +44,7 @@ curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/
 ```
 Log in as a specific user (must be registered and enrolled):
 ```
-curl -X GET "http://localhost:${PORT}/api/login?userid=Walmart&password=HEB"
+curl -X GET "http://localhost:${PORT}/api/login?userid=Walmart&password=Walmart"
 ```
 Get current user:
 ```
