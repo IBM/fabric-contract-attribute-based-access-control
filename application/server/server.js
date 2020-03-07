@@ -402,7 +402,7 @@ app.get('/api/login', (req, res) => {
                 console.log("Successfully submitted getCurrentUserType:" + userType);
                 var result = {};
                 result.errorcode = SUCCESS;   //  SUCCESS = 0
-                result.errormessage = "User is enrolled and has an approle" + userType;
+                result.errormessage = "User " + userId +  " is enrolled";
                 var tmp = userType.toString();
                 result.usertype = tmp.substring(1, tmp.length - 1);
                 res.send(result);
@@ -410,8 +410,8 @@ app.get('/api/login', (req, res) => {
                 console.log("ERROR in getCurrentUserType:" + error);
                 var result = {};
                 result.errorcode = TRANSACTION_ERROR;
-                result.errormessage = "Error while invoking transaction in smart contract";
-                result.usertype = "";
+                result.errormessage = "Error while invoking transaction in smart contract. ", error;
+                //result.usertype = "";
                 res.send(result);
             });
         }, error => {  //  not enrolled
@@ -419,7 +419,6 @@ app.get('/api/login', (req, res) => {
             console.log("ERROR in setUserContext:" + error);
             result.errorcode = USER_NOT_ENROLLED;
             result.errormessage = "User is not registered or enrolled. " + error;
-            result.usertype = "";
             res.send(result);
         });
 

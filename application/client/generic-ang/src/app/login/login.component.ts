@@ -32,7 +32,7 @@ export class LoginComponent{
       if (res['errorcode']==0) {
         var user = {"userid": this.model.userid, "password": this.model.password, "usertype": res['usertype']};
         console.log (user)
-        this.userService.setCurrentuser(user);
+        this.userService.setCurrentUser(user);
 
         localStorage.setItem('currentUser', JSON.stringify(user));
         if (res['usertype']=="admin") {

@@ -46,7 +46,7 @@ export class OrderFormComponent implements OnInit{
       const descStr = this.handleMsg(msg.message.description);
       console.log(descStr);
       this.messages.push(descStr);
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
       console.log(msg);
     });
 
@@ -78,7 +78,7 @@ export class OrderFormComponent implements OnInit{
     this.api.orderProduct().subscribe(api => {
       this.order = api
       console.log (this.order);
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
       alert ("Order Created Successfully!")
     }, error => {
       alert ("Problem creating Order")
@@ -88,7 +88,7 @@ export class OrderFormComponent implements OnInit{
   // Get the list of registered Producers
   getProducers() {
     this.producers = [];
-    this.user.getAllUsers().subscribe(allUsers => {
+    this.api.getAllUsers().subscribe(allUsers => {
       console.log(allUsers);
       var userArray = Object.keys(allUsers).map(function(userIndex){
           let user = allUsers[userIndex];
@@ -101,6 +101,7 @@ export class OrderFormComponent implements OnInit{
           this.producers.push(u);
         }
       }
+      console.log(this.producers);
     }, error => {
       console.log(error);
     });
@@ -168,7 +169,7 @@ export class OrderFormComponent implements OnInit{
             this.api.orderProduct().subscribe(api => {
               this.order = api
               console.log(this.order);
-              this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+              this.api.queryOrders();
             }, error => {
               alert("Problem creating Order")
             })
@@ -190,7 +191,7 @@ export class OrderFormComponent implements OnInit{
             this.api.orderProduct().subscribe(api => {
               this.order = api
               console.log(this.order);
-              this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+              this.api.queryOrders();
             }, error => {
               alert("Problem creating Order")
             })

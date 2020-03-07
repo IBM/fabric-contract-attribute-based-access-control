@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-// import { ApiService } from './api.service'
-
 import { User } from '../_models/user';
 
 @Injectable()
@@ -14,7 +11,7 @@ export class UserService {
   body: Object;
   options: Object;
 
-  constructor(private httpClient: HttpClient) {
+  constructor() {
     // initialize users - for testing without connecting to a blockchain network
     // this.users = [
     //   {"userid": "kai", "password": "test123", "role": "admin"},
@@ -38,17 +35,7 @@ export class UserService {
     }
   }
 
-  baseUrl = "http://localhost:3000";
-
-  getAllUsers(){
-    return this.httpClient.get(this.baseUrl + '/api/users/');
-  }
-
-  isUserEnrolled(){
-    return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id);
-  }
-
-  setCurrentuser(user) {
+  setCurrentUser(user) {
     this.currentUser = user;
   }
 
