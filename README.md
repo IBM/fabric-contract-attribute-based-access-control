@@ -210,11 +210,17 @@ The value of running this network on the IBM Blockchain Platform is that one can
  - If the current user is a **Customer**, the *currentOrderState* must equal ORDER_RECEIVED to invoke this transaction
  - Only a **Producer**, **Shipper** or **Retailer** associated with the input *orderId* can invoke this transaction
 
-**11. GetUserRole** - Get the role of the current logged in user.
+**11. getCurrentUserId** - Get the id of the current logged in user.
 
 #### Output:
 
-- a String containing the current user's role
+- a String containing the current user's id
+**11. getCurrentUserType** - Get the type of the current logged in user.
+
+#### Output:
+
+- a String containing the current user's type
+
 ## Filesystem Organization
 
 - application/:
@@ -228,25 +234,20 @@ The value of running this network on the IBM Blockchain Platform is that one can
 
 - gateway/:
 
-   + ibp/ibp_config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
-   + local_fabric/local_config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
+   + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
+   + local/config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
 
 - kube-config/*:
 
    + files needed to deploy this sample onto an iks cluster
 
-- utils/:
-
-   + fabutils/* - utility functions to manually enroll and register users
-
 ## Running the application from Kube Cluster
-We have this application running at http://52.116.150.115:32544/login on our IBP Blockchain Service if you just want to play around with it to see what features it has. Several identities have been defined.  Log in as "admin", password "adminpw" to see the registered and enrolled identities.
+We have this application running at <TBD> on our IBP Blockchain Service if you just want to play around with it to see what features it has. Several identities have been defined.  Log in as "admin", password "adminpw" to see the registered and enrolled identities.
 
 ## Setup for building and running the application from this git code repo
 If you want to build the application and run it on your own Blockchain service:
-
 ```
-git clone git@github.ibm.com:customer-success/BlockchainEnablement.git
+git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 https://github.com/IBM-Blockchain/blockchain-vscode-extension
 
@@ -255,21 +256,14 @@ https://github.com/IBM-Blockchain/blockchain-vscode-extension
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as <git tree>/BlockchainEnablement/GenericSupplychain/src/gateway/ibp/ibp_connection_profile.json.
-- Enroll a user: cd into <git_tree>/BlockchainEnablement/GenericSupplychain/src/utils/fabutils directory and run the enrollUser.js script to enroll the *admin* user (values based on the <git_tree>/BlockchainEnablement/GenericSupplychain/src/gateway/ibp/ibp_config.json file). This creates a user in a local wallet directory also specified in the ibp_config.json file.
-- Create a Wallet in VSCode: select the "+" in the FABRIC WALLETS section. Choose "Specify an existing filesystem wallet".  Choose the directory of the recently created wallet.
-- Create a gateway to IBP Instance: select the "+" in the FABRIC GATEWAYS section. Choose the recently downloaded IBP connection profile when prompted.
-- Associate Wallet to Gateway. Choose the recently created wallet to associate.
+- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). x
 
 #### Local Fabric
 - In the VSCode IDE, the LOCAL FABRIC OPS pane, select "Start Fabric" from the 3 dot menu.
-- Issue Shift+Command+P to bring up the command prompt.  Issue the "IBM Blockchain Platform: Export Connection Profile" command.  Save this file to <git_tree>/BlockchainEnablement/GenericSupplychain/src/gateway/local_fabric. 
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenericSupplychain/src/gateway/local/fabric_connection.json. 
 
-#### Both Local and IBP
-- Ensure that the contract located in https://github.ibm.com/customer-success/BlockchainEnablement/tree/master/GenericSupplychain/src/contract has been installed and instantiated via the VSCode Blockchain IDE extension and
-is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract.
-
-### Start the server side of the application:
+### Start the server side of the application. 
+NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json
 
 In a terminal window -
 ```
@@ -278,6 +272,12 @@ export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
 ```
+#### Connect up wallet
+- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json.
+- Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
+- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json
+- Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
+is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract.
 
 ### Start the client side applications:
 
@@ -285,13 +285,20 @@ In a separate terminal window -
 
 #### 1) build and install all dependencies:
 ```
-cd <git_tree>/BlockchainEnablement/GenericSupplychain/src/client/generic-ang
+cd <git_tree>/Blockchain-GenSupplychain/src/client/generic-ang
 npm install
 ng -o serve
 ```
 #### 2) Start the application, http://localhost:4200
 
-### Test Scenario
+### Test Scenario - automatic
+```
+cd <git_tree>/Blockchain-GenSupplychain/scripts
+./create_identities.sh
+./testcase.sh
+```
+### Test Scenario - Manual
+
 #### 1) Log in as Admin 
 
 id: admin
