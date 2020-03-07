@@ -242,7 +242,7 @@ The value of running this network on the IBM Blockchain Platform is that one can
    + files needed to deploy this sample onto an iks cluster
 
 ## Running the application from Kube Cluster
-We have this application running at <TBD> on our IBP Blockchain Service if you just want to play around with it to see what features it has. Several identities have been defined.  Log in as "admin", password "adminpw" to see the registered and enrolled identities.
+We have this application running at \<TBD\> on our IBP Blockchain Service if you just want to play around with it to see what features it has. Several identities have been defined.  Log in as "admin", password "adminpw" to see the registered and enrolled identities.
 
 ## Setup for building and running the application from this git code repo
 If you want to build the application and run it on your own Blockchain service:
