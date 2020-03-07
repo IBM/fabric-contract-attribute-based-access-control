@@ -291,13 +291,13 @@ ng -o serve
 ```
 #### 2) Start the application, http://localhost:4200
 
-### Test Scenario - automatic
+### Test Scenario - automatic, using curl against API server
 ```
 cd <git_tree>/Blockchain-GenSupplychain/scripts
 ./create_identities.sh
 ./testcase.sh
 ```
-### Test Scenario - Manual
+### Test Scenario - Manual, using UI
 
 #### 1) Log in as Admin 
 
