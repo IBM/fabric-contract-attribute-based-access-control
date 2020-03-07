@@ -105,11 +105,11 @@ class SupplychainContract extends Contract {
         await ctx.stub.putState(orderId, order.toBuffer());
 
         // Define and set event
-        order.event_type = "createOrder";   //  add the field "event_type" for the event to be processed
-        const bufferedOrder = order.toBuffer();
-
+        const event_obj = order;
+        event_obj.event_type = "createOrder";   //  add the field "event_type" for the event to be processed
+ 
         try {
-            await ctx.stub.setEvent(EVENT_TYPE, bufferedOrder);
+            await ctx.stub.setEvent(EVENT_TYPE, event_obj.toBuffer());
         }
         catch (error) {
             console.log("Error in sending event");
@@ -119,7 +119,7 @@ class SupplychainContract extends Contract {
         }
 
         // Must return a serialized order to caller of smart contract
-        return bufferedOrder;
+        return order.toBuffer();
     }
 
     /**
@@ -641,8 +641,8 @@ class SupplychainContract extends Contract {
         if (userid == "admin") {
             return userid;
         }
-        let usertype = ctx.clientIdentity.getAttributeValue("usertype");
-        return usertype;
+        //let usertype = ctx.clientIdentity.getAttributeValue("usertype");
+        return ctx.clientIdentity.getAttributeValue("usertype");
     }
 }  //  Class SupplychainContract
 

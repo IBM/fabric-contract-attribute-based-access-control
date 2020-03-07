@@ -370,21 +370,22 @@ utils.getAllUsers = async () => {
     for (var i = 0; i < identities.length; i++) {
         tmp = {};
         tmp.id = identities[i].id;
-        tmp.role = "";
+        tmp.usertype = "";
 
         if (tmp.id == "admin")
-            tmp.role = tmp.id;
+            tmp.usertype = tmp.id;
         else {
             attributes = identities[i].attrs;
             // look through all attributes for one called "usertype"
-            for (var i = 0; i < attributes.length; i++)
-                if (attributes[i].name == "usertype") {
-                    tmp.role = attributes[i].value;
+            for (var j = 0; j < attributes.length; j++)
+                if (attributes[j].name == "usertype") {
+                    tmp.usertype = attributes[j].value;
                     break;
                 }
         }
         result.push(tmp);
     }
+    //console.log(result);
     return result;
 }  //  end of function getAllUsers
 

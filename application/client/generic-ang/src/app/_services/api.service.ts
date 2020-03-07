@@ -31,22 +31,20 @@ export class ApiService {
     return this.statuses;
   }
 
-  /*
   getAllUsers(){
-    return this.httpClient.get(this.baseUrl + '/api/users/');
+    return this.httpClient.get(this.baseUrl + '/api/users');
   }
 
   isUserEnrolled(){
     return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id);
   }
-  */
 
   queryOrder() {
     return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id)
   }
 
-  queryOrders(userid, password) {
-    this.httpClient.get<any[]>(this.baseUrl + '/api/orders?'+"userid=" + userid + "&password=" + password).subscribe (orders => {
+  queryOrders() {
+    this.httpClient.get<any[]>(this.baseUrl + '/api/orders/').subscribe (orders => {
       console.log (orders);
       // Add status to each order, based on this.statuses
       for (let i of orders) {

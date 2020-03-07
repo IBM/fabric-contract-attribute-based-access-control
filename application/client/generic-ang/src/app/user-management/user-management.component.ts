@@ -1,7 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService, AuthService } from '../_services/index';
-import { UserService } from '../_services/user.service';
 
 import {MatTableDataSource} from '@angular/material/table';
 // import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -23,7 +22,7 @@ export class UserManagementComponent implements OnInit{
   allUsers: MatTableDataSource<EditUser[]>;
   columnsToDisplay = ['id', 'usertype', 'registered'];
 
-  constructor(private api: ApiService, private auth: AuthService, private formBuilder: FormBuilder, private user: UserService ){}
+  constructor(private api: ApiService, private auth: AuthService, private formBuilder: FormBuilder){}
 
   ngOnInit(){
     this.types = ["retailer", "producer", "shipper", "customer", "regulator"];
@@ -74,7 +73,7 @@ export class UserManagementComponent implements OnInit{
 
   loadUserList(tab) {
     if (tab == 0) {
-      this.user.getAllUsers().subscribe(res => {
+      this.api.getAllUsers().subscribe(res => {
         // for debugging
         // console.log(res);
         var userArray = Object.keys(res).map(function (userIndex) {
@@ -84,7 +83,7 @@ export class UserManagementComponent implements OnInit{
         });
         for (let user of userArray) {
           this.api.id = user.id;
-          this.user.isUserEnrolled().subscribe(res => {
+          this.api.isUserEnrolled().subscribe(res => {
             // For debugging
             // console.log(res);
             // NOTE: adding a new user attribute called registered

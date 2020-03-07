@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   login(userid: string, password: string) {
-    // console.log("Inside Login: "+userid);
+    console.log(this.baseUrl + '/api/login?'+"userid=" + userid + "&password=" + password);
     return this.httpClient.get(this.baseUrl + '/api/login?'+"userid=" + userid + "&password=" + password);
   }
 
