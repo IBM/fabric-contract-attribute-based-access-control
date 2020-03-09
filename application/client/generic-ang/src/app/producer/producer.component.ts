@@ -52,12 +52,12 @@ export class ProducerComponent implements OnInit {
 
     this.myPubNubInstance.getMessage(this.bcChannelName, (msg) => {
       this.messages.push(msg);
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
       console.log(msg);
     });
 
     this.myPubNubInstance.getMessage(this.pubnubChannelName, (msg) => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
       console.log(msg);
     });
 
@@ -134,7 +134,7 @@ export class ProducerComponent implements OnInit {
       let descStr = '{"eventType":"orderReceived","orderId":"'+orderid+'"}';
       this.publishMsg("OrderReceived", descStr, this.pubnubChannelName);
 
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Problem receiving order")
     })
@@ -154,7 +154,7 @@ export class ProducerComponent implements OnInit {
       this.publishMsg("Shipment Created", descStr, this.pubnubChannelName);
 
       // update local order table
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert("Problem creating shipment")
     })
