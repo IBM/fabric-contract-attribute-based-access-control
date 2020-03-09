@@ -43,7 +43,7 @@ export class LoginComponent{
       } else if (res['errorcode']==402){
         // Enroll user!
         console.log("enroll user");
-        alert(res['errormessage'] + "\n \nPlease make sure that an administrater has created an account for you and that you've registered first.");
+        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has created an account for you and that you've registered first.");
         this.router.navigate(['register']);
       } else {
         alert("Either you need to be registered first before you are able to log in \n \n -OR- \n \n you should double check the spelling of the userid and password.");

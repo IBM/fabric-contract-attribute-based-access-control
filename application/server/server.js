@@ -116,8 +116,6 @@ app.get('/api/orders', (req, res) => {
 
     // If userid is not passed in get current user id
     if (typeof userid == "undefined") {
-        console.log("userid is undefined")
-        console.log(contract);
         contract.submitTransaction('getCurrentUserId').then(userid => {
 
             // process response from getCurrentUserId: convert to string and remove quotes and
