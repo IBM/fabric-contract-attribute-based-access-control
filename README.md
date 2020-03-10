@@ -359,6 +359,8 @@ If you want to build the application and run it on your own Blockchain service:
 ```
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
+
+This utilizes the VSCode IDE Blockchain extension to interact with a fabric network:
 https://github.com/IBM-Blockchain/blockchain-vscode-extension
 
 ### Start Fabric Network
@@ -374,13 +376,13 @@ https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-ik
 - In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
 - Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
 
-
 ### Start the server side of the application. 
 NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
 
 In a terminal window -
 ```
 cd <git_tree>/Blockchain-GenSupplychain/src/server
+
 export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
