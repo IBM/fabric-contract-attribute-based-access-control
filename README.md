@@ -400,10 +400,11 @@ In a separate terminal window -
 ```
 cd <git_tree>/Blockchain-GenSupplychain/src/client/generic-ang
 npm install
-ng -o serve
 ```
-#### 2) Start the application, http://localhost:4200
-
+#### 2) Start the application
+```
+ng -o serve --port 4200
+```
 ### Test Scenario - automatic, using curl against API server
 ```
 cd <git_tree>/Blockchain-GenSupplychain/scripts
@@ -446,7 +447,12 @@ role: regulator
 #### 3) Register each new User
 Select the Register tab from the Login screen, enter the ID, password and role of each user.
 
-#### 4) Login as "Walmart", this will enroll the "Walmart" participant and should take you to the Retailer Portal
+#### 4) Start a portal for each user
+For each other user open a separate terminal, start the application on a unique port
+```
+ng -o serve --port 420X
+```
+#### 4) On first application instance, login as "Walmart", this will enroll the "Walmart" participant and should take you to the Retailer Portal
 
 Create a couple orders:
 ```
@@ -464,20 +470,20 @@ Producer ID:  GHFarm
 ```
 Click "Create Order"
 
-#### 5) Open a separate tab, log in as "GHFarm", this should take you to the Producer Portal
+#### 6) On another application instances, log in as "GHFarm", this should take you to the Producer Portal
 
 - click on the order
 - select the "Accept Order" button for the corn product
 - select the "Assign Shipper" button for the corn product
 - enter a "UPS"
 
-#### 6) In a separate tab, log in as "UPS", this should take you to the Shipper Portal
+#### 6) On another appication instance, log in as "UPS", this should take you to the Shipper Portal
 
 - click on the order
 - select the "Create Shipment" button for the corn product and enter a tracking number
 - select the "Transport Shipment" button for the corn product
 
-#### 7) Back on Retailer Portal
+#### 7) Back on the Retailer Portal
 
 - click on the order
 - select the "Receive Shipment" button for the corn product
@@ -506,12 +512,12 @@ A Blockchain Event will be generated when an order is created this way.
 
 External message notifications are sent when order states are changed and Price/Quantity Change notifications are sent.
 
-#### 9) In a separate tab, log in as "FDA", this should take you to the Regulator Portal
+#### 9) On another appication instance, log in as "FDA", this should take you to the Regulator Portal
 
 - This will bring up a list of all orders
 - Clicking on an order will display all of the transaction history of that order
 
-#### 10) In a separate tab, log in as "ACustomer", this should take you to the Customer Portal
+#### 10) On another appication instance, log in as "ACustomer", this should take you to the Customer Portal
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
 - Order transaction history should be displayed
