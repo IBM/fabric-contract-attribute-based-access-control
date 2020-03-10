@@ -22,12 +22,10 @@ export class AuthService {
 
 
   register(user){
-    // console.log("Inside Register: "+user);
     return this.httpClient.post(this.baseUrl + '/api/register-user', user);
   }
 
   enroll(user){
-    // console.log("Inside Enroll: "+user);
     return this.httpClient.post(this.baseUrl + '/api/enroll-user', user);
   }
 

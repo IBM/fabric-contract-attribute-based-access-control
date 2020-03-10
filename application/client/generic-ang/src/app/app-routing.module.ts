@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-
+import { EnrollComponent } from './enroll/enroll.component';
 import { CustomerComponent } from './customer/customer.component';
 import { ProducerComponent } from './producer/producer.component';
 import { QueryorderComponent } from './queryorder/queryorder.component';
@@ -15,11 +14,9 @@ import { UserManagementComponent } from './user-management/user-management.compo
 
 import { AuthGuard } from './_guards/auth.guard';
 
-
 const routes: Routes = [
-  // { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'enroll', component: EnrollComponent },
   // Main Pages
   { path: 'customer', component: CustomerComponent, canActivate: [AuthGuard] },
   { path: 'producer', component: ProducerComponent, canActivate: [AuthGuard] },

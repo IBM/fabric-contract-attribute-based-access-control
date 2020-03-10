@@ -89,7 +89,7 @@ export class OrderFormComponent implements OnInit{
   getProducers() {
     this.producers = [];
     this.api.getAllUsers().subscribe(allUsers => {
-      console.log(allUsers);
+      //console.log(allUsers);
       var userArray = Object.keys(allUsers).map(function(userIndex){
           let user = allUsers[userIndex];
           // do something with person
