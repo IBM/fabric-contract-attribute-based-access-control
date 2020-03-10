@@ -10,7 +10,7 @@ correct practices are followed.
 When the reader has completed this code pattern, they will understand:
 
 - Attribute Based Access Control
-- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/FabricCAServices.html)
+- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](hyperledger.github.io/fabric-sdk-node/)
 - How to customize queries
 - External Event management using [PubNub](https://www.pubnub.com/)
 - How to bring together a Hyperledger Fabric network, Fabric Client for user management and a front end UI (Angular)
@@ -91,17 +91,15 @@ git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ## Step 2. Start the Fabric Runtime
 - First, we need to go to our IBM Blockchain Extension. Click on the IBM Blockchain icon
   in the left side of VSCode (It looks like a square). 
-- Next, start your local fabric by clicking on the 
-  *three dot symbol* to the right of *LOCAL FABRIC OPS*
-  and then *Start Fabric Runtime*.
+- Next, start your local fabric by clicking on 
+  *Local Fabric* in the **FABRIC ENVIRONMENTS** pane.
   
-- Once the runtime is finished starting (this might take a couple of minutes), under *Local Fabric 
-  Ops* you should see *Smart Contracts* and a section for both *installed* and *instantiated*.
+- Once the runtime is finished starting (this might take a couple of minutes), under *Local Fabric* you should see *Smart Contracts* and a section for both *installed* and *instantiated*.
 
 ## Step 3. Install Contract
 
  Now, let's click on *+ Install* and choose the peer that is available. Then the extension will ask you which package to 
- install. Choose *vgensupplychainnet@0.0.1.cds* which is in your root directory which you just cloned.
+ install. Choose *gensupplychainnet@0.0.1.cds* which is in your root directory which you just cloned.
  
 If all goes well, you should get a notification as shown 
  below.
@@ -114,20 +112,17 @@ You guessed it. Next, it's time to instantiate.
  
   Click on *+ Instantiate* 
 
-
-and then choose 
- *mychannel* for the channel to instantiate the contract on.
-
-
+and then choose *gensupplychainnet@0.0.1*. If prompted, choose
+ *mychannel* for the channel to instantiate the contract on. 
 Next, the extension will ask you 
- to choose a smart contract and version to instantiate. Click on *voterContract@6.0.0*.
+ to choose a smart contract and version to instantiate. Click on *gensupplychainnet@0.0.1*.
 
- Next, for the optional function, type in *init*.
-
+Next, for the optional function, type in *init*.
 
 Leave the arguments blank, and hit *enter* 
  on your keyboard. 
-
+ 
+ Select *no* for private data collection configuration file, and *Default* for endorsement policy.  
 
  This will instantiate the smart contract. You should see the contract 
  under the *instantiated* tab on the left-hand side, as shown in the picture. Note: excuse 
@@ -371,18 +366,19 @@ https://github.com/IBM-Blockchain/blockchain-vscode-extension
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). x
+- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
 
 #### Local Fabric
-- In the VSCode IDE, the LOCAL FABRIC OPS pane, select "Start Fabric" from the 3 dot menu.
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenericSupplychain/src/gateway/local/fabric_connection.json. 
+- In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
+
 
 ### Start the server side of the application. 
 NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json
 
 In a terminal window -
 ```
-cd <git_tree>/BlockchainEnablement/GenericSupplychain/src/server
+cd <git_tree>/Blockchain-GenSupplychain/src/server
 export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
