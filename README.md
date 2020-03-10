@@ -269,7 +269,7 @@ NOTE: This will automatically enroll admin credentials in the directory of the w
 
 In a terminal window -
 ```
-cd <git_tree>/BlockchainEnablement/GenericSupplychain/src/server
+cd <git_tree>/BlockchainEnablement/GenSupplychain/src/server
 export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
