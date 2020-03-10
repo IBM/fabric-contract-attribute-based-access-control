@@ -392,6 +392,12 @@ node server.js
 - Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
 is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract.
 
+### Test Scenario - automatic, using curl against API server
+```
+cd <git_tree>/Blockchain-GenSupplychain/scripts
+./create_identities.sh
+./testcase.sh
+```
 ### Start the client side applications:
 
 In a separate terminal window -
@@ -405,12 +411,6 @@ npm install
 ```
 ng -o serve --port 4200
 ```
-### Test Scenario - automatic, using curl against API server
-```
-cd <git_tree>/Blockchain-GenSupplychain/scripts
-./create_identities.sh
-./testcase.sh
-```
 ### Test Scenario - Manual, using UI
 
 #### 1) Log in as Admin 
@@ -420,9 +420,7 @@ id: admin
 password: adminpw
 
 #### 2) Create users
-
 Select the "Create New User" tab and enter the following users:
-
 ```
 id: GHFarm
 password: adminpw
