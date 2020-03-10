@@ -40,7 +40,7 @@ export class UserService {
   }
 
   getCurrentUser(){
-    console.log("in getCurrentUseruser, this.currentUser: " + this.currentUser.userid);
+    console.log("in getCurrentUser, this.currentUser: " + this.currentUser.userid);
     return this.currentUser;
   }
 

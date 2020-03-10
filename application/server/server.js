@@ -93,7 +93,7 @@ app.get('/api/orders/:id', (req, res) => {
 
     contract.submitTransaction('queryOrder', req.params.id).then((queryOrderResponse) => {
         // process response
-        console.log('Process QueryOrder transaction.');
+        console.log('Process QueryOrder transaction. ');
 
         order = Order.fromBuffer(queryOrderResponse);
 
@@ -114,44 +114,49 @@ app.get('/api/orders', (req, res) => {
     let userid = req.query.userid;
     let password = req.query.password;
 
-    // If userid is not passed in get current user id
-    if (typeof userid == "undefined") {
-        contract.submitTransaction('getCurrentUserId').then(userid => {
+    let promises = [];
+
+    if (typeof userid != "undefined") {
+        promises.push(Promise.resolve(userid));
+    } else {
+        console.log("userid is not sent in, get current user")
+        promises.push(contract.submitTransaction('getCurrentUserId').then(tmp_userid => {
 
             // process response from getCurrentUserId: convert to string and remove quotes and
-            userid = userid.toString().slice(1, -1);
+            userid = tmp_userid.toString().slice(1, -1);
+            return Promise.resolve(userid);
 
-            console.log('GET orders, userid = ' + userid + ', pwd = ' + password);
-
-            //  set current user in "contract"
-            return utils.setUserContext(userid, password)
-                .then(gateway_contract => {
-                    let orders;
-                    return gateway_contract.submitTransaction('queryAllOrders', '')
-                        .then((queryOrderResponse) => {
-                            // process response
-                            orders = queryOrderResponse;
-                            orders.errorCode = 1;
-                            res.send(orders);
-                        }, (error) => {
-                            // handle error if transaction failed
-                            error.errorCode = 0;
-                            console.log('Error thrown from tx promise', error);
-                            res.send(error);
-                        });
-                }, (error) => {
-                    console.log("Error in setUserContext:  \n " + error);
-                    res.send(error);
-                });
         }, (error) => {
             //  handle error if transaction failed
             error.errorCode = 0;
             console.log('Error thrown from getCurrentUserId: ', error);
             return ("");
-        });
+        }));
     }
 
-
+    Promise.all(promises).then(() => {
+        console.log('GET orders, userid = ' + userid + ', pwd = ' + password);
+        //  set current user in "contract"
+        utils.setUserContext(userid, password)
+            .then(gateway_contract => {
+                let orders;
+                gateway_contract.submitTransaction('queryAllOrders', '')
+                    .then((queryOrderResponse) => {
+                        // process response
+                        orders = queryOrderResponse;
+                        orders.errorCode = 1;
+                        res.send(orders);
+                    }, (error) => {
+                        // handle error if transaction failed
+                        error.errorCode = 0;
+                        console.log('Error thrown from tx promise', error);
+                        res.send(error);
+                    });
+            }, (error) => {
+                console.log("Error in setUserContext:  \n " + error);
+                res.send(error);
+            });
+    });
 });  //  process route queryorders/
 
 app.get('/api/order-history/:id', (req, res) => {
@@ -390,7 +395,7 @@ app.get('/api/login', (req, res) => {
     let userId = req.query.userid;
     let userPwd = req.query.password;
 
-    console.log ("in api/login. userId: " + userId + ", userPwd: " + userPwd);
+    console.log("in api/login. userId: " + userId + ", userPwd: " + userPwd);
 
     utils.setUserContext(userId, userPwd)
         .then(gateway_contract => {
@@ -400,7 +405,7 @@ app.get('/api/login', (req, res) => {
                 console.log("Successfully submitted getCurrentUserType:" + userType);
                 var result = {};
                 result.errorcode = SUCCESS;   //  SUCCESS = 0
-                result.errormessage = "User " + userId +  " is enrolled";
+                result.errormessage = "User " + userId + " is enrolled";
                 var tmp = userType.toString();
                 result.usertype = tmp.substring(1, tmp.length - 1);
                 res.send(result);
