@@ -9,7 +9,7 @@ and transparency
 
 # Author
 
-* Ann Umberhocker <ann.umberhocker@ibm.com>, Horea Porutiu <horea.porutiu@ibm.com>, Sowmya Janakiraman <somya@ibm.com>, Kayleen Iwema
+* Ann Umberhocker <ann.umberhocker@ibm.com>, Horea Porutiu <horea.porutiu@ibm.com>, Sowmya Janakiraman <somya@ibm.com>, Kaleen Iwema
 
 # URLs
 
