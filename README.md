@@ -249,6 +249,8 @@ If you want to build the application and run it on your own Blockchain service:
 ```
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
+
+This utilizes the VSCode IDE Blockchain extension to interact with a fabric network:
 https://github.com/IBM-Blockchain/blockchain-vscode-extension
 
 #### IBP Platform
@@ -256,7 +258,7 @@ https://github.com/IBM-Blockchain/blockchain-vscode-extension
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). x
+- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
 
 #### Local Fabric
 - In the VSCode IDE, the LOCAL FABRIC OPS pane, select "Start Fabric" from the 3 dot menu.
