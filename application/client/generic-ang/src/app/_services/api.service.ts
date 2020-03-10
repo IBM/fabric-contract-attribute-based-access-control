@@ -43,8 +43,10 @@ export class ApiService {
     return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id)
   }
 
-  queryOrders() {
-    this.httpClient.get<any[]>(this.baseUrl + '/api/orders/').subscribe (orders => {
+  queryOrders(userid, password) {
+    console.log ("In queryOrders: " +userid+", "+password);
+
+    this.httpClient.get<any[]>(this.baseUrl + '/api/orders/?userid='+userid+'&password='+password).subscribe (orders => {
       console.log (orders);
       // Add status to each order, based on this.statuses
       for (let i of orders) {
@@ -62,6 +64,7 @@ export class ApiService {
   }
 
   deleteOrder(){
+    console.log ("deleting order: " + this.baseUrl + '/api/orders/' + this.id)
     return this.httpClient.delete(this.baseUrl + '/api/orders/' + this.id)
   }
 

@@ -389,9 +389,6 @@ utils.getAllUsers = async () => {
     return result;
 }  //  end of function getAllUsers
 
-//  global variables for pubnub
-var pubnubChannelName = "priceWatchChannel-gen";
-
 utils.pubnubSetup = () => {
     pubnub = new PubNub({
         publishKey: "pub-c-736b3de9-095f-4e98-8734-d6a36c6715a6",

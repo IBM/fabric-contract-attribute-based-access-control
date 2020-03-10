@@ -32,7 +32,6 @@ export class ProducerComponent implements OnInit {
       productid: ['', Validators.required],
       price: ['',Validators.required],
       quantity: ['']
-      //, producerid: ['', Validators.required],
     });
 
     this.myPubNubInstance = new PubNubAngular();
@@ -52,17 +51,14 @@ export class ProducerComponent implements OnInit {
 
     this.myPubNubInstance.getMessage(this.bcChannelName, (msg) => {
       this.messages.push(msg);
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
       console.log(msg);
     });
 
     this.myPubNubInstance.getMessage(this.pubnubChannelName, (msg) => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
       console.log(msg);
     });
-
-    // First time around, don't want error message to appear
-    //if (!this.order) { this.order = {errorCode:1};}
   }
 
   onSubmit() {
@@ -80,7 +76,6 @@ export class ProducerComponent implements OnInit {
       descStr = '{"eventType":"quantityWatch","productId":"'+this.messageForm.controls.productid.value
                 +'","quantity":'+this.messageForm.controls.quantity.value
                 +',"price":'+this.messageForm.controls.price.value
-                //+',"producerId":"'+this.messageForm.controls.producerid.value+'"}';
                 +',"producerId":"'+this.currentUser.userid+'"}';
 
    } else {
@@ -134,7 +129,7 @@ export class ProducerComponent implements OnInit {
       let descStr = '{"eventType":"orderReceived","orderId":"'+orderid+'"}';
       this.publishMsg("OrderReceived", descStr, this.pubnubChannelName);
 
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
       alert ("Problem receiving order")
     })
@@ -154,7 +149,7 @@ export class ProducerComponent implements OnInit {
       this.publishMsg("Shipment Created", descStr, this.pubnubChannelName);
 
       // update local order table
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
       alert("Problem creating shipment")
     })

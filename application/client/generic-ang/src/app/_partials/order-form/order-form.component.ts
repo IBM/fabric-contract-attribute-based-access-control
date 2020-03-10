@@ -46,7 +46,7 @@ export class OrderFormComponent implements OnInit{
       const descStr = this.handleMsg(msg.message.description);
       console.log(descStr);
       this.messages.push(descStr);
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
       console.log(msg);
     });
 
@@ -78,7 +78,7 @@ export class OrderFormComponent implements OnInit{
     this.api.orderProduct().subscribe(api => {
       this.order = api
       console.log (this.order);
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
       alert ("Order Created Successfully!")
     }, error => {
       alert ("Problem creating Order")
@@ -169,7 +169,7 @@ export class OrderFormComponent implements OnInit{
             this.api.orderProduct().subscribe(api => {
               this.order = api
               console.log(this.order);
-              this.api.queryOrders();
+              this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
             }, error => {
               alert("Problem creating Order")
             })
@@ -191,7 +191,7 @@ export class OrderFormComponent implements OnInit{
             this.api.orderProduct().subscribe(api => {
               this.order = api
               console.log(this.order);
-              this.api.queryOrders();
+              this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
             }, error => {
               alert("Problem creating Order")
             })
