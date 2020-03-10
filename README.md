@@ -64,7 +64,7 @@ The value of running this network on the IBM Blockchain Platform is that one can
 ## Featured technologies
 + [Hyperledger Fabric v1.4](https://hyperledger-fabric.readthedocs.io) is a platform for distributed ledger solutions, underpinned by a modular architecture that delivers high degrees of confidentiality, resiliency, flexibility, and scalability.
 + [Node.js](https://nodejs.org) is an open source, cross-platform JavaScript run-time environment that executes server-side JavaScript code.
-+ [Angular]https://angular.io/) Angular is a platform for building mobile and desktop web applications.
++ [Angular](https://angular.io/) Angular is a platform for building mobile and desktop web applications.
 
 ## Prerequisites (Local)
 If you want to run this pattern locally, without any Cloud services, then all you need is VSCode and the
