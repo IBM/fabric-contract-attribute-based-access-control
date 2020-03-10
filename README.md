@@ -361,6 +361,8 @@ git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 https://github.com/IBM-Blockchain/blockchain-vscode-extension
 
+### Start Fabric Network
+
 #### IBP Platform
 - Create a Kubernetes Cluster using the IBM Kubernetes Service
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
@@ -383,7 +385,7 @@ export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
 ```
-#### Connect up wallet
+### Connect up wallet
 - Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json.
 - Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
 - Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/<local or ibp>/config.json
