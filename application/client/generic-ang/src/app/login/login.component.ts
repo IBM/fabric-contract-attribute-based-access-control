@@ -43,10 +43,10 @@ export class LoginComponent{
       } else if (res['errorcode']==402){
         // Enroll user!
         console.log("enroll user");
-        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has created an account for you and that you've registered first.");
-        this.router.navigate(['register']);
+        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has registered you and that you've enrolled.");
+        this.router.navigate(['enroll']);
       } else {
-        alert("Either you need to be registered first before you are able to log in \n \n -OR- \n \n you should double check the spelling of the userid and password.");
+        alert("Either you need to be registered or enrolled first before you are able to log in \n \n -OR- \n \n you should double check the spelling of the userid and password.");
       }
     }, error => {
       console.log(error);

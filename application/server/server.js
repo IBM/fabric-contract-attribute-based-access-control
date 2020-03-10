@@ -304,7 +304,6 @@ app.post('/api/register-user/', (request, response) => {
     //  Note: On the UI, only admin sees the page "Manage Users"
     //  So, it is assumed that only the admin has access to this api
     utils.registerUser(userId, userPwd, userType).then((result) => {
-        console.log("\n result from registerUser = ", result)
         console.log("\n----------------- api/registeruser --------------------------");
         response.send(result);
     }, (error) => {

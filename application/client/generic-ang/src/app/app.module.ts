@@ -9,7 +9,7 @@ import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatDividerModule, 
 /* Components */
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
+import { EnrollComponent } from './enroll/enroll.component';
 import { HomeComponent } from './home/home.component';
 import { CustomerComponent } from './customer/customer.component';
 import { ProducerComponent } from './producer/producer.component';
@@ -35,8 +35,7 @@ import { AuthGuard } from './_guards/auth.guard';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent,
-    // ConsumerComponent,
+    EnrollComponent,
     CustomerComponent,
     ProducerComponent,
     QueryorderComponent,

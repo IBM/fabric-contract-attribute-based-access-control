@@ -15,7 +15,7 @@
       <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary">Login</button>
         <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-        <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+        <a [routerLink]="['/enroll']" class="btn btn-link">Enroll</a>
       </div>
     </form>
   </div>
@@ -23,13 +23,13 @@
     <h4>How to Sign Up for this application:</h4>
     <ol>
       <li>
-        <p>Admin logs in and creates a user</p>
+        <p>Admin logs in and creates a user by selecting "Register New User"</p>
       </li>
       <li>
-        <p>User goes to Login page and selects Register. Registration is only done once</p>
+        <p>User goes to Login page and selects Enroll. Enroll is only done once</p>
       </li>
     </ol>
-    <p>Once a user is created and registered, they can log in and will be taken to appropriate console page per their
+    <p>Once a user is registered and enrolled, they can log in and will be taken to appropriate console page per their
       role.</p>
   </div>
 </section>

@@ -20,7 +20,7 @@ export class UserManagementComponent implements OnInit{
   submitted = false;
 
   allUsers: MatTableDataSource<EditUser[]>;
-  columnsToDisplay = ['id', 'usertype', 'registered'];
+  columnsToDisplay = ['id', 'usertype', 'enrolled'];
 
   constructor(private api: ApiService, private auth: AuthService, private formBuilder: FormBuilder){}
 
@@ -86,8 +86,8 @@ export class UserManagementComponent implements OnInit{
           this.api.isUserEnrolled().subscribe(res => {
             // For debugging
             // console.log(res);
-            // NOTE: adding a new user attribute called registered
-            user.registered = res;
+            // NOTE: adding a new user attribute called enrolled
+            user.enrolled = res;
           }, error => {
             console.log(error);
           });
