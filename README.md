@@ -325,7 +325,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 #### Output:
 
 - a String containing the current user's id
-**11. getCurrentUserType** - Get the type of the current logged in user.
+**12. getCurrentUserType** - Get the type of the current logged in user.
 
 #### Output:
 
