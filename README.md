@@ -1,20 +1,135 @@
-# Blockchain Full Stack Supply Chain Application Sample
+# Implement attribute based access control to provide end to end visibility into the supply chain history of a particular product 
 
-## Overview
-This sample demonstrates an end to end blockchain application that is running on Blockchain 2.0 (HLF 1.4).  It offers code pattern examples of:
+This sample demonstrates an end to end blockchain application that connects to Hyperledger Fabric 1.4 or the IBM Blockchain Platform. It implements attribute based access control, user management,
+event management, and a Angular front-end UI to interact and query the blockchain ledger. The 
+sample takes the user through ordering, shipping, and enlisting the product for the customer to 
+purchase. The customer can trace the order history through the supply chain, providing 
+end to end visibility. Lastly, a regulator has access to all orders in the system to ensure 
+correct practices are followed. 
 
-- User Management Authorization (this does not currently integrate with an Identity Provider)
+When the reader has completed this code pattern, they will understand:
+
 - Attribute Based Access Control
-- Query Strings
-- Blockchain and External Event management
-- How to bring together Fabric, Fabric Client and a front end UI (Angular)
+- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/FabricCAServices.html)
+- How to customize queries
+- External Event management using [PubNub](https://www.pubnub.com/)
+- How to bring together a Hyperledger Fabric network, Fabric Client for user management and a front end UI (Angular)
 
-Note: This sample pattern can either connect to a local instance of Hyperledger Fabric, or to the IBM Blockchain Platform v2.
+**Audience level : Intermediate Developers**
 
-Audience level : Intermediate Developers
+### Permissioned blockchains - enabling transparancy and confidentiality
+
+In supply chain, confidentiality is mandatory since some consumers might be given 
+discounted rates compared to others. In this scenario, other consumers should not be able to access 
+their competitors' rates. Given that Hyperledger Fabric is optimized for a broad range of 
+industry use-cases, including supply chain, the open-source framework provides a way to implement 
+confidentiality at the chaincode layer using attribute based access control. This example shows you 
+how to implement such functionality, by registering each user with a specific attribute, called "usertype".
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/utils.js#L221);
+The usertype can be either an admin, a regulator, a producer, a shipper, a retailer, or a 
+customer, and is generated when a specific user registers in the application. When that user logs in
+successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
+the regulator (such as the FDA) is able to view all transactions on the network in order to reliably audit
+the network, but the retailer is only able to view the transactions which they are a part of. Once you
+understand how to apply these access control rules, you can apply them to any use-case, and 
+start building innovative, secure, blockchain networks. 
+
+When the reader has completed this code pattern, they will understand how to:
+
+1. Implement attribute based access control in Hyperledger Fabric
+2. Build a chaincode in which certain users have access to certain transactions
+3. Emit events triggered by blockchain transactions
+4. Use a Angular UI to interact with a Hyperleder Fabric network
 
 ## Architecture Diagram
 ![Architecture Diagram](images/GenericArchDiagram.png)
+
+## Flow Diagram
+
+![Application Flow Diagram](images/GenericAppFlow.png)
+
+## Flow Description
+1) The user interacts with an Angular Web UI to update and query the blockchain ledger and state
+2) The UI calls Node.js application APIs running on a backend server
+3) The Node.js application server calls Fabric SDK APIs https://fabric-sdk-node.github.io/release-1.4/index.html
+4) The Fabric SDK interacts with and submits transactions to a deployed IBM Blockchain Platform 2.0 or a Hyperledger Fabric 1.4.1 network
+
+The value of running this network on the IBM Blockchain Platform is that one can easily customize the network infrastructure as needed, whether that is the location of the nodes, the CPU and RAM of the hardware, the endorsement policy needed to reach consensus, or adding new organizations and members to the network.
+
+## Prerequisites (Local)
+If you want to run this pattern locally, without any Cloud services, then all you need is VSCode and the
+IBM Blockchain Platform extension. 
+- [Install VSCode version 1.38.0 or greater](https://code.visualstudio.com/download)
+- [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
+- [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
+
+# Local installation steps: Hyperledger Fabric 1.4 Deployment using VSCode
+1. [Clone the Repo](#step-1-clone-the-repo)
+2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
+3. [Install Contract](#step-3-install-contract)
+4. [Instantiate Contract](#step-4-Instantiate-contract)
+5. [Export Connection Details](#step-5-export-connection-details)
+6. [Export Local Wallet](#step-6-export-connection-details)
+7. [Run the App](#step-7-run-the-app)
+
+## Step 1. Clone the Repo
+
+Git clone this repo onto your computer in the destination of your choice:
+```
+git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
+```
+## Step 2. Start the Fabric Runtime
+- First, we need to go to our IBM Blockchain Extension. Click on the IBM Blockchain icon
+  in the left side of VSCode (It looks like a square). 
+- Next, start your local fabric by clicking on the 
+  *three dot symbol* to the right of *LOCAL FABRIC OPS*
+  and then *Start Fabric Runtime*.
+  
+- Once the runtime is finished starting (this might take a couple of minutes), under *Local Fabric 
+  Ops* you should see *Smart Contracts* and a section for both *installed* and *instantiated*.
+
+## Step 3. Install Contract
+
+ Now, let's click on *+ Install* and choose the peer that is available. Then the extension will ask you which package to 
+ install. Choose *vgensupplychainnet@0.0.1.cds* which is in your root directory which you just cloned.
+ 
+If all goes well, you should get a notification as shown 
+ below.
+
+![packageFile](/docs/successInstall.png)
+
+
+## Step 4. Instantiate Contract
+You guessed it. Next, it's time to instantiate. 
+ 
+  Click on *+ Instantiate* 
+
+
+and then choose 
+ *mychannel* for the channel to instantiate the contract on.
+
+
+Next, the extension will ask you 
+ to choose a smart contract and version to instantiate. Click on *voterContract@6.0.0*.
+
+ Next, for the optional function, type in *init*.
+
+
+Leave the arguments blank, and hit *enter* 
+ on your keyboard. 
+
+
+ This will instantiate the smart contract. You should see the contract 
+ under the *instantiated* tab on the left-hand side, as shown in the picture. Note: excuse 
+ the version number on the picture.
+
+<p align="center">
+  <img src="instantiated.png">
+</p>
+
+## Step 5. Export Connection Details
+## Step 6. Export Local Wallet
+## Step 7. Run the app
 
 ## Application Logic Flow
 
@@ -31,16 +146,6 @@ This project showcases the use of blockchain in the supply chain domain. In this
 7) At this point the **Customer** can trace the **Order** history through the supply chain. This is essentially equivalant to scanning a UPC of a product and tracing it back to a farm.
 8) At any point, the **Regulator** has access to all orders in the system to ensure the process is being followed for each product.
 
-## Application Process Flow
-
-![Application Flow Diagram](images/GenericAppFlow.png)
-
-1) The user interacts with an Angular Web UI to update and query the blockchain ledger and state
-2) The UI calls Node.js application APIs running on a backend server
-3) The Node.js application server calls Fabric SDK APIs https://fabric-sdk-node.github.io/release-1.4/index.html
-4) The Fabric SDK interacts with and submits transactions to a deployed IBM Blockchain Platform 2.0 or a Hyperledger Fabric 1.4.1 network
-
-The value of running this network on the IBM Blockchain Platform is that one can easily customize the network infrastructure as needed, whether that is the location of the nodes, the CPU and RAM of the hardware, the endorsement policy needed to reach consensus, or adding new organizations and members to the network.
 
 ## Business Network Definition
 
