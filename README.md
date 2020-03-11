@@ -161,22 +161,9 @@ cd <git_tree>/Blockchain-GenSupplychain/scripts
 ./create_identities.sh
 ./testcase.sh
 ```
-### Start the client side applications:
+### Test Scenario - Manual, using client side UI
 
-In a separate terminal window -
-
-#### 1) build and install all dependencies:
-```
-cd <git_tree>/Blockchain-GenSupplychain/src/client/generic-ang
-npm install
-```
-#### 2) Start the application
-```
-ng -o serve --port 4200
-```
-### Test Scenario - Manual, using UI
-
-#### 1) Log in as Admin 
+#### 1) Log in as admin 
 
 id: admin
 
@@ -186,34 +173,34 @@ password: adminpw
 Select the "Create New User" tab and enter the following users:
 ```
 id: GHFarm
-password: adminpw
+password: GHFarm
 role: producer
 
 id: Walmart
-password: adminpw
+password: Walmart
 role: retailer
 
 id: UPS
-password: adminpw
+password: UPS
 role: shipper
 
 id: ACustomer
-password: adminpw
+password: ACustomer
 role: customer
 
 id: FDA
-password: adminpw
+password: FDA
 role: regulator
 ```
-#### 3) Register each new User
-Select the Register tab from the Login screen, enter the ID, password and role of each user.
+#### 3) Enroll each new User
+Select the Enroll tab from the Login screen, enter the ID, password and type of each user.
 
 #### 4) Start a portal for each user
-For each other user open a separate terminal, start the application on a unique port
+For each user open a separate terminal, start the application on a unique port
 ```
 ng -o serve --port 420X
 ```
-#### 4) On first application instance, login as "Walmart", this will enroll the "Walmart" participant and should take you to the Retailer Portal
+#### 5) On first application instance, login as "Walmart", this should take you to the Retailer Portal as Walmart
 
 Create a couple orders:
 ```
@@ -231,25 +218,25 @@ Producer ID:  GHFarm
 ```
 Click "Create Order"
 
-#### 6) On another application instances, log in as "GHFarm", this should take you to the Producer Portal
+#### 6) On another application instances, log in as "GHFarm", this should take you to the Producer Portal as GHFarm
 
 - click on the order
 - select the "Accept Order" button for the corn product
 - select the "Assign Shipper" button for the corn product
 - enter a "UPS"
 
-#### 6) On another appication instance, log in as "UPS", this should take you to the Shipper Portal
+#### 7) On another appication instance, log in as "UPS", this should take you to the Shipper Portal as UPS
 
 - click on the order
 - select the "Create Shipment" button for the corn product and enter a tracking number
 - select the "Transport Shipment" button for the corn product
 
-#### 7) Back on the Retailer Portal
+#### 8) Back on the Walmart Retailer Portal
 
 - click on the order
 - select the "Receive Shipment" button for the corn product
 
-#### 8) On Producer Portal submit a couple of Price/Quantity Change notifications.
+#### 9) On GHFarm Producer Portal submit a couple of Price/Quantity Change notifications.
 **Note** if Quantity is left blank, this is considered a **Price Change Notification**, otherwise it is considered a **Quantity Change Notification**
 ```
 Product ID:   mango
@@ -267,18 +254,22 @@ Click "Price/Quantity Change"
 
 - This will generate a **Quantity Change Notification** and an order will automatically be created since we created a rule that says if tomatos drop to $5 or below, and there are at least 20 crates available, order 20 crates.
 
-The new orders should appear for designated participants
+*"Price/Quantity Change"* message notifications can be seen from the **Retailer Portal - Place Order** page.
+
+A new order will be automatically created based on rules imbedded in the UI application code that watches for certain Price or Quantity change messages. These new orders should appear on the designated participants' portal.
 
 A Blockchain Event will be generated when an order is created this way.  
 
 External message notifications are sent when order states are changed and Price/Quantity Change notifications are sent.
 
-#### 9) On another appication instance, log in as "FDA", this should take you to the Regulator Portal
+You can see the Blockchain events from the **Producer Portal - "Price/Quantity Change"** page
+
+#### 10) On another appication instance, log in as "FDA", this should take you to the  Regulator Portal as FDA
 
 - This will bring up a list of all orders
 - Clicking on an order will display all of the transaction history of that order
 
-#### 10) On another appication instance, log in as "ACustomer", this should take you to the Customer Portal
+#### 11) On another appication instance, log in as "ACustomer", this should take you to the Customer Portal as ACustomer
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
 - Order transaction history should be displayed
