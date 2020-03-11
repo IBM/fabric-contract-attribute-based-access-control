@@ -385,6 +385,7 @@ class SupplychainContract extends Contract {
         }
 
         // Access Control:
+
         var order = Order.deserialize(orderAsBytes);
         let userId = await this.getCurrentUserId(ctx);
  
@@ -396,6 +397,7 @@ class SupplychainContract extends Contract {
 
         // Return a serialized order to caller of smart contract
         return orderAsBytes;
+        //return order;
     }
 
     /**

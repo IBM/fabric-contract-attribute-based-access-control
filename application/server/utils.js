@@ -120,7 +120,8 @@ utils.events = async () => {
     var channel = client.getChannel(configdata["channel_name"]);
     var peers = channel.getChannelPeers();
     if (peers.length == 0) {
-        console.log("\nError after call to channel.getChannelPeers(): Channel has no peers !\n")
+        //console.log("\nError after call to channel.getChannelPeers(): Channel has no peers !\n")
+        throw new Error("Error after call to channel.getChannelPeers(): Channel has no peers !");
     }
 
     console.log("Connecting to event hub..." + peers[0].getName());
@@ -152,7 +153,7 @@ utils.events = async () => {
                 console.log("\n\n------------- from HLFabric-----------------------\n");
                 console.log("Event payload: " + event.payload.toString());
                 console.log("\n\n------------------------------------\n");
-                publishMessage("Blockchain Event: ", event_payload.event_type, bcChannelName);
+                utils.publishMessage("Blockchain Event: ", event_payload.event_type, bcChannelName);
 
                 // to see the event payload, use 'true' in the call to channel_event_hub.connect(boolean)
                 console.log("\n\nEvent payload: " + event.payload.toString());
@@ -167,7 +168,7 @@ utils.events = async () => {
         );
     }, (err) => {
 
-        console.log("  At creation of event_monitor: Error:" + err.toString());
+        console.log("At creation of event_monitor: Error:" + err.toString());
         throw (err);
 
     });
@@ -182,9 +183,9 @@ utils.parseAndRelay = (event) => {
     var eventData = JSON.parse(event);
     switch (eventData.event_type) {
         case "createOrder":
-            publishMessage("blockchain event: ", "New Order Created - orderId: " + eventData.orderId, bcChannelName); break;
+            utils.publishMessage("blockchain event: ", "New Order Created - orderId: " + eventData.orderId, bcChannelName); break;
         default:
-            publishMessage("blockchain event: ", eventData.event_type, bcChannelName); break;
+            utils.publishMessage("blockchain event: ", eventData.event_type, bcChannelName); break;
     }
 }
 

@@ -41,8 +41,6 @@ export class QueryorderComponent implements OnInit {
       console.log (this.order)
     })
 
-    //if (!this.order) { this.order = {errorCode:0};}
-
   }
 
 }
