@@ -46,7 +46,7 @@ export class ApiService {
   queryOrders(userid, password) {
     console.log ("In queryOrders: " +userid+", "+password);
     // Need to pass current userid and password of currently logged in user, 
-    // as server might restart resetting server side current user to admin
+    // as server might restart, resetting server side current user to admin
     this.httpClient.get<any[]>(this.baseUrl + '/api/orders/?userid='+userid+'&password='+password).subscribe (orders => {
       console.log (orders);
       // Add status to each order, based on this.statuses

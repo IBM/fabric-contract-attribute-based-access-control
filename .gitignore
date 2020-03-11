@@ -1,9 +1,13 @@
-src/gateway/local_fabric/local_fabric_connection.json
-src/gateway/ibp/ibp_connection_profile.json
-src/gateway/ibp/wallet/*
-src/gateway/local/wallet/*
-src/application/client/src/generic-ang/node_modules/*
-src/application/server/node_modules/*
+contract/.vscode/*
+gateway/local/fabric_connection.json
+gateway/ibp/gen_ibp_wallet/*
+gateway/local/gen_local_wallet/*
+gateway/local/fabric_connection.json
+gateway/ibp/connection_profile.json
+gateway/ibp/wallet/*
+gateway/local/wallet/*
+application/client/src/generic-ang/node_modules/*
+application/server/node_modules/*
 
 # IDE - VSCode
 .vscode/*

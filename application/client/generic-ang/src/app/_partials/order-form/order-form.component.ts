@@ -186,7 +186,7 @@ export class OrderFormComponent implements OnInit{
               price: messageData.price,
               quantity: 20,
               producerId: messageData.producerId,
-              retailerId: "c001"
+              retailerId: "Walmart"
             }
             this.api.orderProduct().subscribe(api => {
               this.order = api
