@@ -129,7 +129,7 @@ is finished instantiating.
 ## Step 4. Export Connection Details
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
 
 
 ## Step 5. Export Local Wallet
@@ -137,27 +137,27 @@ is finished instantiating.
 - 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
 the application will not work! 🚨
 - Export the and save the wallet as `gen_local_wallet` to 
-<git_tree>/Blockchain-GenSupplychain/src/gateway/local/gen_local_wallet.json. 
+Blockchain-GenSupplychain/src/gateway/local/gen_local_wallet.json. 
 
 ## Step 6. Build and Run the app
 
-- Next, we need to install the dependencies. Navigate to 
-`Blockchain-GenSupplyChain/application/client/generic-ang` and run `npm install`.
 - Next, let's install the server-side app. Navigate to 
 `Blockchain-GenSupplyChain/application/server` and run 
 `npm install`.
+- Next, we need to install the UI dependencies. Navigate to 
+`Blockchain-GenSupplyChain/application/client/generic-ang` and run `npm install`.
 
 ![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
 
-- Run `node server.js` to connect to the network. 
-- Run `ng serve` to build the Angular app.
+- Run `node server.js` to connect start the API server to the fabric network. 
+- Run `ng serve` to run the Angular app.
 - Go to localhost:4200 to view the app.
 
 ## Step 7. Submit transactions in the app
 
 ### Test Scenario - automatic, using curl against API server
 ```
-cd <git_tree>/Blockchain-GenSupplychain/scripts
+cd Blockchain-GenSupplychain/scripts
 ./create_identities.sh
 ./testcase.sh
 ```
@@ -200,7 +200,8 @@ For each user open a separate terminal, start the application on a unique port
 ```
 ng -o serve --port 420X
 ```
-#### 5) On first application instance, login as "Walmart", this should take you to the Retailer Portal as Walmart
+#### 5) On first application instance, login as "Walmart"
+This should take you to the Retailer Portal as Walmart
 
 Create a couple orders:
 ```
@@ -218,14 +219,16 @@ Producer ID:  GHFarm
 ```
 Click "Create Order"
 
-#### 6) On another application instances, log in as "GHFarm", this should take you to the Producer Portal as GHFarm
+#### 6) On another application instance, log in as "GHFarm"
+This should take you to the Producer Portal as GHFarm
 
 - click on the order
 - select the "Accept Order" button for the corn product
 - select the "Assign Shipper" button for the corn product
 - enter a "UPS"
 
-#### 7) On another appication instance, log in as "UPS", this should take you to the Shipper Portal as UPS
+#### 7) On another application instance, log in as "UPS"
+This should take you to the Shipper Portal as UPS
 
 - click on the order
 - select the "Create Shipment" button for the corn product and enter a tracking number
@@ -256,7 +259,7 @@ Click "Price/Quantity Change"
 
 *"Price/Quantity Change"* message notifications can be seen from the **Retailer Portal - Place Order** page.
 
-A new order will be automatically created based on rules imbedded in the UI application code that watches for certain Price or Quantity change messages. These new orders should appear on the designated participants' portal.
+A new order will be automatically created based on the rules imbedded in the UI application code that watches for certain Price or Quantity change messages. These new orders should appear on the designated participants' portal.
 
 A Blockchain Event will be generated when an order is created this way.  
 
@@ -264,12 +267,14 @@ External message notifications are sent when order states are changed and Price/
 
 You can see the Blockchain events from the **Producer Portal - "Price/Quantity Change"** page
 
-#### 10) On another appication instance, log in as "FDA", this should take you to the  Regulator Portal as FDA
+#### 10) On another application instance, log in as "FDA"
+This should take you to the  Regulator Portal as FDA
 
 - This will bring up a list of all orders
 - Clicking on an order will display all of the transaction history of that order
 
-#### 11) On another appication instance, log in as "ACustomer", this should take you to the Customer Portal as ACustomer
+#### 11) On a final application instance, log in as "ACustomer"
+This should take you to the Customer Portal as ACustomer
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
 - Order transaction history should be displayed
@@ -284,30 +289,29 @@ This Cloud pattern assumes you have an IBM Cloud account.
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
 <!-- 
 #### Local Fabric
 - In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
 
 ### Start the server side of the application. 
-NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
+NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
 
 In a terminal window -
 ```
-cd <git_tree>/Blockchain-GenSupplychain/src/server
+cd Blockchain-GenSupplychain/src/server
 
 export PORT=<PORT #>          // Defaults to 3000
 export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
 node server.js
 ```
 ### Connect up wallet
-- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json.
+- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json.
 - Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
-- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
+- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
 - Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
 is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract. -->
-
 
 
 ## Helpful links
