@@ -136,20 +136,7 @@ Leave the arguments blank, and hit *enter*
 ## Step 6. Export Local Wallet
 ## Step 7. Run the app
 
-## Application Logic Flow
 
-![Application Logic Flow Diagram](images/GenericAppLogicFlow.png)
-
-This project showcases the use of blockchain in the supply chain domain. In this application, we have five participants: a **Producer**, **Shipper**, **Retailer**, **Regulator**, and **Customer**. The scenario is such that:
-
-1) **Retailer** orders a product from a particular **Producer**.  
-2) **Producer** accepts the **Order**
-3) **Producer** fulfills **Order** by assigning it to a **Shipper**.
-4) **Shipper** creates the shipment by adding a tracking number to the **Order**
-5) **Shipper** transports the shipment back to the **Retailer**.
-6) **Retailer** then accepts the shipment. The Product is now available for a **Customer** to purchase.
-7) At this point the **Customer** can trace the **Order** history through the supply chain. This is essentially equivalant to scanning a UPC of a product and tracing it back to a farm.
-8) At any point, the **Regulator** has access to all orders in the system to ensure the process is being followed for each product.
 
 
 ## Business Network Definition
@@ -331,6 +318,20 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
 - a String containing the current user's type
 
+## Application Logic Flow
+
+![Application Logic Flow Diagram](images/GenericAppLogicFlow.png)
+
+This project showcases the use of blockchain in the supply chain domain. In this application, we have five participants: a **Producer**, **Shipper**, **Retailer**, **Regulator**, and **Customer**. The scenario is such that:
+
+1) **Retailer** orders a product from a particular **Producer**.  
+2) **Producer** accepts the **Order**
+3) **Producer** fulfills **Order** by assigning it to a **Shipper**.
+4) **Shipper** creates the shipment by adding a tracking number to the **Order**
+5) **Shipper** transports the shipment back to the **Retailer**.
+6) **Retailer** then accepts the shipment. The Product is now available for a **Customer** to purchase.
+7) At this point the **Customer** can trace the **Order** history through the supply chain. This is essentially equivalant to scanning a UPC of a product and tracing it back to a farm.
+8) At any point, the **Regulator** has access to all orders in the system to ensure the process is being followed for each product.
 ## Filesystem Organization
 
 - application/:
@@ -359,7 +360,6 @@ If you want to build the application and run it on your own Blockchain service:
 ```
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
-
 This utilizes the VSCode IDE Blockchain extension to interact with a fabric network:
 https://github.com/IBM-Blockchain/blockchain-vscode-extension
 
