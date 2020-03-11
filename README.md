@@ -39,7 +39,10 @@ When the reader has completed this code pattern, they will understand how to:
 1. Implement attribute based access control in Hyperledger Fabric
 2. Build a chaincode in which certain users have access to certain transactions
 3. Emit events triggered by blockchain transactions
-4. Use a Angular UI to interact with a Hyperleder Fabric network
+4. Use a Angular UI to interact with a Hyperleder Fabric network.
+
+## Application Access Control Rules, Architecture, and Model can be found [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/app-architecture.md) 
+
 
 ## Architecture Diagram
 ![Architecture Diagram](images/GenericArchDiagram.png)
@@ -73,14 +76,16 @@ IBM Blockchain Platform extension.
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 
+# IBM Cloud (IBM Blockchain Platform stes) shown [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain#ibp-platform)
+
 # Local installation steps: Hyperledger Fabric 1.4 Deployment using VSCode
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
-3. [Install Contract](#step-3-install-contract)
-4. [Instantiate Contract](#step-4-Instantiate-contract)
-5. [Export Connection Details](#step-5-export-connection-details)
-6. [Export Local Wallet](#step-6-export-connection-details)
-7. [Run the App](#step-7-run-the-app)
+3. [Import Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
+4. [Export Connection Details](#step-4-export-connection-details)
+5. [Export Local Wallet](#step-5-export-connection-details)
+6. [Build and Run the App](#step-6-build-and-run-the-app)
+7. [Submit transactions in the app](#step-7-Submit-transactions-in-the-app)
 
 ## Step 1. Clone the Repo
 
@@ -89,310 +94,66 @@ Git clone this repo onto your computer in the destination of your choice:
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 ## Step 2. Start the Fabric Runtime
+![startRuntime](https://user-images.githubusercontent.com/10428517/76370968-dea3ae80-62f5-11ea-8793-d04610e8bf30.gif)
+
+- If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your ~/Applications
+folder shows version 1.39 when you click on show details. You may need to 
+move newer version into the trash, and then empty the trash for the older 
+version to work.
+
 - First, we need to go to our IBM Blockchain Extension. Click on the IBM Blockchain icon
   in the left side of VSCode (It looks like a square). 
 - Next, start your local fabric by clicking on 
-  *Local Fabric* in the **FABRIC ENVIRONMENTS** pane.
+  *1 Org Local Fabric* in the **FABRIC ENVIRONMENTS** pane.
   
 - Once the runtime is finished starting (this might take a couple of minutes), under *Local Fabric* you should see *Smart Contracts* and a section for both *installed* and *instantiated*.
 
-## Step 3. Install Contract
+## Step 3. Import Install and Instantiate Contract
+![importContract](https://user-images.githubusercontent.com/10428517/76371236-e0ba3d00-62f6-11ea-82a1-bfa4798985b9.gif)
+- Next, we have to import our contract before we can install it. Click on 
+**View -> Open Command Pallette -> Import Smart Contract**. Next, click 
+on the `gensupplychainnet@0.0.1.cds` file that is at the root of our directory.
+This will be where you cloned this repo.
+
+
+![installAndInstantiate](https://user-images.githubusercontent.com/10428517/76371514-bae16800-62f7-11ea-9038-039b0fac6967.gif)
+- Now, let's click on *+ Install* and choose the peer that is available. Then the extension will ask you which package to 
+ install. Choose *gensupplychainnet@0.0.1.cds*.
+- Lastly, we need to instantiate the contract to be able to submit transactions 
+on our network. Click on *+ Instantiate* and then choose *gensupplychainnet@0.0.1*.
+- When promted for a function, a private data collection, or and endorsement 
+policy, hit `enter` on your keyboard, which will take all of the defaults.
+- This will instantiate the smart contract. This may take some time. You should see the contract under the *instantiated* tab on the left-hand side, once it 
+is finished instantiating.
+
+## Step 4. Export Connection Details
+![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
- Now, let's click on *+ Install* and choose the peer that is available. Then the extension will ask you which package to 
- install. Choose *gensupplychainnet@0.0.1.cds* which is in your root directory which you just cloned.
- 
-If all goes well, you should get a notification as shown 
- below.
-
-![packageFile](/docs/successInstall.png)
-
-
-## Step 4. Instantiate Contract
-You guessed it. Next, it's time to instantiate. 
- 
-  Click on *+ Instantiate* 
-
-and then choose *gensupplychainnet@0.0.1*. If prompted, choose
- *mychannel* for the channel to instantiate the contract on. 
-Next, the extension will ask you 
- to choose a smart contract and version to instantiate. Click on *gensupplychainnet@0.0.1*.
-
-Next, for the optional function, type in *init*.
-
-Leave the arguments blank, and hit *enter* 
- on your keyboard. 
- 
- Select *no* for private data collection configuration file, and *Default* for endorsement policy.  
-
- This will instantiate the smart contract. You should see the contract 
- under the *instantiated* tab on the left-hand side, as shown in the picture. Note: excuse 
- the version number on the picture.
-
-<p align="center">
-  <img src="instantiated.png">
-</p>
-
-## Step 5. Export Connection Details
-## Step 6. Export Local Wallet
-## Step 7. Run the app
-
-
-
-
-## Business Network Definition
-
-![Business Network Diagram](images/GenericBNDFlow.png)
-
-### Assets
-
-**Order** contains fields:
-
-   - String *orderId*
-   - String *productId*
-   - Float *price*
-   - Integer *quantity*
-   - String *producerId*
-   - String *shipperId*
-   - String *retailerId*
-   - String *modifiedBy*   
-   - String *trackingInfo*
-   - Enumerated *currentOrderState*
-     - ORDER_CREATED: 1
-     - ORDER_RECEIVED: 2
-     - SHIPMENT_ASSIGNED: 3
-     - SHIPMENT_CREATED: 4
-     - SHIPMENT_IN_TRANSIT: 5
-     - SHIPMENT_RECEIVED: 6
-     - ORDER_CLOSED: 7
-
-### Participants
-
-**Retailer** -
-
-  - Places an **Order** to a **Producer** 
-  - Receives **Order** from a **Shipper**.
-
-**Producer** -
-
-   - Fulfills an **Order**
-   - Assigns to a **Shipper**.
-
-**Shipper** -
-
-  - Creates shipment and transports **Order** assigned by **Producer**.
-
-**Customer** -
-
-  - Queries an **Order** to get the Order Transaction History, essentially tracing it back to origination.
-
-**Regulator** -
-
-  - Moderates all **Orders** in the system to ensure that proper quality and guidelines are being followed.
-
-### Transactions
-
-**1. OrderProduct** - Creates an **Order** asset. *currentOrderState* is changed to ORDER_CREATED.
-
-#### Inputs:
-
-  - *orderId*
-  - *productId*
-  - *price*
-  - *quantity*
-  - *producerId*
-  - *retailerId*
-
- #### Access Control:
-
-  - Only a **Retailer** or a **Producer** can invoke this transaction
-
-**2. ReceiveOrder** - Modifies an **Order** asset. *currentOrderState* is changed to ORDER_RECEIVED.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Access Control:
-
- - Only a **Retailer** can invoke this transaction
-
-**3. AssignShipper** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_ASSIGNED.
-
-#### Inputs:
-
-  - valid *orderId*
-  - valid *shipperId*
-
-#### Access Control:
-
- - Only a **Retailer** can invoke this transaction
-
-**4. CreateShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_CREATED.
-
-#### Inputs:
-
-  - valid *orderId*
-  - trackingInfo
-
-#### Access Control:
-
- - Only a **Shipper** can invoke this transaction
-
-**5. TransportShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_IN_TRANSIT.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Access Control:
-
- - Only a **Shipper** can invoke this transaction
-
-**6. ReceiveShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_RECEIVED.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Access Control:
-
- - Only a **Retailer** can invoke this transaction
-
-**7. DeleteOrder** - Deletes an **Order** asset.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Access Control:
-
- - Only the originator of the **Order** can invoke this transaction
-
-**8. QueryOrder** - Query an **Order** asset.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Ouput:
-
-  - returns a buffer containing the **Order** details
-
-#### Access Control:
-
- - Only a **Producer**, **Shipper** or **Retailer** associated with the input *orderId* can invoke this transaction
-
-**9. QueryAllOrders** - Query all **Order** assets.
-
-#### Output:
-
- - returns an array of **order** assets accessible by current active identity with details in JSON format.
-
-#### Access Control:
-
- - Only **Orders** associated with the current user will be returned
-
-**10. GetOrderHistory** - Query transaction history of an **Order** asset.
-
-#### Input:
-
-  - valid *orderId*
-
-#### Output:
-
-- returns an array of JSON objects with the transaction history of an **Order**
-
-#### Access Control:
-
- - If the current user is a **Customer**, the *currentOrderState* must equal ORDER_RECEIVED to invoke this transaction
- - Only a **Producer**, **Shipper** or **Retailer** associated with the input *orderId* can invoke this transaction
-
-**11. getCurrentUserId** - Get the id of the current logged in user.
-
-#### Output:
-
-- a String containing the current user's id
-**12. getCurrentUserType** - Get the type of the current logged in user.
-
-#### Output:
-
-- a String containing the current user's type
-
-## Application Logic Flow
-
-![Application Logic Flow Diagram](images/GenericAppLogicFlow.png)
-
-This project showcases the use of blockchain in the supply chain domain. In this application, we have five participants: a **Producer**, **Shipper**, **Retailer**, **Regulator**, and **Customer**. The scenario is such that:
-
-1) **Retailer** orders a product from a particular **Producer**.  
-2) **Producer** accepts the **Order**
-3) **Producer** fulfills **Order** by assigning it to a **Shipper**.
-4) **Shipper** creates the shipment by adding a tracking number to the **Order**
-5) **Shipper** transports the shipment back to the **Retailer**.
-6) **Retailer** then accepts the shipment. The Product is now available for a **Customer** to purchase.
-7) At this point the **Customer** can trace the **Order** history through the supply chain. This is essentially equivalant to scanning a UPC of a product and tracing it back to a farm.
-8) At any point, the **Regulator** has access to all orders in the system to ensure the process is being followed for each product.
-## Filesystem Organization
-
-- application/:
-
-  + server/server.js - Contains the Node JS code to interact with the backend
-  + client/* - Front end Angular UI code
-
-- contract/*:
-
-  + The smart contract files.  VSCode needs to be opened up to this directory to package the smart contract. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for more information on running VSCode IDE.
-
-- gateway/:
-
-   + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
-   + local/config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
-
-- kube-config/*:
-
-   + files needed to deploy this sample onto an iks cluster
-
-## Running the application from Kube Cluster
-We have this application running at \<TBD\> on our IBP Blockchain Service if you just want to play around with it to see what features it has. Several identities have been defined.  Log in as "admin", password "adminpw" to see the registered and enrolled identities.
-
-## Setup for building and running the application from this git code repo
-If you want to build the application and run it on your own Blockchain service:
-```
-git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
-```
-This utilizes the VSCode IDE Blockchain extension to interact with a fabric network:
-https://github.com/IBM-Blockchain/blockchain-vscode-extension
-
-### Start Fabric Network
-
-#### IBP Platform
-- Create a Kubernetes Cluster using the IBM Kubernetes Service
-https://cloud.ibm.com/docs/containers?topic=containers-getting-started
-- Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
-https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
-
-#### Local Fabric
-- In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
 - Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
 
-### Start the server side of the application. 
-NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
 
-In a terminal window -
-```
-cd <git_tree>/Blockchain-GenSupplychain/src/server
+## Step 5. Export Local Wallet
+![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
+- 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
+the application will not work! 🚨
+- Export the and save the wallet as `gen_local_wallet` to 
+<git_tree>/Blockchain-GenSupplychain/src/gateway/local/gen_local_wallet.json. 
 
-export PORT=<PORT #>          // Defaults to 3000
-export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
-node server.js
-```
-### Connect up wallet
-- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json.
-- Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
-- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
-- Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
-is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract.
+## Step 6. Build and Run the app
+
+- Next, we need to install the dependencies. Navigate to 
+`Blockchain-GenSupplyChain/application/client/generic-ang` and run `npm install`.
+- Next, let's install the server-side app. Navigate to 
+`Blockchain-GenSupplyChain/application/server` and run 
+`npm install`.
+
+![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
+
+- Run `node server.js` to connect to the network. 
+- Run `ng serve` to build the Angular app.
+- Go to localhost:4200 to view the app.
+
+## Step 7. Submit transactions in the app
 
 ### Test Scenario - automatic, using curl against API server
 ```
@@ -521,6 +282,42 @@ External message notifications are sent when order states are changed and Price/
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
 - Order transaction history should be displayed
+
+## IBM Blockchain Platform steps
+This Cloud pattern assumes you have an IBM Cloud account.
+
+- IBM Cloud account
+- Node v8.x or greater and npm v5.x or greater
+
+- Create a Kubernetes Cluster using the IBM Kubernetes Service
+https://cloud.ibm.com/docs/containers?topic=containers-getting-started
+- Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
+https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
+- Export the Connection Profile from the IBP instance and save as <git tree>/Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+<!-- 
+#### Local Fabric
+- In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to <git_tree>/Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
+
+### Start the server side of the application. 
+NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
+
+In a terminal window -
+```
+cd <git_tree>/Blockchain-GenSupplychain/src/server
+
+export PORT=<PORT #>          // Defaults to 3000
+export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
+node server.js
+```
+### Connect up wallet
+- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json.
+- Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
+- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in <git_tree>/Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
+- Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
+is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract. -->
+
+
 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
