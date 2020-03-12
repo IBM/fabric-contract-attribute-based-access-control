@@ -198,7 +198,7 @@ Select the Enroll tab from the Login screen, enter the ID, password and type of 
 #### 4) Start a portal for each user
 For each user open a separate terminal, start the application on a unique port
 ```
-ng -o serve --port 420X
+ng serve --port 420X
 ```
 #### 5) On first application instance, login as "Walmart"
 This should take you to the Retailer Portal as Walmart
