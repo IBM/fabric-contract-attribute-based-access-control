@@ -10,7 +10,7 @@ correct practices are followed.
 When the reader has completed this code pattern, they will understand:
 
 - Attribute Based Access Control
-- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](hyperledger.github.io/fabric-sdk-node/)
+- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/index.html)
 - How to customize queries
 - External Event management using [PubNub](https://www.pubnub.com/)
 - How to bring together a Hyperledger Fabric network, Fabric Client for user management and a front end UI (Angular)
