@@ -1,5 +1,5 @@
 {
-    "wallet":"../../gateway/local/wallet",
+    "wallet":"../../gateway/local/gen_local_wallet",
     "connection_profile_filename":"../../gateway/local/fabric_connection.json",
     "channel_name":"mychannel",
     "smart_contract_name":"gensupplychainnet",
