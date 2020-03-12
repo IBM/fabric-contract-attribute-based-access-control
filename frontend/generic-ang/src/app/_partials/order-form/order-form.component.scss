@@ -1,0 +1,66 @@
+@import './../../colors.scss';
+label {
+  display: block;
+
+  input, textarea {
+    display: block;
+    width: 100%;
+    height: 25px;
+    margin-bottom: 20px;
+    padding: 1em;
+  }
+
+  .error {
+    margin-top: -20px;
+    background: yellow;
+    padding: .5em;
+    display: inline-block;
+    font-size: .9em;
+    margin-bottom: 20px;
+  }
+}
+
+.form-button {
+  background: $pastel-blue;
+  width: 125px;
+
+  border: 1px white solid;
+  color: $dark-grey;
+  // border-style: outset;
+  width: 250px;
+  font-size: 75%;
+
+  text-transform: uppercase;
+  // border-radius: 4px;
+  padding: 1em;
+  cursor: pointer;
+  font-family: 'Montserrat';
+}
+
+.form-button:hover {
+  background: $bright-green;
+}
+
+.formstyle {
+  width: 50%;
+  min-height: 400px;
+  float: left;
+}
+
+.messageareastyle {
+  display: block;
+  border-radius: 5px;
+  height: 500px;
+  width: 50%;
+  padding: 5px;
+  float: left;
+  overflow-y:scroll;
+  p {
+    display: block;
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+    text-align: left;
+  }
+}
+

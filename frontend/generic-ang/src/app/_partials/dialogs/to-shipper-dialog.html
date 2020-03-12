@@ -1,0 +1,11 @@
+<div id="shipper-dialog">
+  <h1 mat-dialog-title>Choose a Shipper</h1>
+  <div mat-dialog-content>
+    <select class="form-control" name="shipper" [(ngModel)]="model.shipper" #shipper="ngModel" required>
+      <option *ngFor="let shipper of data.shippers" [ngValue]="shipper">{{ shipper.id }}</option>
+    </select>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button mat-button [mat-dialog-close]="model.shipper" cdkFocusInitial [disabled]='model.shipper!=null?false:true'>Choose Shipper</button>
+  </div>
+</div>

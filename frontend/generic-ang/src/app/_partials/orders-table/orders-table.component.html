@@ -1,0 +1,139 @@
+<section id="orders-table">
+  <div class="table-div">
+    <mat-form-field class="mat-form-field ng-tns-c26-530 mat-primary mat-form-field-type-mat-input mat-form-field-appearance-legacy mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    <table mat-table
+       [dataSource]="orders" multiTemplateDataRows
+       class="mat-elevation-z8">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{ element[column] }}</span>
+          <!-- <span *ngIf="column=='action'">
+            <mat-icon aria-hidden="false" aria-label="delete icon" (click)="deleteOrder(element.orderId)">delete</mat-icon>
+          </span> -->
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+          <div *ngIf="!regulator" class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="row">
+              <!-- Retailer -->
+              <div class="status-stage status-complete">
+                <span>
+                  <p>
+                    Order Placed
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+              </div>
+              <!-- Producer -->
+              <div class="status-stage" [class.status-complete]="element.currentOrderState>=2">
+                <span *ngIf="element.currentOrderState<=1">
+                  <p>
+                    Order Pending...
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
+                  </p>
+                </span>
+                <button *ngIf="element.currentOrderState==1 && currentUser.usertype=='producer'" [disabled]='element.currentOrderState==1?false:true' (click)="acceptOrder(element.orderId)" class="example-element-button">
+                  Accept Order
+                </button>
+                <span *ngIf="element.currentOrderState>=2">
+                  <p>
+                    Order Received
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+              </div>
+              <!-- Producer -->
+              <div class="status-stage" [class.status-complete]="element.currentOrderState>=3">
+                <span *ngIf="element.currentOrderState<=2">
+                  <p>
+                    Package Pending...
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
+                  </p>
+                </span>
+                <button *ngIf="element.currentOrderState==2 && currentUser.usertype=='producer'" [disabled]='element.currentOrderState==2?false:true' (click)="chooseShipper(element.orderId)" class="example-element-button">
+                  Assign Shipper
+                </button>
+                <span *ngIf="element.currentOrderState>=3">
+                  <p>
+                    Shipment Packaged
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+              </div>
+              <!-- Shipper -->
+              <div class="status-stage" [class.status-complete]="element.currentOrderState>=5">
+                <span *ngIf="element.currentOrderState<=3">
+                  <p>
+                    Shipment Pending...
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
+                  </p>
+                </span>
+                <button *ngIf="element.currentOrderState==3 && currentUser.usertype=='shipper'" [disabled]='element.currentOrderState==3?false:true' (click)="createShipment(element.orderId)" class="example-element-button">
+                  Create Shipment
+                </button>
+                <span *ngIf="element.currentOrderState==4">
+                  <p>
+                    Shipment Created
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+                <button *ngIf="element.currentOrderState==4 && currentUser.usertype=='shipper'" [disabled]='element.currentOrderState==4?false:true' (click)="transportShipment(element.orderId)" class="example-element-button">
+                  Transport Shipment
+                </button>
+                <span *ngIf="element.currentOrderState>=5">
+                  <p>
+                    Shipment In Transit
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+              </div>
+              <!-- Retailer -->
+              <div class="status-stage" [class.status-complete]="element.currentOrderState>=6">
+                <span *ngIf="element.currentOrderState<=5">
+                  <p>
+                    Awaiting Shipment...
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">hourglass_empty</mat-icon>
+                  </p>
+                </span>
+                <button *ngIf="element.currentOrderState==5 && currentUser.usertype=='retailer'" [disabled]='element.currentOrderState==5?false:true' (click)="receiveShipment(element.orderId)" class="example-element-button">
+                  Receive Shipment
+                </button>
+                <span *ngIf="element.currentOrderState>=6">
+                  <p>
+                    Shipment Received
+                    <mat-icon aria-hidden="false" aria-label="check circle icon">check_circle</mat-icon>
+                  </p>
+                </span>
+              </div>
+            </div>
+            <!-- Delete Order -->
+            <div *ngIf="element.currentOrderState==1 || element.currentOrderState>=6" class="row delete-order">
+              <button (click)="deleteOrder(element)" class="delete-button">
+                Delete Order <mat-icon aria-hidden="false" aria-label="delete icon">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Regulator View -->
+          <div *ngIf="regulator" class="row example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <order-history [orderId]="element.orderId"></order-history>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+  </div>
+</section>
