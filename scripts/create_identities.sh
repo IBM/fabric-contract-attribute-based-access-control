@@ -11,6 +11,7 @@ API_URL=${API_URL:-localhost:3000}
 #echo ""
 # curl -X POST "${API_URL}/api/reset-demo" -H "accept: application/json"
 #echo ""
+set -x
 echo ""
 curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
 curl -X POST "${API_URL}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"

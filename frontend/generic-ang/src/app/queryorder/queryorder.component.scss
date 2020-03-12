@@ -1,0 +1,39 @@
+label {
+    display: block;
+    
+    input, textarea {
+        display: block;
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 1em;
+    }
+
+    .error {
+        margin-top: -20px;
+        background: yellow;
+        padding: .5em;
+        display: inline-block;
+        font-size: .9em;
+        margin-bottom: 20px;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
+    text-align: center;
+    background-color: rgb(27, 43, 167);
+    color: white;
+}
+
+th, td {
+    padding: 5px;
+    text-align: center;
+}
