@@ -29,8 +29,8 @@ how to implement such functionality, by registering and enrolling each user with
 To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/backend/src/utils.js#L199);
 The usertype can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
-the regulator (such as the FDA) is able to view all transactions on the network in order to reliably audit
-the network, but the retailer is only able to view the transactions which they are a part of. Once you
+the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
+the network, but a **retailer** is only able to view the transactions which they are a part of. Once you
 understand how to apply these access control rules, you can apply them to any use-case, and 
 start building innovative, secure, blockchain networks. 
 
