@@ -77,16 +77,14 @@ IBM Blockchain Platform extension.
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 
-# IBM Cloud (IBM Blockchain Platform steps) shown [here](#ibm-blockchain-platform-steps)
-
-# Local installation steps: Hyperledger Fabric 1.4 Deployment using VSCode
+# Fabric network startup steps: 
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
 3. [Import Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
 4. [Export Connection Details](#step-4-export-connection-details)
-5. [Export Local Wallet](#step-5-export-connection-details)
+5. [Export Local Wallet](#step-5-export-local-wallet)
 6. [Build and Run the App](#step-6-build-and-run-the-app)
-7. [Submit transactions in the app](#step-7-Submit-transactions-in-the-app)
+7. [Submit transactions in the app](#step-7-submit-transactions-in-the-app)
 
 ## Step 1. Clone the Repo
 
@@ -95,6 +93,8 @@ Git clone this repo onto your computer in the destination of your choice:
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 ## Step 2. Start the Fabric Runtime
+### IBM Cloud (IBM Blockchain Platform) start up steps shown [here](#ibm-blockchain-platform-steps)
+### Local Hyperledger Fabric 1.4 Deployment steps here, using VSCode Blockchain extension:
 ![startRuntime](https://user-images.githubusercontent.com/10428517/76370968-dea3ae80-62f5-11ea-8793-d04610e8bf30.gif)
 
 - If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your ~/Applications
@@ -170,7 +170,7 @@ id: admin
 password: adminpw
 
 #### 2) Create users
-Select the "Create New User" tab and enter the following users:
+Select the "Register New User" tab and enter the following users:
 ```
 id: GHFarm
 password: GHFarm
