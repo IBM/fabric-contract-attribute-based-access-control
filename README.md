@@ -215,7 +215,7 @@ Producer ID:  GHFarm
 Click "Create Order"
 
 #### 5) Log out and in as "GHFarm"
-Click the person icon in top right of window to logout and be redirected to the login screen again. This should take you to the Producer Portal as *GHFarm*
+Click the person icon in top right of window to logout to be redirected to the login screen. Log in as GHFarm. This should take you to the Producer Portal as *GHFarm*
 
 - click on the corn order
 - select the "Accept Order" button for the corn product
