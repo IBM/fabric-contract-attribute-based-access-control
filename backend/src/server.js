@@ -77,7 +77,7 @@ app.post('/api/orders', (req, res) => {
             console.log('Process orderProduct transaction.');
             let order = Order.fromBuffer(orderProdResponse);
             console.log(`order ${order.orderId} : price = ${order.price}, quantity = ${order.quantity}, producer = ${order.producerId}, consumer = ${order.retailerId}, trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
-            //order.errorCode = 1;
+            order.errorCode = 1;
             res.send(order);
         }, (error) => {
             // handle error if transaction failed
@@ -100,7 +100,7 @@ app.get('/api/orders/:id', (req, res) => {
 
         console.log(`order ${order.orderId} : price = ${order.price}, quantity = ${order.quantity}, producer = ${order.producerId}, consumer = ${order.retailerId}, trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
         console.log('Transaction complete.');
-        //order.errorCode = 1;
+        order.errorCode = 1;
         res.send(order);
     }, (error) => {
         //  handle error if transaction failed
@@ -373,7 +373,7 @@ app.get('/api/users', (req, res) => {
     utils.getAllUsers().then((result) => {
         // process response
         console.log('Process getAllUsers response');
-        //  result.errorCode = 1;
+        result.errorCode = 1;
         res.send(result);
     }, (error) => {
         //  handle error if transaction failed
