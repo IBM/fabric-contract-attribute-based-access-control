@@ -1,7 +1,0 @@
-{
-   "connection_profile_filename":"../../gateway/ibp/fabric_connection.json",
-    "channel_name":"channel1",
-    "smart_contract_name":"gensupplychainnet",
-    "wallet":"../../gateway/ibp/wallet",
-    "peerForEventsSubscription": "nd77f62-peerorg1.blockchain-work3.us-south.containers.appdomain.cloud:7051",
-}

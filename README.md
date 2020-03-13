@@ -9,10 +9,11 @@ correct practices are followed.
 
 When the reader has completed this code pattern, they will understand:
 
+- User Identity Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/index.html)
 - Attribute Based Access Control
-- User Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/index.html)
+
 - How to customize queries
-- External Event management using [PubNub](https://www.pubnub.com/)
+
 - How to bring together a Hyperledger Fabric network, Fabric Client for user management and a front end UI (Angular)
 
 **Audience level : Intermediate Developers**
@@ -25,7 +26,7 @@ their competitors' rates. Given that Hyperledger Fabric is optimized for a broad
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
 how to implement such functionality, by registering each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/utils.js#L221);
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/backend/src/utils.js#L119);
 The usertype can be either an admin, a regulator, a producer, a shipper, a retailer, or a 
 customer, and is generated when a specific user registers in the application. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
@@ -76,7 +77,7 @@ IBM Blockchain Platform extension.
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 
-# IBM Cloud (IBM Blockchain Platform steps) shown [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain#ibp-platform)
+# IBM Cloud (IBM Blockchain Platform steps) shown [here](#ibm-blockchain-platform-steps)
 
 # Local installation steps: Hyperledger Fabric 1.4 Deployment using VSCode
 1. [Clone the Repo](#step-1-clone-the-repo)
@@ -129,23 +130,22 @@ is finished instantiating.
 ## Step 4. Export Connection Details
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
-
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/backend/gateway/local/fabric_connection.json. 
 
 ## Step 5. Export Local Wallet
 ![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
 - 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
 the application will not work! 🚨
 - Export the and save the wallet as `gen_local_wallet` to 
-Blockchain-GenSupplychain/src/gateway/local/gen_local_wallet.json. 
+Blockchain-GenSupplychain/backend/gateway/local/gen_local_wallet.json. 
 
 ## Step 6. Build and Run the app
 
 - Next, let's install the server-side app. Navigate to 
-`Blockchain-GenSupplyChain/application/server` and run 
+`Blockchain-GenSupplyChain/backend/src` and run 
 `npm install`.
 - Next, we need to install the UI dependencies. Navigate to 
-`Blockchain-GenSupplyChain/application/client/generic-ang` and run `npm install`.
+`Blockchain-GenSupplyChain/frontend/generic-ang` and run `npm install`.
 
 ![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
 
@@ -195,13 +195,8 @@ role: regulator
 #### 3) Enroll each new User
 Select the Enroll tab from the Login screen, enter the ID, password and type of each user.
 
-#### 4) Start a portal for each user
-For each user open a separate terminal, start the application on a unique port
-```
-ng serve --port 420X
-```
-#### 5) On first application instance, login as "Walmart"
-This should take you to the Retailer Portal as Walmart
+#### 4) Log in as "Walmart"
+On the "Log in" page, log in as Walmart. This should take you to the Retailer Portal as *Walmart*
 
 Create a couple orders:
 ```
@@ -219,65 +214,38 @@ Producer ID:  GHFarm
 ```
 Click "Create Order"
 
-#### 6) On another application instance, log in as "GHFarm"
-This should take you to the Producer Portal as GHFarm
+#### 5) Log out and in as "GHFarm"
+Click the person icon in top right of window to logout and be redirected to the login screen again. This should take you to the Producer Portal as *GHFarm*
 
-- click on the order
+- click on the corn order
 - select the "Accept Order" button for the corn product
 - select the "Assign Shipper" button for the corn product
 - enter a "UPS"
 
-#### 7) On another application instance, log in as "UPS"
-This should take you to the Shipper Portal as UPS
+#### 6) Log out and in as "UPS"
+This should take you to the Shipper Portal as *UPS*
 
-- click on the order
+- click on corn order
 - select the "Create Shipment" button for the corn product and enter a tracking number
 - select the "Transport Shipment" button for the corn product
 
-#### 8) Back on the Walmart Retailer Portal
+#### 7) Log out and in as "Walmart" again
 
-- click on the order
+- click on corn order
 - select the "Receive Shipment" button for the corn product
 
-#### 9) On GHFarm Producer Portal submit a couple of Price/Quantity Change notifications.
-**Note** if Quantity is left blank, this is considered a **Price Change Notification**, otherwise it is considered a **Quantity Change Notification**
-```
-Product ID:   mango
-Price:        4
-```
-Click "Price/Quantity Change"
-
-- This will generate a **Price Change Notification** and an order will automatically be created since we created a rule that says if mangos drop to $5 or below, order 10 crates.
-```
-Product ID:   tomato
-Price:        2
-Quantity:     25
-```
-Click "Price/Quantity Change"
-
-- This will generate a **Quantity Change Notification** and an order will automatically be created since we created a rule that says if tomatos drop to $5 or below, and there are at least 20 crates available, order 20 crates.
-
-*"Price/Quantity Change"* message notifications can be seen from the **Retailer Portal - Place Order** page.
-
-A new order will be automatically created based on the rules imbedded in the UI application code that watches for certain Price or Quantity change messages. These new orders should appear on the designated participants' portal.
-
-A Blockchain Event will be generated when an order is created this way.  
-
-External message notifications are sent when order states are changed and Price/Quantity Change notifications are sent.
-
-You can see the Blockchain events from the **Producer Portal - "Price/Quantity Change"** page
-
-#### 10) On another application instance, log in as "FDA"
-This should take you to the  Regulator Portal as FDA
+#### 8) Log out and in as "FDA"
+This should take you to the  Regulator Portal as *FDA*
 
 - This will bring up a list of all orders
 - Clicking on an order will display all of the transaction history of that order
 
-#### 11) On a final application instance, log in as "ACustomer"
-This should take you to the Customer Portal as ACustomer
+#### 9) Log out and in as "ACustomer"
+This should take you to the Customer Portal as *ACustomer*
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
 - Order transaction history should be displayed
+- Enter order id for avocado.  An error should appear indicating that the customer can't see this order. It hasn't made it through the process yet.  
 
 ## IBM Blockchain Platform steps
 This Cloud pattern assumes you have an IBM Cloud account.
@@ -289,7 +257,7 @@ This Cloud pattern assumes you have an IBM Cloud account.
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/src/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/backend/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
 <!-- 
 #### Local Fabric
 - In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
