@@ -64,7 +64,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
 ### Transactions
 
-**1. OrderProduct** - Creates an **Order** asset. *currentOrderState* is changed to ORDER_CREATED.
+**1. orderProduct** - Creates an **Order** asset. *currentOrderState* is changed to ORDER_CREATED.
 
 #### Inputs:
 
@@ -79,7 +79,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
   - Only a **Retailer** or a **Producer** can invoke this transaction
 
-**2. ReceiveOrder** - Modifies an **Order** asset. *currentOrderState* is changed to ORDER_RECEIVED.
+**2. receiveOrder** - Modifies an **Order** asset. *currentOrderState* is changed to ORDER_RECEIVED.
 
 #### Input:
 
@@ -89,7 +89,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Retailer** can invoke this transaction
 
-**3. AssignShipper** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_ASSIGNED.
+**3. assignShipper** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_ASSIGNED.
 
 #### Inputs:
 
@@ -100,7 +100,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Retailer** can invoke this transaction
 
-**4. CreateShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_CREATED.
+**4. createShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_CREATED.
 
 #### Inputs:
 
@@ -111,7 +111,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Shipper** can invoke this transaction
 
-**5. TransportShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_IN_TRANSIT.
+**5. transportShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_IN_TRANSIT.
 
 #### Input:
 
@@ -121,7 +121,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Shipper** can invoke this transaction
 
-**6. ReceiveShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_RECEIVED.
+**6. receiveShipment** - Modifies an **Order** asset. *currentOrderState* is changed to SHIPMENT_RECEIVED.
 
 #### Input:
 
@@ -131,7 +131,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Retailer** can invoke this transaction
 
-**7. DeleteOrder** - Deletes an **Order** asset.
+**7. deleteOrder** - Deletes an **Order** asset.
 
 #### Input:
 
@@ -141,7 +141,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only the originator of the **Order** can invoke this transaction
 
-**8. QueryOrder** - Query an **Order** asset.
+**8. queryOrder** - Query an **Order** asset.
 
 #### Input:
 
@@ -155,7 +155,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only a **Producer**, **Shipper** or **Retailer** associated with the input *orderId* can invoke this transaction
 
-**9. QueryAllOrders** - Query all **Order** assets.
+**9. queryAllOrders** - Query all **Order** assets.
 
 #### Output:
 
@@ -165,7 +165,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - Only **Orders** associated with the current user will be returned
 
-**10. GetOrderHistory** - Query transaction history of an **Order** asset.
+**10. getOrderHistory** - Query transaction history of an **Order** asset.
 
 #### Input:
 
@@ -193,20 +193,23 @@ This project showcases the use of blockchain in the supply chain domain. In this
 - a String containing the current user's type
 
 ## Filesystem Organization
+- backend/src:
 
-- application/:
+  + src/server.js - Uses Node Express to define the API routes
+  + src/utils.js - Contains the Node JS support code to interact with the fabric network
 
-  + server/server.js - Contains the Node JS code to interact with the backend
-  + client/* - Front end Angular UI code
+- backend/gateway:
+
+   + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
+   + local/config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
+
+- frontend/generic-app:
+
+   Angular Frontend User Interface application
 
 - contract/*:
 
   + The smart contract files.  VSCode needs to be opened up to this directory to package the smart contract. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for more information on running VSCode IDE.
-
-- gateway/:
-
-   + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
-   + local/config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
 
 - kube-config/*:
 
