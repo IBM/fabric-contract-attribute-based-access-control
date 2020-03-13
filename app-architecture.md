@@ -201,7 +201,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 - backend/gateway:
 
    + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
-   + local/config.json - Contains information used to run  against a Hyperledger Fabric 1.4 running locally.
+   + local/config.json - Contains information used to run against a local Hyperledger v1.4 Fabric.
 
 - frontend/generic-app:
 
