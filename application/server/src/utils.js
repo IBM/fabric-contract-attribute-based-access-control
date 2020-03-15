@@ -47,11 +47,11 @@ utils.connectGatewayFromConfig = async () => {
 
         const platform = process.env.PLATFORM || 'LOCAL';
         if (platform == 'IBP') {
-            configdata = JSON.parse(fs.readFileSync('../../gateway/ibp/config.json', 'utf8'));
+            configdata = JSON.parse(fs.readFileSync('../../../gateway/ibp/config.json', 'utf8'));
             console.log("Platform = " + platform);
             bLocalHost = false;
         } else { // PLATFORM = LOCAL
-            configdata = JSON.parse(fs.readFileSync('../../gateway/local/config.json', 'utf8'));
+            configdata = JSON.parse(fs.readFileSync('../../../gateway/local/config.json', 'utf8'));
             console.log("Platform = " + platform);
             bLocalHost = true;
         }
