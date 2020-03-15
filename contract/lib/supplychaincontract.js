@@ -73,6 +73,7 @@ class SupplychainContract extends Contract {
 
         // Access Control: This transaction should only be invoked by a Producer or Retailer
         let userType = await this.getCurrentUserType(ctx);
+        
 
         if ((userType != "admin") && // admin only has access as a precaution.
             (userType != "producer") &&
