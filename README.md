@@ -128,14 +128,14 @@ is finished instantiating.
 ## Step 4. Export Connection Details
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/backend/gateway/local/fabric_connection.json. 
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplyChain/application/server/gateway/local/fabric_connection.json. 
 
 ## Step 5. Export Local Wallet
 ![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
 - 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
 the application will not work! 🚨
 - Export the and save the wallet as `gen_local_wallet` to 
-Blockchain-GenSupplychain/backend/gateway/local/gen_local_wallet.json. 
+Blockchain-GenSupplyChain/application/server/gateway/local/gen_local_wallet.json. 
 
 ## Step 6. Build and Run the app
 
