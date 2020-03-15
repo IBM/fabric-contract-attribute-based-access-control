@@ -7,15 +7,6 @@ purchase. The customer can trace the order history through the supply chain, pro
 end to end visibility. Lastly, a regulator has access to all orders in the system to ensure 
 correct practices are followed. 
 
-When the reader has completed this code pattern, they will understand:
-
-- User Identity Management using [Hyperledger Fabric node.js SDK CA Client (FabricCAServices)](https://hyperledger.github.io/fabric-sdk-node/release-1.4/index.html)
-- Attribute Based Access Control
-
-- How to customize queries
-
-- How to bring together a Hyperledger Fabric network, Fabric Client for user management and a front end UI (Angular)
-
 **Audience level : Intermediate Developers**
 
 ### Permissioned blockchains - enabling transparancy and confidentiality
