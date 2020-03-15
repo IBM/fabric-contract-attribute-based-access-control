@@ -1,7 +1,6 @@
 # Implement attribute based access control to provide end to end visibility into the supply chain history of a particular product 
 
-This sample demonstrates an end to end blockchain application that connects to Hyperledger Fabric 1.4 or the IBM Blockchain Platform. It implements attribute based access control, user management,
-event management, and a Angular front-end UI to interact and query the blockchain ledger. The 
+This sample demonstrates an end to end blockchain application that connects to Hyperledger Fabric 1.4 or the IBM Blockchain Platform. It implements attribute based access control, user management, and a Angular front-end UI to interact and query the blockchain ledger. The 
 sample takes the user through ordering, shipping, and enlisting the product for the customer to 
 purchase. The customer can trace the order history through the supply chain, providing 
 end to end visibility. Lastly, a regulator has access to all orders in the system to ensure 
@@ -29,8 +28,7 @@ When the reader has completed this code pattern, they will understand how to:
 
 1. Implement attribute based access control in Hyperledger Fabric
 2. Build a chaincode in which certain users have access to certain transactions
-3. Emit events triggered by blockchain transactions
-4. Use a Angular UI to interact with a Hyperleder Fabric network.
+3. Use a Angular UI to interact with a Hyperleder Fabric network.
 
 ## Application Access Control Rules, Architecture, and Model can be found [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/app-architecture.md) 
 
