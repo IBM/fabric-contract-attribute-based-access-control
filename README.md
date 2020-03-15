@@ -54,7 +54,7 @@ When the reader has completed this code pattern, they will understand how to:
 ## Flow Description
 1) The user interacts with an Angular Web UI to update and query the blockchain ledger and state
 2) The UI calls Node.js application APIs running on a backend server
-3) The Node.js application server calls Fabric SDK APIs [see documentation here](https://hyperledger-fabric-ca.readthedocs.io/en/latest/users-guide.html#fabric-ca-client)
+3) The Node.js application server calls Fabric SDK APIs [see documentation here](https://hyperledger.github.io/fabric-sdk-node/release-1.4/index.html)
 4) The Fabric SDK interacts with and submits transactions to a deployed IBM Blockchain Platform 2.0 or a Hyperledger Fabric 1.4.1 network
 
 The value of running this network on the IBM Blockchain Platform is that one can easily customize the network infrastructure as needed, whether that is the location of the nodes, the CPU and RAM of the hardware, the endorsement policy needed to reach consensus, or adding new organizations and members to the network.
