@@ -26,7 +26,7 @@ their competitors' rates. Given that Hyperledger Fabric is optimized for a broad
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
 how to implement such functionality, by registering and enrolling each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/backend/src/utils.js#L199);
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/src/utils.js#L199);
 The usertype can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
 the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
@@ -115,7 +115,6 @@ version to work.
 on the `gensupplychainnet@0.0.1.cds` file that is at the root of our directory.
 This will be where you cloned this repo.
 
-
 ![installAndInstantiate](https://user-images.githubusercontent.com/10428517/76371514-bae16800-62f7-11ea-9038-039b0fac6967.gif)
 - Now, let's click on *+ Install* and choose the peer that is available. Then the extension will ask you which package to 
  install. Choose *gensupplychainnet@0.0.1.cds*.
@@ -141,15 +140,17 @@ Blockchain-GenSupplychain/backend/gateway/local/gen_local_wallet.json.
 ## Step 6. Build and Run the app
 
 - Next, let's install the server-side app. Navigate to 
-`Blockchain-GenSupplyChain/backend/src` and run 
+`Blockchain-GenSupplyChain/application/server/src` and run 
 `npm install`.
 - Next, we need to install the UI dependencies. Navigate to 
-`Blockchain-GenSupplyChain/frontend/generic-ang` and run `npm install`.
+`Blockchain-GenSupplyChain/application/client` and run `npm install`.
 
 ![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
 
-- Run `node server.js` to connect start the API server to the fabric network. 
-- Run `ng serve` to run the Angular app.
+- Navigate to 
+`Blockchain-GenSupplyChain/application/server/src` and run `node server.js` to connect start the API server to the fabric network. 
+- Navigate to 
+`Blockchain-GenSupplyChain/application/client` and run `ng serve` to run the Angular app.
 - Go to localhost:4200 to view the app.
 
 ## Step 7. Submit transactions in the app
@@ -161,6 +162,7 @@ cd Blockchain-GenSupplychain/scripts
 ./testcase.sh
 ```
 ### Test Scenario - Manual, using client side UI
+- Navigate to http://localhost:4200
 
 #### 1) Log in as admin 
 
