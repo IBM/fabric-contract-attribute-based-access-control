@@ -25,13 +25,12 @@ discounted rates compared to others. In this scenario, other consumers should no
 their competitors' rates. Given that Hyperledger Fabric is optimized for a broad range of 
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
-how to implement such functionality, by registering each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/backend/src/utils.js#L119);
-The usertype can be either an admin, a regulator, a producer, a shipper, a retailer, or a 
-customer, and is generated when a specific user registers in the application. When that user logs in
+how to implement such functionality, by registering and enrolling each user with a specific attribute, called "usertype".
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/backend/src/utils.js#L199);
+The usertype can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
-the regulator (such as the FDA) is able to view all transactions on the network in order to reliably audit
-the network, but the retailer is only able to view the transactions which they are a part of. Once you
+the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
+the network, but a **retailer** is only able to access assets and invoke transactions against assets which they are involved with. Once you
 understand how to apply these access control rules, you can apply them to any use-case, and 
 start building innovative, secure, blockchain networks. 
 
@@ -77,16 +76,14 @@ IBM Blockchain Platform extension.
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 
-# IBM Cloud (IBM Blockchain Platform steps) shown [here](#ibm-blockchain-platform-steps)
-
-# Local installation steps: Hyperledger Fabric 1.4 Deployment using VSCode
+# Fabric network startup steps: 
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
 3. [Import Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
 4. [Export Connection Details](#step-4-export-connection-details)
-5. [Export Local Wallet](#step-5-export-connection-details)
+5. [Export Local Wallet](#step-5-export-local-wallet)
 6. [Build and Run the App](#step-6-build-and-run-the-app)
-7. [Submit transactions in the app](#step-7-Submit-transactions-in-the-app)
+7. [Submit transactions in the app](#step-7-submit-transactions-in-the-app)
 
 ## Step 1. Clone the Repo
 
@@ -95,6 +92,8 @@ Git clone this repo onto your computer in the destination of your choice:
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 ## Step 2. Start the Fabric Runtime
+### IBM Cloud (IBM Blockchain Platform) start up steps shown [here](#ibm-blockchain-platform-steps)
+### Local Hyperledger Fabric 1.4 Deployment steps here, using VSCode Blockchain extension:
 ![startRuntime](https://user-images.githubusercontent.com/10428517/76370968-dea3ae80-62f5-11ea-8793-d04610e8bf30.gif)
 
 - If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your ~/Applications
@@ -170,7 +169,7 @@ id: admin
 password: adminpw
 
 #### 2) Create users
-Select the "Create New User" tab and enter the following users:
+Select the "Register New User" tab and enter the following users:
 ```
 id: GHFarm
 password: GHFarm
@@ -215,7 +214,7 @@ Producer ID:  GHFarm
 Click "Create Order"
 
 #### 5) Log out and in as "GHFarm"
-Click the person icon in top right of window to logout and be redirected to the login screen again. This should take you to the Producer Portal as *GHFarm*
+Click the person icon in top right of window to logout to be redirected to the login screen. Log in as GHFarm. This should take you to the Producer Portal as *GHFarm*
 
 - click on the corn order
 - select the "Accept Order" button for the corn product
