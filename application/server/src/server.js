@@ -6,7 +6,7 @@ const app = express();
 const cors = require('cors');
 
 // Bring key classes into scope, most importantly Fabric SDK network class
-const Order = require('../../contract/lib/order.js');
+const Order = require('../../../contract/lib/order.js');
 
 const SUCCESS = 0;
 const TRANSACTION_ERROR = 401;
