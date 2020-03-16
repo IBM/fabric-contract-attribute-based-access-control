@@ -67,7 +67,7 @@ IBM Blockchain Platform extension.
 # Fabric network startup steps: 
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
-3. [Import Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
+3. [Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
 4. [Export Connection Details](#step-4-export-connection-details)
 5. [Export Local Wallet](#step-5-export-local-wallet)
 6. [Build and Run the App](#step-6-build-and-run-the-app)
@@ -96,7 +96,7 @@ version to work.
   
 - Once the runtime is finished starting (this might take a couple of minutes), under *Local Fabric* you should see *Smart Contracts* and a section for both *installed* and *instantiated*.
 
-## Step 3. Import Install and Instantiate Contract
+## Step 3. Install and Instantiate Contract
 ![importContract](https://user-images.githubusercontent.com/10428517/76371236-e0ba3d00-62f6-11ea-82a1-bfa4798985b9.gif)
 - Next, we have to import our contract before we can install it. Click on 
 **View -> Open Command Pallette -> Import Smart Contract**. Next, click 
