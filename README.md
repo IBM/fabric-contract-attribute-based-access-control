@@ -115,9 +115,14 @@ policy, hit `enter` on your keyboard, which will take all of the defaults.
 is finished instantiating.
 
 ## Step 4. Export Connection Details
+![connectAsAdmin](https://media.github.ibm.com/user/79254/files/df1ec800-6781-11ea-9085-6fc2089d4cb0)
+
+- Under `FABRIC GATEWAYS`, click on `1 Org Local Fabric - Org1` gateway.
+- When asked to choose an identity to connect with, choose `admin`.
+
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- Connect to the "1 Org Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplyChain/gateway/local/fabric_connection.json. 
+- To export your connection profile, right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplyChain/gateway/local/fabric_connection.json. 
 
 ## Step 5. Export Local Wallet
 ![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
