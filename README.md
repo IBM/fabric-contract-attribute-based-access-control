@@ -28,10 +28,9 @@ When the reader has completed this code pattern, they will understand how to:
 
 1. Implement attribute based access control in Hyperledger Fabric
 2. Build a chaincode in which certain users have access to certain transactions
-3. Use a Angular UI to interact with a Hyperleder Fabric network.
+3. Use an Angular UI to interact with a Hyperleder Fabric network.
 
 ## Application Access Control Rules, Architecture, and Model can be found [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/app-architecture.md) 
-
 
 ## Architecture Diagram
 ![Architecture Diagram](images/GenericArchDiagram.png)
