@@ -201,6 +201,8 @@ Select the Enroll tab from the Login screen, enter the ID, password and type of 
 should repeat the process for the FDA, ACustomer, and UPS as well.
 
 #### 4) Log in as "Walmart"
+![walmart](https://media.github.ibm.com/user/79254/files/6d497d00-6787-11ea-89c6-9e826eb67f4b)
+
 On the "Log in" page, log in as Walmart. This should take you to the Retailer Portal as *Walmart*
 
 Create a couple orders:
@@ -220,6 +222,8 @@ Producer ID:  GHFarm
 Click "Create Order"
 
 #### 5) Log out and in as "GHFarm"
+![Ghfarm](https://media.github.ibm.com/user/79254/files/fd3cf600-678a-11ea-9f45-5088496c3c26)
+
 Click the person icon in top right of window to logout to be redirected to the login screen. Log in as GHFarm. This should take you to the Producer Portal as *GHFarm*
 
 - click on the corn order
@@ -228,6 +232,8 @@ Click the person icon in top right of window to logout to be redirected to the l
 - enter a "UPS"
 
 #### 6) Log out and in as "UPS"
+![UPS](https://media.github.ibm.com/user/79254/files/9a4c5e80-678c-11ea-8d55-1db3db9efe8c)
+
 This should take you to the Shipper Portal as *UPS*
 
 - click on corn order
@@ -235,17 +241,22 @@ This should take you to the Shipper Portal as *UPS*
 - select the "Transport Shipment" button for the corn product
 
 #### 7) Log out and in as "Walmart" again
+![Walmart2](https://media.github.ibm.com/user/79254/files/07a8c100-6786-11ea-91bb-b87d07dc71b7)
 
 - click on corn order
 - select the "Receive Shipment" button for the corn product
 
 #### 8) Log out and in as "FDA"
+![FDA](https://media.github.ibm.com/user/79254/files/97ea0480-678c-11ea-8463-bdee090eb5bf)
+
 This should take you to the  Regulator Portal as *FDA*
 
 - This will bring up a list of all orders
 - Clicking on an order will display all of the transaction history of that order
 
 #### 9) Log out and in as "ACustomer"
+![ACustomer](https://media.github.ibm.com/user/79254/files/97516e00-678c-11ea-94d3-b0f64803368b)
+
 This should take you to the Customer Portal as *ACustomer*
 
 - Enter order id for corn (representing a barcode of a particular product with is associated with that order)
