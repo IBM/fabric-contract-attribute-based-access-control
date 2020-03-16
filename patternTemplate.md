@@ -73,7 +73,7 @@ When the reader has completed this code pattern, they will understand how to:
 
 # Instructions
 
-> Find the detailed steps for this pattern in the [readme file](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain#setup-for-building-and-running-the-application-from-this-git-code-repo). The steps will show you how to:
+> Find the detailed steps for this pattern in the [readme file](SupplyChain/blob/master/README.md). The steps will show you how to:
 
 1. Clone the Repo
 2. Start the Fabric Runtime
