@@ -116,20 +116,22 @@ is finished instantiating.
 ## Step 4. Export Connection Details
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplyChain/application/server/gateway/local/fabric_connection.json. 
+- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplyChain/gateway/local/fabric_connection.json. 
 
 ## Step 5. Export Local Wallet
 ![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
 - 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
 the application will not work! 🚨
-- Export the and save the wallet as `gen_local_wallet` to 
-Blockchain-GenSupplyChain/application/server/gateway/local/gen_local_wallet.json. 
+- Export and save the wallet as `gen_local_wallet` to 
+Blockchain-GenSupplyChain/gateway/local/gen_local_wallet.json. 
 - Once you're done exporting the wallet and the connection profile, your directory 
 structure should look like below:
 
 ![dirStruct](https://media.github.ibm.com/user/79254/files/21cb6200-645b-11ea-8dbd-00806fc391a8)
 
-## Step 6. Build and Run the app
+## Step 6. Add a wallet
+## Step 7. Create a new gateway and connect with new wallet
+## Step 8. Build and Run the app
 
 - Next, let's install the server-side app. Navigate to 
 `Blockchain-GenSupplyChain/application/server/src` and run 
@@ -145,7 +147,7 @@ structure should look like below:
 `Blockchain-GenSupplyChain/application/client` and run `ng serve` to run the Angular app.
 - Go to localhost:4200 to view the app.
 
-## Step 7. Submit transactions in the app
+## Step 9. Submit transactions in the app
 
 ### Test Scenario - automatic, using curl against API server
 ```
