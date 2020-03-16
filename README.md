@@ -64,7 +64,7 @@ IBM Blockchain Platform extension.
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 # Steps (Cloud Deployment)
-> To run a cloud network, you can find steps [here](ibm-blockchain-platform-steps).
+> To run a cloud network, you can find steps [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/README.md#ibm-blockchain-platform-steps).
 
 # Steps (Hyperledger Fabric Local Deployment)
 1. [Clone the Repo](#step-1-clone-the-repo)
