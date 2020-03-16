@@ -67,7 +67,7 @@ IBM Blockchain Platform extension.
 # Fabric network startup steps: 
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
-3. [Install and Instantiate Contract](#step-3-import-install-and-instantiate-contract)
+3. [Install and Instantiate Contract](#step-3-install-and-instantiate-contract)
 4. [Export Connection Details](#step-4-export-connection-details)
 5. [Export Local Wallet](#step-5-export-local-wallet)
 6. [Build and Run the App](#step-6-build-and-run-the-app)
