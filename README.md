@@ -17,7 +17,7 @@ their competitors' rates. Given that Hyperledger Fabric is optimized for a broad
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
 how to implement such functionality, by registering and enrolling each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/src/utils.js#L199);
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/utils.js#L199);
 The "usertype" can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
 the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
