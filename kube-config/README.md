@@ -52,7 +52,7 @@ $ kubectl get services generic-app-service
 NAME              TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
 generic-app-service   LoadBalancer   172.21.52.123   52.116.150.115   3000:30158/TCP,4200:32544/TCP   16d
 ```
-## Naviage to application 
+## Navigate to application 
 The application will be available at <EXTERNAL-IP>:port-number1 where _port-number1_ is the port number dynamically mapped to `port 4200` at which the frontend service is available.  From this output, the application will be available at [http://52.116.150.115:32544](http://52.116.150.115:32544)
   
   
