@@ -264,16 +264,19 @@ This should take you to the Customer Portal as *ACustomer*
 - Enter order id for avocado.  An error should appear indicating that the customer can't see this order. It hasn't made it through the process yet.  
 
 ## IBM Blockchain Platform steps
-This Cloud pattern assumes you have an IBM Cloud account.
 
+### Prereqs:
 - IBM Cloud account
 - Node v8.x or greater and npm v5.x or greater
 
+### Steps:
 - Create a Kubernetes Cluster using the IBM Kubernetes Service
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/backend/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+
+For instructions on how to deploy the API server and UI client to the cloud, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/tree/master/kube-config)
 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
