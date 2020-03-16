@@ -131,7 +131,7 @@ structure should look like below:
 ## Step 6. Build and Run the app
 
 - Next, let's install the server-side app. Navigate to 
-`Blockchain-GenSupplyChain/application/server/src` and run 
+`Blockchain-GenSupplyChain/application/server` and run 
 `npm install`.
 - Next, we need to install the UI dependencies. Navigate to 
 `Blockchain-GenSupplyChain/application/client` and run `npm install`.
@@ -139,7 +139,7 @@ structure should look like below:
 ![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
 
 - Navigate to 
-`Blockchain-GenSupplyChain/application/server/src` and run `node server.js` to connect start the API server to the fabric network. 
+`Blockchain-GenSupplyChain/application/server` and run `node server.js` to connect start the API server to the fabric network. 
 - Navigate to 
 `Blockchain-GenSupplyChain/application/client` and run `ng serve` to run the Angular app.
 - Go to localhost:4200 to view the app.
