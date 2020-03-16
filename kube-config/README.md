@@ -10,13 +10,15 @@ $ ibmcloud login -sso
 $ ibmcloud target -o <org_name> -g <resource_group>
 $ ibmcloud cr login
 ```
-## Set context to your cluster and namespace, (`bc-cncoc` and namespace, gensupplychain)
+## Set context to your cluster and namespace
+For example: `bc-cncoc`, `gensupplychain`
 ```
 $ ibmcloud cs cluster-config --cluster <cluster_name>
 $ export KUBECFG=.....
 $ kubectl config set-context <cluster_name> --namespace=<namespace>
 ```
-## Build image for backend node.js server (dont miss the . at the end!):
+## Build image for backend node.js server 
+Note: don't miss the . at the end!
 ```
 cd <INSTALL-DIR>/kube-config
 cp Dockerfile-backend  <INSTALL-DIR>/Blockchain-GenSupplyChain/application/server/Dockerfile
@@ -30,7 +32,7 @@ cp Dockerfile-ng <INSTALL-DIR>/Blockchain-GenSupplyChain/application/client/Dock
 cd <INSTALL-DIR>/Blockchain-GenSupplyChain/application/client
 ibmcloud cr build -t us.icr.io/<image_registry>/bc-generic-ng:1  .
 ```
-## Deploy the application:
+## Deploy the application
 ```
 cd <INSTALL-DIR>/Blockchain-GenSupplyChain/kube-config
 kubectl apply -f gen-supplychain-deploy.yaml
