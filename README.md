@@ -241,7 +241,7 @@ This should take you to the Shipper Portal as *UPS*
 - select the "Transport Shipment" button for the corn product
 
 #### 7) Log out and in as "Walmart" again
-![Walmart2](https://media.github.ibm.com/user/79254/files/07a8c100-6786-11ea-91bb-b87d07dc71b7)
+![Walmart2](https://media.github.ibm.com/user/79254/files/9ae4f500-678c-11ea-8888-137738ac2cd0)
 
 - click on corn order
 - select the "Receive Shipment" button for the corn product
