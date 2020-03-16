@@ -1,12 +1,11 @@
 contract/.vscode/*
-application/server/gateway/local/fabric_connection.json
-application/server/gateway/ibp/gen_ibp_wallet/*
-application/server/gateway/local/gen_local_wallet/*
-application/server/gateway/local/fabric_connection.json
-application/server/gateway/ibp/connection_profile.json
-application/server/gateway/ibp/wallet/*
-application/server/gateway/local/wallet/*
-application/server/src/node_modules/*
+gateway/ibp/fabric_connection.json
+gateway/ibp/gen_ibp_wallet/*
+gateway/local/gen_local_wallet/*
+gateway/local/fabric_connection.json
+gateway/ibp/wallet/*
+gateway/local/wallet/*
+application/server/node_modules/*
 application/client/node_modules/*
 
 # IDE - VSCode
