@@ -125,6 +125,10 @@ is finished instantiating.
 the application will not work! 🚨
 - Export the and save the wallet as `gen_local_wallet` to 
 Blockchain-GenSupplyChain/application/server/gateway/local/gen_local_wallet.json. 
+- Once you're done exporting the wallet and the connection profile, your directory 
+structure should look like below:
+
+![dirStruct](https://media.github.ibm.com/user/79254/files/21cb6200-645b-11ea-8dbd-00806fc391a8)
 
 ## Step 6. Build and Run the app
 
@@ -160,6 +164,8 @@ id: admin
 password: adminpw
 
 #### 2) Create users
+![createUsers](https://media.github.ibm.com/user/79254/files/209a3500-645b-11ea-9067-1858dfd8e253)
+
 Select the "Register New User" tab and enter the following users:
 ```
 id: GHFarm
@@ -183,6 +189,7 @@ password: FDA
 role: regulator
 ```
 #### 3) Enroll each new User
+![enrollUser](https://media.github.ibm.com/user/79254/files/dcf3fb00-645b-11ea-9616-41d8c264f5d4)
 Select the Enroll tab from the Login screen, enter the ID, password and type of each user.
 
 #### 4) Log in as "Walmart"
@@ -248,29 +255,6 @@ https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
 - Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/backend/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
-<!-- 
-#### Local Fabric
-- In the VSCode IDE Blockchain extention  **FABRIC ENVIRONMENTS** pane, click on `Local Fabric` to start a fabric network.
-- Connect to the "Local Fabric - Org1" gateway as `admin`.  Right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to Blockchain-GenSupplychain/src/gateway/local/fabric_connection.json. 
-
-### Start the server side of the application. 
-NOTE: This will automatically enroll admin credentials in the directory of the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
-
-In a terminal window -
-```
-cd Blockchain-GenSupplychain/src/server
-
-export PORT=<PORT #>          // Defaults to 3000
-export PLATFORM= <IBP|LOCAL>  // Defaults to LOCAL
-node server.js
-```
-### Connect up wallet
-- Create a Wallet in VSCode: select the "+" in the **FABRIC WALLETS** section. Choose "Specify an existing filesystem wallet".  Choose the directory of the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json.
-- Create a gateway for this application: select the "+" in the **FABRIC GATEWAYS** pane. Choose the recently downloaded connection profile when prompted.
-- Connect to your new Gateway, will be prompted to connect a wallet, choose the wallet path specified in Blockchain-GenericSupplychain/src/gateway/\<local or ibp\>/config.json
-- Ensure that the contract (.cds file) located in https://github.ibm.com/customer-success/Blockchain-GenSupplyChain has been installed and instantiated via the VSCode Blockchain IDE extension and
-is running on a local fabric or the IBP V2 service. See https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform for information in installing the VSCode Blockchain IDE extension and tutorials on how to install a smart contract. -->
-
 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
