@@ -47,7 +47,6 @@ When the reader has completed this code pattern, they will understand how to:
 
 1. Implement attribute based access control in Hyperledger Fabric
 2. Build a chaincode in which certain users have access to certain transactions
-3. Emit events triggered by blockchain transactions
 4. Use a Angular UI to interact with a Hyperleder Fabric network
 
 # Technologies
@@ -76,11 +75,13 @@ When the reader has completed this code pattern, they will understand how to:
 
 > Find the detailed steps for this pattern in the [readme file](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain#setup-for-building-and-running-the-application-from-this-git-code-repo). The steps will show you how to:
 
-1. Clone the repo
-2. Export the connection profile details to connect to a Hyperledger Fabric network
-3. Export the private and public keys housed in your local filesystem wallet
-4. Install the server and client side dependencies
-5. Test the network 
+1. Clone the Repo
+2. Start the Fabric Runtime
+3. Install and Instantiate Contract
+4. Export Connection Details
+5. Export Local Wallet
+6. Build and Run the App
+7. Submit transactions in the app
 
 # Components and services
 
