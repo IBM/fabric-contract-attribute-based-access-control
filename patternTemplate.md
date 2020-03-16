@@ -1,6 +1,6 @@
 # Short title
 
-> Use access control to run a blockchain-based supply chain application
+> Use access control in your blockchain smart contracts to streamline supply chain operations
 
 # Long title
 
