@@ -63,8 +63,10 @@ IBM Blockchain Platform extension.
 - [Install VSCode version 1.38.0 or greater](https://code.visualstudio.com/download)
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
+# Steps (Cloud Deployment)
+> To run a cloud network, you can find steps [here](ibm-blockchain-platform-steps).
 
-# Fabric network startup steps: 
+# Steps (Hyperledger Fabric Local Deployment)
 1. [Clone the Repo](#step-1-clone-the-repo)
 2. [Start the Fabric Runtime](#step-2-start-the-fabric-runtime)
 3. [Install and Instantiate Contract](#step-3-install-and-instantiate-contract)
@@ -80,8 +82,7 @@ Clone this repo onto your computer in the destination of your choice:
 git clone git@github.ibm.com:customer-success/Blockchain-GenSupplyChain.git
 ```
 ## Step 2. Start the Fabric Runtime
-### IBM Cloud (IBM Blockchain Platform) start up steps shown [here](#ibm-blockchain-platform-steps)
-### Local Hyperledger Fabric 1.4 Deployment steps here, using VSCode Blockchain extension:
+
 ![startRuntime](https://user-images.githubusercontent.com/10428517/76370968-dea3ae80-62f5-11ea-8793-d04610e8bf30.gif)
 
 - If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your ~/Applications
