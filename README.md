@@ -17,7 +17,7 @@ their competitors' rates. Given that Hyperledger Fabric is optimized for a broad
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
 how to implement such functionality, by registering and enrolling each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/src/utils.js#L199);
+To jump to the code that does this, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/application/server/utils.js#L199);
 The "usertype" can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
 the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
@@ -264,16 +264,19 @@ This should take you to the Customer Portal as *ACustomer*
 - Enter order id for avocado.  An error should appear indicating that the customer can't see this order. It hasn't made it through the process yet.  
 
 ## IBM Blockchain Platform steps
-This Cloud pattern assumes you have an IBM Cloud account.
 
+### Prereqs:
 - IBM Cloud account
 - Node v8.x or greater and npm v5.x or greater
 
+### Steps:
 - Create a Kubernetes Cluster using the IBM Kubernetes Service
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/backend/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+
+For instructions on how to deploy the API server and UI client to the cloud, go [here](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/tree/master/kube-config)
 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
