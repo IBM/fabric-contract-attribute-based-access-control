@@ -1,9 +1,10 @@
 # Implement attribute based access control to provide end to end visibility into the supply chain history of a particular product 
+![appDemo](https://media.github.ibm.com/user/79254/files/07a8c100-6786-11ea-91bb-b87d07dc71b7)
 
 This sample demonstrates an end to end blockchain application that connects to Hyperledger Fabric 1.4 or the IBM Blockchain Platform. It implements attribute based access control, user management, and a Angular front-end UI to interact and query the blockchain ledger. The 
 sample takes the user through ordering, shipping, and enlisting the product for the customer to 
 purchase. The customer can trace the order history through the supply chain, providing 
-end to end visibility. Lastly, a regulator has access to all orders in the system to ensure 
+end to end visibility. For example, in the video above, you can see the retailer receiving a shipment, and then a customer logging into the application to see a trace of when the shipment was orderered, shipped, and recived. Lastly, a regulator has access to all orders in the system to ensure 
 correct practices are followed. 
 
 **Audience level : Intermediate Developers**
@@ -119,6 +120,8 @@ is finished instantiating.
 
 - Under `FABRIC GATEWAYS`, click on `1 Org Local Fabric - Org1` gateway.
 - When asked to choose an identity to connect with, choose `admin`.
+- Once you are connected, you should see `connected via gateway: 1 Org Local Fabric` 
+under the `FABRIC GATEWAYS` tab as shown in the gif below.
 
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
@@ -194,7 +197,8 @@ role: regulator
 ```
 #### 3) Enroll each new User
 ![enrollUser](https://media.github.ibm.com/user/79254/files/dcf3fb00-645b-11ea-9616-41d8c264f5d4)
-Select the Enroll tab from the Login screen, enter the ID, password and type of each user.
+Select the Enroll tab from the Login screen, enter the ID, password and type of each user. Note that the video above only shows enrollment for GHFarm and Walmart, but you
+should repeat the process for the FDA, ACustomer, and UPS as well.
 
 #### 4) Log in as "Walmart"
 On the "Log in" page, log in as Walmart. This should take you to the Retailer Portal as *Walmart*
@@ -227,7 +231,7 @@ Click the person icon in top right of window to logout to be redirected to the l
 This should take you to the Shipper Portal as *UPS*
 
 - click on corn order
-- select the "Create Shipment" button for the corn product and enter a tracking number
+- select the "Create Shipment" button for the corn product
 - select the "Transport Shipment" button for the corn product
 
 #### 7) Log out and in as "Walmart" again
