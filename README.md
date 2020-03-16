@@ -4,7 +4,7 @@
 This sample demonstrates an end to end blockchain application that connects to Hyperledger Fabric 1.4 or the IBM Blockchain Platform. It implements attribute based access control, user management, and a Angular front-end UI to interact and query the blockchain ledger. The 
 sample takes the user through ordering, shipping, and enlisting the product for the customer to 
 purchase. The customer can trace the order history through the supply chain, providing 
-end to end visibility. For example, in the video above, you can see the retailer receiving a shipment, and then a customer logging into the application to see a trace of when the shipment was orderered, shipped, and recived. Lastly, a regulator has access to all orders in the system to ensure 
+end to end visibility. For example, in the video above, you can see the retailer receiving a shipment, and then a customer logging into the application to see a trace of when the shipment was orderered, shipped, and received. Lastly, a regulator has access to all orders in the system to ensure 
 correct practices are followed. 
 
 **Audience level : Intermediate Developers**
