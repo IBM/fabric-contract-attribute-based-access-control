@@ -281,9 +281,9 @@ For instructions on how to deploy the API server and UI client to the cloud, go 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 
-https://fabric-sdk-node.github.io/release-1.4/index.html
+https://hyperledger.github.io/fabric-sdk-node/release-1.4/
 
-https://fabric-sdk-node.github.io/release-1.4/module-fabric-network.html
+https://hyperledger.github.io/fabric-sdk-node/release-1.4/module-fabric-network.html
 
 https://marketplace.visualstudio.com/items?itemName=IBMBlockchain.ibm-blockchain-platform
 
