@@ -15,7 +15,7 @@ and transparency
 
 ### Github repo
 
-> https://github.ibm.com/customer-success/Blockchain-GenSupplyChain
+> https://github.com/IBM/Blockchain-GenSupplyChain
 
 
 # Summary
