@@ -116,8 +116,6 @@ policy, hit `enter` on your keyboard, which will take all of the defaults.
 is finished instantiating.
 
 ## Step 4. Export Connection Details
-![connectAsAdmin](https://media.github.ibm.com/user/79254/files/df1ec800-6781-11ea-9085-6fc2089d4cb0)
-
 - Under `FABRIC GATEWAYS`, click on `1 Org Local Fabric - Org1` gateway.
 - When asked to choose an identity to connect with, choose `admin`.
 - Once you are connected, you should see `connected via gateway: 1 Org Local Fabric` 
