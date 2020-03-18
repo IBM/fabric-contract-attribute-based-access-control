@@ -4,7 +4,7 @@
 
 # Long title
 
-> Implement attribute based access control with Hyperledger Fabric to ensure security 
+> Implement attribute based access control in Hyperledger Fabric smart contracts to ensure security 
 and transparency 
 
 # Author
