@@ -15,7 +15,7 @@ and transparency
 
 ### Github repo
 
-> https://github.com/IBM/Blockchain-GenSupplyChain
+> https://github.com/IBM/fabric-contract-role-based-access-control
 
 
 # Summary
@@ -60,7 +60,7 @@ When the reader has completed this code pattern, they will understand how to:
 <br>
 <p align="center">
 
-![flow](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/images/GenericAppFlow.png)
+![flow](https://github.com/IBM/fabric-contract-role-based-access-control/blob/master/images/GenericAppFlow.png)
 
 </p>
 <br>
@@ -73,7 +73,7 @@ When the reader has completed this code pattern, they will understand how to:
 
 # Instructions
 
-> Find the detailed steps for this pattern in the [readme file](https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/README.md). The steps will show you how to:
+> Find the detailed steps for this pattern in the [readme file](https://github.com/IBM/fabric-contract-role-based-access-control/blob/master/README.md). The steps will show you how to:
 
 1. Clone the Repo
 2. Start the Fabric Runtime
