@@ -58,13 +58,15 @@ The value of running this network on the IBM Blockchain Platform is that one can
 + [Node.js](https://nodejs.org) is an open source, cross-platform JavaScript run-time environment that executes server-side JavaScript code.
 + [Angular](https://angular.io/) Angular is a platform for building mobile and desktop web applications.
 
-# Watch the Video - App Demo (Cloud)
+# Watch the Video - Network Setup (Local - VSCode Extension)
+
+[![](https://user-images.githubusercontent.com/10428517/77028846-417cf180-6957-11ea-8b9c-6134e1558269.png)](https://www.youtube.com/watch?v=7QWV40vZTM4)
+
+# Watch the Video - App Demo (Local - Angular UI)
 
 [![](https://user-images.githubusercontent.com/10428517/77028868-55285800-6957-11ea-96b1-5b97f727eae9.png)](https://www.youtube.com/watch?v=EjJS_bRgoS8)
 
-# Watch the Video - Network Setup (Cloud)
 
-[![](https://user-images.githubusercontent.com/10428517/77028846-417cf180-6957-11ea-8b9c-6134e1558269.png)](https://www.youtube.com/watch?v=7QWV40vZTM4)
 
 ## Prerequisites (Local)
 If you want to run this pattern locally, without any Cloud services, then all you need is VSCode and the
