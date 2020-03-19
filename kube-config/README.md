@@ -18,23 +18,23 @@ $ export KUBECFG=.....
 $ kubectl config set-context <cluster_name> --namespace=<namespace>
 ```
 ## Build image for backend node.js server 
-Note: don't miss the . at the end!
 ```
 cd <INSTALL-DIR>/kube-config
-cp Dockerfile-backend  <INSTALL-DIR>/Blockchain-GenSupplyChain/application/server/Dockerfile
+cp Dockerfile-backend  <INSTALL-DIR>/application/server/Dockerfile
 cd <INSTALL-DIR>/application/server/
 ibmcloud cr build -t us.icr.io/<image_registry>/fabclient-gensupplychain:1  .
 ```
-## Build image for frondend angular client:
+Note: don't miss the . at the end!
+## Build image for frontend angular client:
 ```
 cd <INSTALL-DIR>/kube-config
-cp Dockerfile-ng <INSTALL-DIR>/Blockchain-GenSupplyChain/application/client/Dockerfile
-cd <INSTALL-DIR>/Blockchain-GenSupplyChain/application/client
+cp Dockerfile-ng <INSTALL-DIR>/application/client/Dockerfile
+cd <INSTALL-DIR>/application/client
 ibmcloud cr build -t us.icr.io/<image_registry>/bc-generic-ng:1  .
 ```
 ## Deploy the application
 ```
-cd <INSTALL-DIR>/Blockchain-GenSupplyChain/kube-config
+cd <INSTALL-DIR>/kube-config
 kubectl apply -f gen-supplychain-deploy.yaml
 ```
 ## Expose the services 
