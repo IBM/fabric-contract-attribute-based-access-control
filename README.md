@@ -94,7 +94,7 @@ git clone https://github.com/IBM/fabric-contract-role-based-access-control.git
 
 ![startRuntime](https://user-images.githubusercontent.com/10428517/76370968-dea3ae80-62f5-11ea-8793-d04610e8bf30.gif)
 
-- If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your ~/Applications
+- If you get errors like the gRPC error, you may need to download an earlier version of VSCode (1.39) [here](https://code.visualstudio.com/updates/v1_39). Note that if you are using Mac, make sure the VSCode in your /Applications
 folder shows version 1.39 when you click on show details. You may need to 
 move newer version into the trash, and then empty the trash for the older 
 version to work.
