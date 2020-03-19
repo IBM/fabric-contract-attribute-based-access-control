@@ -17,6 +17,10 @@ and transparency
 
 > https://github.com/IBM/fabric-contract-role-based-access-control
 
+Demo URL (Demo) - https://www.youtube.com/watch?v=EjJS_bRgoS8
+
+Demo URL (Network Setup) - https://www.youtube.com/watch?v=7QWV40vZTM4
+
 
 # Summary
 
