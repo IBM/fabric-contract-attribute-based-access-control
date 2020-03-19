@@ -179,6 +179,7 @@ This project showcases the use of blockchain in the supply chain domain. In this
 
  - If the current user is a **Customer**, the *currentOrderState* must equal ORDER_RECEIVED to invoke this transaction
  - Only a **Producer**, **Shipper** or **Retailer** associated with the input *orderId* can invoke this transaction
+ - A **Regulator** can see the history of any **Order**
 
 **11. getCurrentUserId** - Get the id of the current logged in user.
 
