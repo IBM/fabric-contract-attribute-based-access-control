@@ -17,7 +17,7 @@ their competitors' rates. Given that Hyperledger Fabric is optimized for a broad
 industry use-cases, including supply chain, the open-source framework provides a way to implement 
 confidentiality at the chaincode layer using attribute based access control. This example shows you 
 how to implement such functionality, by registering and enrolling each user with a specific attribute, called "usertype".
-To jump to the code that does this, go [here](https://github.com/IBM/fabric-contract-role-based-access-control/blob/master/application/server/utils.js#L220);
+To jump to the code that does this, go [here](https://github.com/IBM/fabric-contract-attribute-based-access-control/blob/master/application/server/utils.js#L220);
 The "usertype" can be **admin**, **regulator**, **producer**, **shipper**, **retailer**, or **customer**. When that user logs in
 successfully, and connects to an instance of the Hyperledger Fabric network, their "usertype" gives them access to certain transactions that have been submitted on the network. For example,
 the **regulator** (such as the FDA) is able to view all transactions on the network in order to reliably audit
@@ -31,7 +31,7 @@ When the reader has completed this code pattern, they will understand how to:
 2. Build a chaincode in which certain users have access to certain transactions
 3. Use an Angular UI to interact with a Hyperleder Fabric network.
 
-## Application Access Control Rules, Architecture, and Model can be found [here](https://github.com/IBM/fabric-contract-role-based-access-control/blob/master/app-architecture.md) 
+## Application Access Control Rules, Architecture, and Model can be found [here](https://github.com/IBM/fabric-contract-attribute-based-access-control/blob/master/app-architecture.md) 
 
 ## Architecture Diagram
 ![Architecture Diagram](images/GenericArchDiagram.png)
@@ -88,7 +88,7 @@ IBM Blockchain Platform extension.
 
 Clone this repo onto your computer in the destination of your choice:
 ```
-git clone https://github.com/IBM/fabric-contract-role-based-access-control.git
+git clone https://github.com/IBM/fabric-contract-attribute-based-access-control.git
 ```
 ## Step 2. Start the Fabric Runtime
 
@@ -131,13 +131,13 @@ under the `FABRIC GATEWAYS` tab as shown in the gif below.
 
 ![export](https://user-images.githubusercontent.com/10428517/76371002-fd09aa00-62f5-11ea-9f6b-cc25e68c410e.gif)
 
-- To export your connection profile, right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to fabric-contract-role-based-access-control/gateway/local/fabric_connection.json. 
+- To export your connection profile, right click on the 3 dot menu on the **FABRIC GATEWAYS** pane and `Export Connection Profile` Save this file to fabric-contract-attribute-based-access-control/gateway/local/fabric_connection.json. 
 
 ## Step 5. Export Local Wallet
 ![wallet](https://user-images.githubusercontent.com/10428517/76375176-65f71f00-6302-11ea-8071-d68192905a91.gif)
 - 🚨Under the `FABRIC WALLETS` pane, click on `1 Org Local Fabric - Org1 Wallet`. Note this is very important, if you click on the Orderer wallet at the top, 
 the application will not work! 🚨
-- Export and save the wallet to `fabric-contract-role-based-access-control/gateway/local/gen_local_wallet`
+- Export and save the wallet to `fabric-contract-attribute-based-access-control/gateway/local/gen_local_wallet`
 - Once you're done exporting the wallet and the connection profile, your directory 
 structure should look like below:
 
@@ -146,24 +146,24 @@ structure should look like below:
 ## Step 6. Build and Run the app
 
 - Next, let's install the server-side app. Navigate to 
-`fabric-contract-role-based-access-control/application/server` and run 
+`fabric-contract-attribute-based-access-control/application/server` and run 
 `npm install`.
 - Next, we need to install the UI dependencies. Navigate to 
-`fabric-contract-role-based-access-control/application/client` and run `npm install`.
+`fabric-contract-attribute-based-access-control/application/client` and run `npm install`.
 
 ![buildandRunapp](https://user-images.githubusercontent.com/10428517/76376047-8b852800-6304-11ea-87b2-db6043e6e7cf.gif)
 
 - Navigate to 
-`fabric-contract-role-based-access-control/application/server` and run `node server.js` to connect start the API server to the fabric network. 
+`fabric-contract-attribute-based-access-control/application/server` and run `node server.js` to connect start the API server to the fabric network. 
 - Navigate to 
-`fabric-contract-role-based-access-control/application/client` and run `ng serve` to run the Angular app.
+`fabric-contract-attribute-based-access-control/application/client` and run `ng serve` to run the Angular app.
 - Go to localhost:4200 to view the app.
 
 ## Step 7. Submit transactions in the app
 
 ### Test Scenario - automatic, using curl against API server
 ```
-cd fabric-contract-role-based-access-control/scripts
+cd fabric-contract-attribute-based-access-control/scripts
 ./create_identities.sh
 ./testcase.sh
 ```
@@ -280,9 +280,9 @@ This should take you to the Customer Portal as *ACustomer*
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
 - Create an IBM Blockchain service including all relevant components, such as Certificate Authority, MSP (Membership Service Providers), peers, orderers, and channels.
 https://cloud.ibm.com/docs/services/blockchain?topic=blockchain-ibp-v2-deploy-iks
-- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.com/IBM/fabric-contract-role-based-access-control/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
+- Export the Connection Profile from the IBP instance and save as Blockchain_GenSupplyChain/gateway/ibp/fabric_connection.json. For instructions on how to do that on the IBM Blockchain Platform, go [here](https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-ibp-console-app#ibp-console-app-profile). NOTE: to export the IBP connection profile, the smart contract located [here](https://github.com/IBM/fabric-contract-attribute-based-access-control/blob/master/gensupplychainnet%400.0.1.cds) must be installed.
 
-For instructions on how to deploy the API server and UI client to the cloud, go [here](https://github.com/IBM/fabric-contract-role-based-access-control/tree/master/kube-config)
+For instructions on how to deploy the API server and UI client to the cloud, go [here](https://github.com/IBM/fabric-contract-attribute-based-access-control/tree/master/kube-config)
 
 ## Helpful links
 https://cloud.ibm.com/docs/containers?topic=containers-getting-started
