@@ -194,17 +194,17 @@ This project showcases the use of blockchain in the supply chain domain. In this
 - a String containing the current user's type
 
 ## Filesystem Organization
-- backend/src:
+- server:
 
-  + src/server.js - Uses Node Express to define the API routes
-  + src/utils.js - Contains the Node JS support code to interact with the fabric network
+  + server.js - Uses Node Express to define the API routes
+  + utils.js - Contains the Node JS support code to interact with the fabric network
 
-- backend/gateway:
+- gateway:
 
    + ibp/config.json - Contains information used to run against a running IBM Blockchain 2.0 Service
    + local/config.json - Contains information used to run against a local Hyperledger v1.4 Fabric.
 
-- frontend/generic-app:
+- frontend/*:
 
    Angular Frontend User Interface application
 
