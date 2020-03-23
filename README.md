@@ -38,7 +38,7 @@ When the reader has completed this code pattern, they will understand how to:
 
 ## Flow Diagram
 
-![Application Flow Diagram](images/GenericAppFlow.png)
+![Application Flow Diagram](https://media.github.ibm.com/user/1650/files/e90b7280-6d0f-11ea-84f5-cf4d95e45b64)
 
 ## Flow Description
 1) The user interacts with an Angular Web UI to update and query the blockchain ledger and state
