@@ -15,7 +15,7 @@ and transparency
 
 ### Github repo
 
-> https://github.com/IBM/fabric-contract-role-based-access-control
+> https://github.com/IBM/fabric-contract-attribute-based-access-control
 
 Demo URL (Demo) - https://www.youtube.com/watch?v=EjJS_bRgoS8
 
