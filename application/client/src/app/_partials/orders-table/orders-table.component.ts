@@ -39,7 +39,7 @@ export class OrdersTableComponent implements OnInit {
       this.orders = new MatTableDataSource(currentOrders);
       this.cd.markForCheck();
     })
-    this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+    this.api.queryOrders();
   }
   applyFilter(filterValue: string) {
     this.orders.filter = filterValue.trim().toLowerCase();
@@ -49,7 +49,7 @@ export class OrdersTableComponent implements OnInit {
   acceptOrder(orderid) {
     this.api.id = orderid;
     this.api.receiveOrder().subscribe(api => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Producer is having a problem accepting order: " + orderid)
     });
@@ -94,7 +94,7 @@ export class OrdersTableComponent implements OnInit {
     this.api.id = orderid;
     this.api.shipperid = shipperid;
     this.api.assignShipper().subscribe(api => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Producer is having a problem packaging items of order: " + orderid)
     });
@@ -104,7 +104,7 @@ export class OrdersTableComponent implements OnInit {
   createShipment(orderid) {
     this.api.id = orderid;
     this.api.createShipment().subscribe(api => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Producer is having a problem creating shipment for order: " + orderid)
     });
@@ -114,7 +114,7 @@ export class OrdersTableComponent implements OnInit {
   transportShipment(orderid) {
     this.api.id = orderid;
     this.api.transportShipment().subscribe(api => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Producer is having a problem shipping shipment for order: " + orderid)
     });
@@ -124,7 +124,7 @@ export class OrdersTableComponent implements OnInit {
   receiveShipment(orderid) {
     this.api.id = orderid;
     this.api.receiveShipment().subscribe(api => {
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
     }, error => {
       alert ("Problem receiving shipment")
     })
@@ -145,7 +145,7 @@ export class OrdersTableComponent implements OnInit {
         this.api.id = order.orderId;
         this.api.deleteOrder().subscribe(res => {
           console.log(res);
-          this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+          this.api.queryOrders();
         }, error => {
           console.log(error);
         });
