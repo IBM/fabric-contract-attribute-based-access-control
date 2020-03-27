@@ -4,18 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 const { FileSystemWallet, Gateway, User, X509WalletMixin } = require('fabric-network');
-const PubNub = require('pubnub')
 const FabricCAServices = require('fabric-ca-client');
-
-// global variables for pubnub
-var pubnub;
-var pubnubChannelName = "priceWatchChannel-gen";
-var bcChannelName = "bcEventsChannel-gen";
 
 //  global variables for HLFabric
 var gateway;
-var configdata;
 var network;
+var contract = null;
+var configdata;
 var wallet;
 var bLocalHost;
 var ccp;
@@ -23,15 +18,11 @@ var orgMSPID;
 const EVENT_TYPE = "bcpocevent";  //  HLFabric EVENT
 
 const SUCCESS = 0;
-
-//  connectionOptions
-var contract = null;
-
-const utils = {};
+const fabricClient = {};
 
 // Main program function
-utils.connectGatewayFromConfig = async () => {
-    console.log("*********************** connectGatewayFromConfig function: ********************* ");
+fabricClient.connectGatewayFromConfig = async () => {
+    console.log("--------------- connectGatewayFromConfig function: --------------- ");
 
     // A gateway defines the peers used to access Fabric networks
     gateway = new Gateway();
@@ -81,7 +72,7 @@ utils.connectGatewayFromConfig = async () => {
         if (!idExists) {
             // Enroll identity in the wallet
             console.log(`Enrolling and importing ${userid} into wallet`);
-            await utils.enrollUser(userid, pwd, usertype);
+            await fabricClient.enrollUser(userid, pwd, usertype);
         }
 
         // Connect to gateway using application specified parameters
@@ -96,20 +87,19 @@ utils.connectGatewayFromConfig = async () => {
         // Get addressability to the smart contract as specified in config
         network = await gateway.getNetwork(configdata["channel_name"]);
         console.log('Use ' + configdata["smart_contract_name"] + ' smart contract.');
+
+        //  this variable, contract will be used in subsequent calls to submit transactions to Fabric
         contract = await network.getContract(configdata["smart_contract_name"]);
 
     } catch (error) {
-
         console.log(`Error processing transaction. ${error}`);
         console.log(error.stack);
-
     } finally {
     }
     return contract;
 }
 
-utils.events = async () => {
-    //console.log("*********************** From events function: ********************* ");
+fabricClient.events = async () => {
     // get an eventhub once the fabric client has a user assigned. The user
     // is required because the event registration must be signed
 
@@ -150,16 +140,15 @@ utils.events = async () => {
 
                 let event_payload = JSON.parse(event.payload.toString());
 
-                console.log("\n\n------------- from HLFabric-----------------------\n");
                 console.log("Event payload: " + event.payload.toString());
                 console.log("\n\n------------------------------------\n");
-                utils.publishMessage("Blockchain Event: ", event_payload.event_type, bcChannelName);
+                // utils.publishMessage("Blockchain Event: ", event_payload.event_type, bcChannelName);
 
                 // to see the event payload, use 'true' in the call to channel_event_hub.connect(boolean)
                 console.log("\n\nEvent payload: " + event.payload.toString());
 
                 // parse the event and relay it onto pubnub channel for UI updates
-                utils.parseAndRelay(event.payload.toString());
+                //  utils.parseAndRelay(event.payload.toString());
             }, (err) => {
                 // this is the callback if something goes wrong with the event registration or processing
                 reject(new Error('There was a problem with the eventhub in registerTxEvent ::' + err));
@@ -174,36 +163,21 @@ utils.events = async () => {
     Promise.all([event_monitor]);
 }  //  end of events()
 
-//  events - pubnub
-utils.parseAndRelay = (event) => {
-
-    //  Parse the JSON data to a javascript object
-    var eventData = JSON.parse(event);
-    switch (eventData.event_type) {
-        case "createOrder":
-            utils.publishMessage("blockchain event: ", "New Order Created - orderId: " + eventData.orderId, bcChannelName); break;
-        default:
-            utils.publishMessage("blockchain event: ", eventData.event_type, bcChannelName); break;
-    }
-}
-
-//  Util
-utils.shipId = () => {
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-    return `${s4()}${s4()}${s4()}${s4()}`
+fabricClient.submitTx = async(contract, txName, ...args) => {
+  return contract.submitTransaction(txName, ...args);
 }
 
 //  function registerUser
 //  Purpose: Utility function for registering users with HL Fabric CA.
 //  See POST api for details
-utils.registerUser = async (userid, userpwd, usertype) => {
+fabricClient.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
     console.log("\n------------  function registerUser ---------------");
     console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + usertype)
 
     const gateway = new Gateway();
 
     // Connect to gateway as admin
-    await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false, asLocalhost: bLocalHost } });
+    await gateway.connect(ccp, { wallet, identity: adminIdentity, discovery: { enabled: false, asLocalhost: bLocalHost } });
 
     const orgs = ccp.organizations;
     const CAs = ccp.certificateAuthorities;
@@ -246,7 +220,7 @@ utils.registerUser = async (userid, userpwd, usertype) => {
         });
 }  //  end of function registerUser
 
-utils.enrollUser = async (userid, userpwd, usertype) => {
+fabricClient.enrollUser = async (userid, userpwd, usertype) => {
     console.log("\n------------  function enrollUser -----------------");
     console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype:" + usertype);
 
@@ -287,34 +261,19 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
     });
 }
 
-utils.isUserEnrolled = async (userid) => {
-    console.log("\n---------------  function isUserEnrolled ------------------------------------");
-    console.log("\n userid: " + userid);
-    console.log("\n---------------------------------------------------");
-
-    return wallet.exists(userid).then(result => {
-        console.log("is User Enrolled: " + result);
-        console.log("\n---------------  end of function isUserEnrolled ------------------------------------");
-        return result;
-    }, error => {
-        console.log("error in wallet.exists\n" + error);
-        throw error;
-    });
-}
 
 //  function setUserContext
-//  Purpose:    to set the context to the user (who called this api) so that ACLs can be applied 
-//              for that user inside chaincode. All subsequent calls using that gateway / contract 
+//  Purpose:    to set the context to the user (who called this api) so that ACLs can be applied
+//              for that user inside chaincode. All subsequent calls using that gateway / contract
 //              will be on this user's behalf.
 //  Input:      userid - which has been registered and enrolled earlier (so that certificates are
 //              available in the wallet)
 //  Output:     no explicit output;  (Global variable) contract will be set to this user's context
-
-utils.setUserContext = async (userid, pwd) => {
+fabricClient.setUserContext = async (userid, pwd) => {
     console.log('In function: setUserContext ....');
 
     // It is possible that the user has been registered and enrolled in Fabric CA earlier
-    // and the certificates (in the wallet) could have been removed.  
+    // and the certificates (in the wallet) could have been removed.
     // Note that this case is not handled here.
 
     // Verify if user is already enrolled
@@ -331,28 +290,35 @@ utils.setUserContext = async (userid, pwd) => {
         let userGateway = new Gateway();
         await userGateway.connect(ccp, { identity: userid, wallet: wallet, discovery: { enabled: true, asLocalhost: bLocalHost } });
 
-        // Access channel: channel_name
-        console.log('Use network channel: ' + configdata["channel_name"]);
         network = await userGateway.getNetwork(configdata["channel_name"]);
-
-        // Get addressability to the smart contract as specified in config
         contract = await network.getContract(configdata["smart_contract_name"]);
-        console.log('Userid: ' + userid + ' connected to smartcontract: ' +
-            configdata["smart_contract_name"] + ' in channel: ' + configdata["channel_name"]);
 
-        console.log('Leaving setUserContext: ' + userid);
         return contract;
     }
     catch (error) { throw (error); }
-}  //  end of UserContext(userid)
+}  //  end of setUserContext(userid)
+
+fabricClient.isUserEnrolled = async (userid) => {
+    console.log("\n---------------  function isUserEnrolled ------------------------------------");
+    console.log("\n userid: " + userid);
+
+    return wallet.exists(userid).then(result => {
+        console.log("is User Enrolled: " + result);
+        console.log("\n---------------  end of function isUserEnrolled ------------------------------------");
+        return result;
+    }, error => {
+        console.log("error in wallet.exists\n" + error);
+        throw error;
+    });
+}
 
 //  function getAllUsers
 //  Purpose: get all enrolled users
-utils.getAllUsers = async () => {
+fabricClient.getAllUsers = async (adminIdentity) => {
     const gateway = new Gateway();
 
     // Connect to gateway as admin
-    await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false, asLocalhost: bLocalHost } });
+    await gateway.connect(ccp, { wallet, identity: adminIdentity, discovery: { enabled: false, asLocalhost: bLocalHost } });
     let client = gateway.getClient();
     let fabric_ca_client = client.getCertificateAuthority();
     let idService = fabric_ca_client.newIdentityService();
@@ -382,54 +348,8 @@ utils.getAllUsers = async () => {
         }
         result.push(tmp);
     }
-    //console.log(result);
     return result;
 }  //  end of function getAllUsers
 
-utils.pubnubSetup = () => {
-    pubnub = new PubNub({
-        publishKey: "***REMOVED***",
-        subscribeKey: "***REMOVED***"
-    });
 
-    pubnub.addListener({
-        status: function (statusEvent) {
-            if (statusEvent.category === "PNConnectedCategory") {
-                utils.publishMessage("Initialization", "{\"message\":\"Pubnub Initialized!\"}", pubnubChannelName);
-            }
-        },
-        message: function (msg) {
-            console.log("-----------  pubnub -----------------");
-            console.log("msg = ", msg);
-            console.log("-------------------------------------");
-        },
-        presence: function (presenceEvent) {
-            // handle presence
-        }
-    })
-
-    return pubnub;
-}
-
-utils.getFormattedTime = (timetoken) => {
-    var d = new Date(timetoken / 10000);
-    return d.toLocaleString();
-}
-
-utils.publishMessage = (title, message, channelName) => {
-    var publishConfig = {
-        channel: channelName,
-        message: {
-            title: title,
-            description: message
-        },
-        triggerEvents: true
-    }
-
-    pubnub.publish(publishConfig, function (status, response) {
-        console.log("Last message published at " + utils.getFormattedTime(response.timetoken));
-    })
-}
-
-module.exports = utils;
-
+module.exports = fabricClient;

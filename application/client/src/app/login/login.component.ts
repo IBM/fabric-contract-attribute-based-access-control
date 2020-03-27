@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, UserService } from '../_services/index';
+import { ApiService, UserService } from '../_services/index';
 
 @Component({
   selector: 'app-login',
@@ -16,16 +16,22 @@ export class LoginComponent{
 
   constructor(
     private router: Router,
-    private authService: AuthService,
+    private apiService: ApiService,
     private userService: UserService
   ) { }
 
   login() {
     this.loading = true;
-    this.authService.login(this.model.userid, this.model.password).subscribe(res => {
+    var user = {
+      userid: this.model.userid,
+      password: this.model.password,
+      usertype: ""
+    }
+    this.apiService.id = this.model.userid;
+    this.apiService.getUser().subscribe(res => {
       console.log(res);
       if (res['errorcode']==0) {
-        var user = {"userid": this.model.userid, "password": this.model.password, "usertype": res['usertype']};
+        user.usertype = res['usertype'];
         console.log (user)
         this.userService.setCurrentUser(user);
 

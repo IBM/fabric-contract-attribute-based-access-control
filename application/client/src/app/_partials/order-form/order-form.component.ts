@@ -50,7 +50,7 @@ export class OrderFormComponent implements OnInit{
     this.api.orderProduct().subscribe(api => {
       this.order = api
       console.log (this.order);
-      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
+      this.api.queryOrders();
       alert ("Order Created Successfully!")
     }, error => {
       alert ("Problem creating Order: "+error)
