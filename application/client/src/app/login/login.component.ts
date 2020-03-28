@@ -29,9 +29,11 @@ export class LoginComponent{
     }
     this.apiService.id = this.model.userid;
     this.apiService.getUser().subscribe(res => {
+      console.log("In login ()");
       console.log(res);
       if (res['errorcode']==0) {
         user.usertype = res['usertype'];
+        console.log("In login ()");
         console.log (user)
         this.userService.setCurrentUser(user);
 

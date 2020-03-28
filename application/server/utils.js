@@ -312,6 +312,34 @@ fabricClient.isUserEnrolled = async (userid) => {
     });
 }
 
+//  function getUser
+//  Purpose: get specific registered user
+fabricClient.getUser = async (userid) => {
+    const gateway = new Gateway();
+
+    // Connect to gateway as admin
+    await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false, asLocalhost: bLocalHost } });
+    let client = gateway.getClient();
+    let fabric_ca_client = client.getCertificateAuthority();
+    let idService = fabric_ca_client.newIdentityService();
+    let user = await idService.getOne(userid, gateway.getCurrentIdentity());
+
+    let result = {"id": userid};
+
+    // for all identities
+    //result.id = userid;
+    if (userid == "admin") {
+        result.usertype = userid;
+    } else { // look through user attributes for "usertype"
+        //let attributes = user.result.attrs;
+        let j = 0;
+        while (user.result.attrs[j].name !== "usertype") j++;
+        result.usertype = user.result.attrs[j].value;
+    }
+    console.log(result);
+    return result;
+}  //  end of function getUser
+
 //  function getAllUsers
 //  Purpose: get all enrolled users
 fabricClient.getAllUsers = async (adminIdentity) => {

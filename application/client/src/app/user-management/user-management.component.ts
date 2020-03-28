@@ -73,11 +73,14 @@ export class UserManagementComponent implements OnInit{
   loadUserList(tab) {
     if (tab == 0) {
       this.api.getAllUsers().subscribe(res => {
+        console.log(res);
+
         var userArray = Object.keys(res).map(function (userIndex) {
           let user = res[userIndex];
           // do something with person
           return user;
         });
+        console.log(userArray);
         for (let user of userArray) {
           this.api.id = user.id;
           this.api.isUserEnrolled().subscribe(res => {
