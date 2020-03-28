@@ -31,7 +31,7 @@ export class ApiService {
 
   createUserAuthorizationHeader(headers: HttpHeaders) {
     const currentUser = this.userService.getCurrentUser();
-    headers.append('Authorization', 'Basic ' + btoa(currentUser.userid+':'+currentUser.password)); 
+    headers = headers.append('Authorization', 'Basic ' + btoa(currentUser.userid+':'+currentUser.password)); 
   }
 
   getAllStatuses(){
@@ -40,21 +40,21 @@ export class ApiService {
 
   getAllUsers(){
     let headers = new HttpHeaders();
-    headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
-    this.createUserAuthorizationHeader(headers);
-    console.log(headers);
-    return this.httpClient.get(this.baseUrl + '/api/users', {headers:headers});
+    headers = headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
+    return this.httpClient.get(this.baseUrl + '/api/users/', {headers:headers});
   }
 
   getUser(){
     let headers = new HttpHeaders();
-    headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
+    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
+    console.log("In Api service: getUser");
+    console.log(this.id);
     return this.httpClient.get(this.baseUrl + '/api/users/'+ this.id, {headers:headers});
   }
 
   isUserEnrolled(){
     let headers = new HttpHeaders();
-    headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
+    headers = headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
     return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id, {headers:headers});
   }
 
