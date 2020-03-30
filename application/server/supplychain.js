@@ -55,8 +55,15 @@ async function submitTx(request, txName, ...args) {
             console.log(txName);
             console.log(args);
             //console.log(contract);
-
-            return utils.submitTx(contract, txName, args);
+            // Insert txName as args[0]
+            args.unshift(txName);
+            // Insert contract as args[0]
+            args.unshift(contract);
+            // Convert args from an array to a list of strings
+            let buffer = utils.submitTx.apply ("unused", args);
+            console.log(buffer);
+            return buffer;
+            //return utils.submitTx(contract, txName, ...args);
         }, error => {
             return console.log(error);
         });

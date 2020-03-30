@@ -164,7 +164,14 @@ utils.events = async () => {
 }  //  end of events()
 
 utils.submitTx = async(contract, txName, ...args) => {
-  return contract.submitTransaction(txName, ...args);
+    console.log("utils.submitTx ")
+    console.log(txName);
+    console.log(args);
+    let result = contract.submitTransaction(txName, ...args);
+    return result.then (response => {
+        return Promise.resolve(response);
+    });
+    //return await contract.submitTransaction(txName, ...args);
 }
 
 //  function registerUser
