@@ -18,10 +18,10 @@ var orgMSPID;
 const EVENT_TYPE = "bcpocevent";  //  HLFabric EVENT
 
 const SUCCESS = 0;
-const fabricClient = {};
+const utils = {};
 
 // Main program function
-fabricClient.connectGatewayFromConfig = async () => {
+utils.connectGatewayFromConfig = async () => {
     console.log("--------------- connectGatewayFromConfig function: --------------- ");
 
     // A gateway defines the peers used to access Fabric networks
@@ -72,7 +72,7 @@ fabricClient.connectGatewayFromConfig = async () => {
         if (!idExists) {
             // Enroll identity in the wallet
             console.log(`Enrolling and importing ${userid} into wallet`);
-            await fabricClient.enrollUser(userid, pwd, usertype);
+            await utils.enrollUser(userid, pwd, usertype);
         }
 
         // Connect to gateway using application specified parameters
@@ -99,7 +99,7 @@ fabricClient.connectGatewayFromConfig = async () => {
     return contract;
 }
 
-fabricClient.events = async () => {
+utils.events = async () => {
     // get an eventhub once the fabric client has a user assigned. The user
     // is required because the event registration must be signed
 
@@ -163,14 +163,14 @@ fabricClient.events = async () => {
     Promise.all([event_monitor]);
 }  //  end of events()
 
-fabricClient.submitTx = async(contract, txName, ...args) => {
+utils.submitTx = async(contract, txName, ...args) => {
   return contract.submitTransaction(txName, ...args);
 }
 
 //  function registerUser
 //  Purpose: Utility function for registering users with HL Fabric CA.
 //  See POST api for details
-fabricClient.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
+utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
     console.log("\n------------  function registerUser ---------------");
     console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + usertype)
 
@@ -220,7 +220,7 @@ fabricClient.registerUser = async (userid, userpwd, usertype, adminIdentity) => 
         });
 }  //  end of function registerUser
 
-fabricClient.enrollUser = async (userid, userpwd, usertype) => {
+utils.enrollUser = async (userid, userpwd, usertype) => {
     console.log("\n------------  function enrollUser -----------------");
     console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype:" + usertype);
 
@@ -261,7 +261,6 @@ fabricClient.enrollUser = async (userid, userpwd, usertype) => {
     });
 }
 
-
 //  function setUserContext
 //  Purpose:    to set the context to the user (who called this api) so that ACLs can be applied
 //              for that user inside chaincode. All subsequent calls using that gateway / contract
@@ -269,7 +268,7 @@ fabricClient.enrollUser = async (userid, userpwd, usertype) => {
 //  Input:      userid - which has been registered and enrolled earlier (so that certificates are
 //              available in the wallet)
 //  Output:     no explicit output;  (Global variable) contract will be set to this user's context
-fabricClient.setUserContext = async (userid, pwd) => {
+utils.setUserContext = async (userid, pwd) => {
     console.log('In function: setUserContext ....');
 
     // It is possible that the user has been registered and enrolled in Fabric CA earlier
@@ -298,7 +297,7 @@ fabricClient.setUserContext = async (userid, pwd) => {
     catch (error) { throw (error); }
 }  //  end of setUserContext(userid)
 
-fabricClient.isUserEnrolled = async (userid) => {
+utils.isUserEnrolled = async (userid) => {
     console.log("\n---------------  function isUserEnrolled ------------------------------------");
     console.log("\n userid: " + userid);
 
@@ -314,7 +313,7 @@ fabricClient.isUserEnrolled = async (userid) => {
 
 //  function getUser
 //  Purpose: get specific registered user
-fabricClient.getUser = async (userid) => {
+utils.getUser = async (userid) => {
     const gateway = new Gateway();
 
     // Connect to gateway as admin
@@ -342,7 +341,7 @@ fabricClient.getUser = async (userid) => {
 
 //  function getAllUsers
 //  Purpose: get all enrolled users
-fabricClient.getAllUsers = async (adminIdentity) => {
+utils.getAllUsers = async (adminIdentity) => {
     const gateway = new Gateway();
 
     // Connect to gateway as admin
@@ -379,5 +378,11 @@ fabricClient.getAllUsers = async (adminIdentity) => {
     return result;
 }  //  end of function getAllUsers
 
+//  function shipId
+//  Purpose: Provide a random tracking number for the createShipment transaction
+utils.shipId = () => {	
+    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)	
+    return `${s4()}${s4()}${s4()}${s4()}`	
+}
 
-module.exports = fabricClient;
+module.exports = utils;
