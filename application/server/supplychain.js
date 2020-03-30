@@ -51,6 +51,10 @@ async function submitTx(request, txName, ...args) {
         //  does NOT verify auth credentials
         await getUsernamePassword(request);
         utils.setUserContext(request.username, request.password).then((contract) => {
+            console.log("supplychain.js:submitTx - ")
+            console.log(txName);
+            console.log(args);
+            //console.log(contract);
 
             return utils.submitTx(contract, txName, args);
         }, error => {
@@ -185,11 +189,11 @@ supplychainRouter.route('/assign-shipper/:id').put(function (request, res) {
 
 // This changes the status on the order, and adds a ship id
 // app.put('/api/create-shipment-for-order/:id', (request, res) => {
-// contract.submitTransaction('createShipment', request.params.id, utils.shipId())
+// contract.submitTransaction('createShipment', request.params.id, utils.getRandomNum())
 supplychainRouter.route('/create-shipment-for-order/:id').put(function (request, res) {
     res.send("supplychain.js: route: /create-shipment-for-order/:id:  This route not fixed yet.  ");
 
-      submitTx (request, 'createShipment', request.params.id, utils.shipId())
+      submitTx (request, 'createShipment', request.params.id, utils.getRandomNum())
       .then((createShipmentResponse) => {
           // process response
           console.log('Process CreateShipment transaction.');
@@ -353,11 +357,11 @@ supplychainRouter.route('/is-user-enrolled/:id').get(function (request, res) {
             console.log("\n userid: " + userId);
             utils.isUserEnrolled(userId).then(result => {
                 console.log("\n result from is-user-enrolled = \n", result)
-                console.log("\n----------------- api/is-user-enrolled --------------------------");
+                //console.log("\n----------------- api/is-user-enrolled --------------------------");
                 res.send(result);
             }, error => {
                 console.log("\n Error returned from is-user-enrolled: \n" + error);
-                console.log("\n----------------- api/is-user-enrolled --------------------------");
+                //console.log("\n----------------- api/is-user-enrolled --------------------------");
                 res.status(500).send(error.toString());
             });
         }, ((error) => {
@@ -390,24 +394,37 @@ supplychainRouter.route('/users').get(function (request, res) {
         }));
 });
 
-supplychainRouter.route('/users/:id').get(function (request, res) {
+supplychainRouter.route('/users/:id').get(function (request, response) {
     //  only admin can call this api;  get admin username and pwd from request header
+
     getUsernamePassword(request)
         .then(request => {
-            utils.getUser(request.username).then((result) => {
-                // process response
-                console.log('Process getUser response');
-                result.errorcode = 0;
-                res.send(result);
-            }, (error) => {
-                //  handle error if transaction failed
-                error.errorcode = 1;
-                console.log('Error returned from: ', error.url);
-                res.send(error);
+            console.log ("In supplychainRouter.route('/users/:id').get")
+            utils.isUserEnrolled(request.params.id).then(result => {
+                if (result == true) {
+                    utils.getUser(request.params.id,request.username).then((res) => {
+                        // process response
+                        console.log('Process getUser response');
+                        res.errorcode = 0;
+                        response.send(res);
+                    }, (error) => {
+                        //  handle error if transaction failed
+                        error.errorcode = 1;
+                        console.log('Error returned from: ', error.url);
+                        response.send(error);
+                    });
+                } else {
+                    const errorStr = 'Problem getting details for userid '+request.params.id;
+                    response.send({errormessage:errorStr,errorcode:402});
+                }
+            }, error => {
+                console.log("\n Error returned from is-user-enrolled: \n" + error);
+                //console.log("\n----------------- api/is-user-enrolled --------------------------");
+                response.status(500).send(error.toString());
             });
         }, ((error) => {
             console.log('Error returned ', error.url);
-            res.send(error);
+            response.send(error);
         }));
 });
 

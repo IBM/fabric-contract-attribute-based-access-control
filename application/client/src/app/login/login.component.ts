@@ -27,29 +27,28 @@ export class LoginComponent{
       password: this.model.password,
       usertype: ""
     }
+    console.log("In login ()");
+    console.log(user);
     this.apiService.id = this.model.userid;
+    console.log(this.apiService.id);
     this.apiService.getUser().subscribe(res => {
-      console.log("In login ()");
-      console.log(res);
       if (res['errorcode']==0) {
         user.usertype = res['usertype'];
-        console.log("In login ()");
-        console.log (user)
         this.userService.setCurrentUser(user);
-
         localStorage.setItem('currentUser', JSON.stringify(user));
         if (res['usertype'] == "admin") {
           this.router.navigate(['users']);
         } else {
           this.router.navigate([res['usertype']]);
         }
-      } else if (res['errorcode'] == 402){
+      } else if (res['errorcode'] == 402) {
         // Enroll user!
-        console.log("enroll user");
-        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has registered you and that you've enrolled.");
+        console.log(res);
+        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has registered this user and that the user has enrolled.");
         this.router.navigate(['enroll']);
       } else {
-        alert("Either you need to be registered or enrolled first before you are able to log in \n \n -OR- \n \n you should double check the spelling of the userid and password.");
+        alert("Either "+res['userid']+" needs to be registered or enrolled before they are able to log in \n \n -OR- \n \n double check the spelling of the userid and password.");
+        this.router.navigate(['enroll']);
       }
     }, error => {
       console.log(error);

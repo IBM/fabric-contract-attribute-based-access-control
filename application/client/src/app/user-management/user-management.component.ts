@@ -47,7 +47,7 @@ export class UserManagementComponent implements OnInit{
       return;
     }
 
-    if(this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
+    if (this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
       console.log("the passwords don't match");
       this.newUser = {errorCode:0};
       return;
@@ -59,11 +59,13 @@ export class UserManagementComponent implements OnInit{
       usertype: this.newUserForm.controls.usertype.value,
     }
 
+    console.log(user);
     this.auth.register(user).subscribe(res => {
       console.log (res);
       // this.newUser = res;
     }, error => {
       console.log(error)
+      this.newUser = {errorCode:0};
       alert ("Problem creating User")
     })
 

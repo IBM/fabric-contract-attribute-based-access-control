@@ -298,12 +298,12 @@ utils.setUserContext = async (userid, pwd) => {
 }  //  end of setUserContext(userid)
 
 utils.isUserEnrolled = async (userid) => {
-    console.log("\n---------------  function isUserEnrolled ------------------------------------");
+    //console.log("\n---------------  function isUserEnrolled ------------------------------------");
     console.log("\n userid: " + userid);
 
     return wallet.exists(userid).then(result => {
-        console.log("is User Enrolled: " + result);
-        console.log("\n---------------  end of function isUserEnrolled ------------------------------------");
+        //console.log("is User Enrolled: " + result);
+        //console.log("\n---------------  end of function isUserEnrolled ------------------------------------");
         return result;
     }, error => {
         console.log("error in wallet.exists\n" + error);
@@ -313,28 +313,27 @@ utils.isUserEnrolled = async (userid) => {
 
 //  function getUser
 //  Purpose: get specific registered user
-utils.getUser = async (userid) => {
+utils.getUser = async (userid, adminIdentity) => {
     const gateway = new Gateway();
+    console.log("in utils.getUser before connecting to Gateway. id = ",userid)
 
     // Connect to gateway as admin
-    await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: false, asLocalhost: bLocalHost } });
+    await gateway.connect(ccp, { wallet, identity: adminIdentity, discovery: { enabled: false, asLocalhost: bLocalHost } });
     let client = gateway.getClient();
     let fabric_ca_client = client.getCertificateAuthority();
     let idService = fabric_ca_client.newIdentityService();
     let user = await idService.getOne(userid, gateway.getCurrentIdentity());
-
     let result = {"id": userid};
-
+ 
     // for all identities
-    //result.id = userid;
     if (userid == "admin") {
         result.usertype = userid;
     } else { // look through user attributes for "usertype"
-        //let attributes = user.result.attrs;
         let j = 0;
         while (user.result.attrs[j].name !== "usertype") j++;
         result.usertype = user.result.attrs[j].value;
     }
+    console.log("********************************** utils.getUser *************************************")
     console.log(result);
     return result;
 }  //  end of function getUser
@@ -378,9 +377,9 @@ utils.getAllUsers = async (adminIdentity) => {
     return result;
 }  //  end of function getAllUsers
 
-//  function shipId
+//  function getRandomNum
 //  Purpose: Provide a random tracking number for the createShipment transaction
-utils.shipId = () => {	
+utils.getRandomNum = () => {	
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)	
     return `${s4()}${s4()}${s4()}${s4()}`	
 }
