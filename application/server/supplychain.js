@@ -4,7 +4,7 @@
 'use strict';
 
 const express = require('express');
-const fabricClient = require('./utils.js');
+const utils = require('./utils.js');
 const supplychainRouter = express.Router();
 
 // Bring key classes into scope, most importantly Fabric SDK network class
@@ -50,9 +50,9 @@ async function submitTx(request, txName, ...args) {
         //  check header; get username and pwd from request
         //  does NOT verify auth credentials
         await getUsernamePassword(request);
-        fabricClient.setUserContext(request.username, request.password).then((contract) => {
+        utils.setUserContext(request.username, request.password).then((contract) => {
 
-            return fabricClient.submitTx(contract, txName, args);
+            return utils.submitTx(contract, txName, args);
         }, error => {
             return console.log(error);
         });
@@ -185,12 +185,11 @@ supplychainRouter.route('/assign-shipper/:id').put(function (request, res) {
 
 // This changes the status on the order, and adds a ship id
 // app.put('/api/create-shipment-for-order/:id', (request, res) => {
-// contract.submitTransaction('createShipment', request.params.id, fabricClient.shipId())
+// contract.submitTransaction('createShipment', request.params.id, utils.shipId())
 supplychainRouter.route('/create-shipment-for-order/:id').put(function (request, res) {
     res.send("supplychain.js: route: /create-shipment-for-order/:id:  This route not fixed yet.  ");
 
-    /*  SJ: TODO: fabricClient.shipId()  find replacement for this
-      submitTx (request, 'createShipment', request.params.id, fabricClient.shipId())
+      submitTx (request, 'createShipment', request.params.id, utils.shipId())
       .then((createShipmentResponse) => {
           // process response
           console.log('Process CreateShipment transaction.');
@@ -204,7 +203,6 @@ supplychainRouter.route('/create-shipment-for-order/:id').put(function (request,
           console.log('Error thrown from tx promise: ', error);
           res.send(error);
       });
-      */
 });  //  process route /
 
 // This changes the status on the order
@@ -296,7 +294,7 @@ supplychainRouter.route('/register-user').post(function (request, response) {
                 //  So, it is assumed that only the admin has access to this api
                 //  register-user can only be called by a user with admin privileges.
 
-                fabricClient.registerUser(userId, userPwd, userType, request.username).
+                utils.registerUser(userId, userPwd, userType, request.username).
                     then((result) => {
                         response.send(result);
                     }, (error) => {
@@ -328,7 +326,7 @@ supplychainRouter.route('/enroll-user/').post(function (request, response) {
     console.log("\n userType: " + userType);
     console.log("\n---------------------------------------------------");
 
-    fabricClient.enrollUser(userId, userPwd, userType).then(result => {
+    utils.enrollUser(userId, userPwd, userType).then(result => {
         console.log("\n result from enrollUser = \n", result)
         console.log("\n----------------- api/enrollUser --------------------------");
         response.send(result);
@@ -353,7 +351,7 @@ supplychainRouter.route('/is-user-enrolled/:id').get(function (request, res) {
         .then(request => {
             let userId = request.params.id;
             console.log("\n userid: " + userId);
-            fabricClient.isUserEnrolled(userId).then(result => {
+            utils.isUserEnrolled(userId).then(result => {
                 console.log("\n result from is-user-enrolled = \n", result)
                 console.log("\n----------------- api/is-user-enrolled --------------------------");
                 res.send(result);
@@ -375,7 +373,7 @@ supplychainRouter.route('/is-user-enrolled/:id').get(function (request, res) {
 supplychainRouter.route('/users').get(function (request, res) {
     getUsernamePassword(request)
         .then(request => {
-            fabricClient.getAllUsers(request.username).then((result) => {
+            utils.getAllUsers(request.username).then((result) => {
                 // process response
                 console.log('Process getAllUsers response');
                 result.errorcode = 0;
@@ -396,7 +394,7 @@ supplychainRouter.route('/users/:id').get(function (request, res) {
     //  only admin can call this api;  get admin username and pwd from request header
     getUsernamePassword(request)
         .then(request => {
-            fabricClient.getUser(request.username).then((result) => {
+            utils.getUser(request.username).then((result) => {
                 // process response
                 console.log('Process getUser response');
                 result.errorcode = 0;
