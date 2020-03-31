@@ -30,6 +30,7 @@ export class LoginComponent{
     console.log("In login ()");
     console.log(user);
     this.apiService.id = this.model.userid;
+    this.apiService.pwd = this.model.password;
     console.log(this.apiService.id);
     this.apiService.getUser().subscribe(res => {
       if (res['errorcode']==0) {

@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable } from '../../../node_modules/rxjs';
 export class ApiService {
 
   id: String = "";
+  pwd: String = "";
   shipperid: String = "";
   body: Object;
   options: Object;
@@ -40,24 +41,20 @@ export class ApiService {
 
   getAllUsers(){
     let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
+    headers = this.createUserAuthorizationHeader(headers);
     return this.httpClient.get(this.baseUrl + '/api/users/', {headers:headers});
   }
 
   getUser(){
-    console.log("In Api service: getUser");
-    console.log(this.id);
     let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
-    let user = this.httpClient.get(this.baseUrl + '/api/users/'+ this.id, {headers:headers});
-    //console.log("In Api service: result from getUser");
-    //console.log(user);
-    return user;
+    //headers = this.createUserAuthorizationHeader(headers);
+    headers = headers.append('Authorization', 'Basic ' + btoa(this.id+':'+this.pwd)); 
+    return this.httpClient.get(this.baseUrl + '/api/users/'+ this.id, {headers:headers});
   }
 
   isUserEnrolled(){
     let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Basic ' +btoa('admin:adminpw')); 
+    headers = this.createUserAuthorizationHeader(headers);
     return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id, {headers:headers});
   }
 
