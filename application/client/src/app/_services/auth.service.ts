@@ -19,6 +19,7 @@ export class AuthService {
 
   baseUrl = "http://localhost:3000";
 
+
   register(user){
     let headers = new HttpHeaders();
     headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
@@ -27,14 +28,9 @@ export class AuthService {
 
   enroll(user){
     let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
-    return this.httpClient.post(this.baseUrl + '/api/enroll-user', user, {headers:headers});
+    headers = headers.append('Authorization', 'Basic ' + btoa(user.userid+':'+user.password)); 
+    return this.httpClient.post(this.baseUrl + '/api/enroll-user', {usertype:user.usertype}, {headers:headers});
   }
-
-  //login(user) {
-  //  console.log(user);
-    //return this.httpClient.post(this.baseUrl + '/api/login', user);
-  //}
 
   logout() {
     this.api.clearOrders();
