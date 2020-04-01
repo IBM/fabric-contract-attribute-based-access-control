@@ -30,28 +30,41 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient, private userService: UserService) {}
 
+  getAllStatuses(){
+    return this.statuses;
+  }
+
   createUserAuthorizationHeader(headers: HttpHeaders) {
     const currentUser = this.userService.getCurrentUser();
     return headers.append('Authorization', 'Basic ' + btoa(currentUser.userid+':'+currentUser.password)); 
   }
 
-  getAllStatuses(){
-    return this.statuses;
-  }
-
+  //  This API is used:
+  //  for a 'retailer' to get a list of 'producers' when creating an order
+  //  for a 'producer' to get a list of 'shippers' when assigning a shipper
   getAllUsers(){
     let headers = new HttpHeaders();
-    headers = this.createUserAuthorizationHeader(headers);
+    //
+    //  NOTE: an admin identity is needed to invoke this API since it calls the CA methods. 
+    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
+    // replace with this line to pass in the current user vs admin
+    //headers = this.createUserAuthorizationHeader(headers);
     return this.httpClient.get(this.baseUrl + '/api/users/', {headers:headers});
   }
 
+  // This API is used during login to get the details of specific user trying to log in
+  // The 'usertype' is retrieved to set the currentUser for this application
   getUser(){
     let headers = new HttpHeaders();
-    //headers = this.createUserAuthorizationHeader(headers);
-    headers = headers.append('Authorization', 'Basic ' + btoa(this.id+':'+this.pwd)); 
+    //
+    //  NOTE: an admin identity is needed to invoke this API since it calls the CA methods. 
+    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
+    // replace with this line to pass in the user trying to log in vs admin
+    //headers = headers.append('Authorization', 'Basic ' + btoa(this.id+':'+this.pwd)); 
     return this.httpClient.get(this.baseUrl + '/api/users/'+ this.id, {headers:headers});
   }
 
+  // This API checks to see if user credentials exist in Wallet
   isUserEnrolled(){
     let headers = new HttpHeaders();
     headers = this.createUserAuthorizationHeader(headers);
@@ -65,8 +78,6 @@ export class ApiService {
   }
 
   queryOrders() {
-    // Need to pass current userid and password of currently logged in user, 
-    // as server might restart, resetting server side current user to admin
     let headers = new HttpHeaders();
     headers = this.createUserAuthorizationHeader(headers);
     this.httpClient.get<any[]>(this.baseUrl + '/api/orders/', {headers:headers}).subscribe (orders => {
