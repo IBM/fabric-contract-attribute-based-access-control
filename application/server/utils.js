@@ -156,9 +156,9 @@ utils.submitTx = async(contract, txName, ...args) => {
     console.log(">>>utils.submitTx..."+txName+" ("+args+")");
     let result = contract.submitTransaction(txName, ...args);
     return result.then (response => {
-        let strResponse = response.toString();
-        console.log ('Transaction submitted  successfully;  Response: ', strResponse);
-        return Promise.resolve(strResponse); 
+        // console.log ('Transaction submitted successfully;  Response: ', response.toString());
+        console.log ('Transaction submitted  successfully');
+        return Promise.resolve(response.toString()); 
     },(error) =>
         {
         console.log('Error thrown from tx promise',error);

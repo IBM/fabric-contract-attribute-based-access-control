@@ -58,13 +58,16 @@ async function submitTx(request, txName, ...args) {
             return utils.submitTx.apply ("unused", args) 
             .then (buffer => {
                 return buffer;    
-            }, error => {  return console.log (error); });
+            }, error => {     
+                return Promise.reject(error);   
+            });
         }, error => {
-            return console.log(error);
+            return Promise.reject(error);   
         });
-
     }
-    catch (error) { return console.log(error); }
+    catch (error) {                 
+        return Promise.reject(error);   
+    }
 }
 
 supplychainRouter.route('/orders').get(function (request, res) {
@@ -121,7 +124,7 @@ supplychainRouter.route('/orders').post(function (request, response) {
 supplychainRouter.route('/order-history/:id').get(function (request, res) {
     submitTx(request, 'getOrderHistory', request.params.id)
         .then((orderHistoryResponse) => {
-            console.log('\n>>>Transaction complete.', orderHistoryResponse);
+            console.log('\n>>>Process getOrderHistory response', orderHistoryResponse);
             //  response is already a string;  not a buffer
             //  no need of conversion from buffer to string
             res.send(orderHistoryResponse);
