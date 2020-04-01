@@ -15,7 +15,7 @@ curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWR
 curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
 curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
 curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
-curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "Content-Type: application/json" -d "{\"userid\":\"ACustomer\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
+curl -X POST "${API_URL}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "Content-Type: application/json" -d "{\"userid\":\"ACustomer\",\"password\":\"ACustomer\",\"usertype\":\"customer\"}"
 
 curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
 curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic SEVCOkhFQg==" -H "Content-Type: application/json" -d "{\"userid\":\"HEB\",\"password\":\"HEB\",\"usertype\":\"retailer\"}"
@@ -24,4 +24,4 @@ curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic QUJGYXJtOkFCR
 curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic RkRBOkZEQQ==" -H "Content-Type: application/json" -d "{\"userid\":\"FDA\",\"password\":\"FDA\",\"usertype\":\"regulator\"}"
 curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic RmVkZXg6RmVkZXg=" -H "Content-Type: application/json" -d "{\"userid\":\"Fedex\",\"password\":\"Fedex\",\"usertype\":\"shipper\"}"
 curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic VVBTOlVQUw==" -H "Content-Type: application/json" -d "{\"userid\":\"UPS\",\"password\":\"UPS\",\"usertype\":\"shipper\"}"
-curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic QUN1c3RvbWVyOkFDdXN0b21lcg==" -H "Content-Type: application/json" -d "{\"userid\":\"ACustomer\",\"password\":\"Customer1\",\"usertype\":\"customer\"}"
+curl -X POST "${API_URL}/api/enroll-user" -H "authorization: Basic QUN1c3RvbWVyOkFDdXN0b21lcg==" -H "Content-Type: application/json" -d "{\"userid\":\"ACustomer\",\"password\":\"ACustomer\",\"usertype\":\"customer\"}"
