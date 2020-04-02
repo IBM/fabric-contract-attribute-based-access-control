@@ -30,9 +30,9 @@ export class OrdersTableComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.user.getCurrentUser();
-    console.log("currentUser: "+this.currentUser);
+    //console.log("currentUser: "+this.currentUser);
     this.regulator = this.regulator !== undefined;
-    console.log(`Regulator Boolean attribute is ${this.regulator ? '' : 'non-'}present!`);
+    //console.log(`Regulator Boolean attribute is ${this.regulator ? '' : 'non-'}present!`);
 
     // Load up the Orders from backend
     this.api.orders$.subscribe ( currentOrders => {
@@ -41,6 +41,7 @@ export class OrdersTableComponent implements OnInit {
     })
     this.api.queryOrders();
   }
+
   applyFilter(filterValue: string) {
     this.orders.filter = filterValue.trim().toLowerCase();
   }
@@ -56,18 +57,18 @@ export class OrdersTableComponent implements OnInit {
   }
 
   // create dialog with shipper select menu
-  chooseShipper(orderid){
+  chooseShipper(orderid) {
     let shippers = [];
     this.api.getAllUsers().subscribe(allUsers => {
-      console.log(allUsers);
+      //console.log(allUsers);
       var userArray = Object.keys(allUsers).map(function(userIndex){
           let user = allUsers[userIndex];
           // do something with person
           return user;
       });
 
-      for(let u of userArray){
-        if(u['usertype'] == "shipper"){
+      for (let u of userArray) {
+        if (u['usertype'] == "shipper") {
           shippers.push(u);
         }
       }
@@ -83,7 +84,7 @@ export class OrdersTableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         this.assignShipper(orderid, result['id']);
       }
     });
@@ -131,7 +132,7 @@ export class OrdersTableComponent implements OnInit {
   }
 
   // delete order
-  deleteOrder(order){
+  deleteOrder (order) {
     // Open Tile Dialog
     const dialogRef = this.dialog.open(DeleteOrderDialog, {
       disableClose: false,
@@ -141,7 +142,7 @@ export class OrdersTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if(result){
+      if (result) {
         this.api.id = order.orderId;
         this.api.deleteOrder().subscribe(res => {
           console.log(res);
@@ -174,7 +175,8 @@ export interface ShipperDialogData {
   templateUrl: './../dialogs/to-shipper-dialog.html',
   styleUrls: ['./orders-table.component.scss'],
 })
-export class ToShipperDialog implements OnInit{
+
+export class ToShipperDialog implements OnInit {
   model: any;
   constructor(
     public dialogRef: MatDialogRef<ToShipperDialog>,
@@ -183,7 +185,6 @@ export class ToShipperDialog implements OnInit{
   ngOnInit(){
     this.model = {};
   }
-
 }
 
 export interface DeleteDialogData {
@@ -195,10 +196,10 @@ export interface DeleteDialogData {
   templateUrl: './../dialogs/delete-order-dialog.html',
   styleUrls: ['./orders-table.component.scss'],
 })
-export class DeleteOrderDialog{
+
+export class DeleteOrderDialog {
   model: any;
   constructor(
     public dialogRef: MatDialogRef<DeleteOrderDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData) {}
-
 }

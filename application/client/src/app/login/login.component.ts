@@ -21,17 +21,18 @@ export class LoginComponent{
   ) { }
 
   login() {
+    console.log("In login ()");
     this.loading = true;
+
     var user = {
       userid: this.model.userid,
       password: this.model.password,
       usertype: ""
     }
-    console.log("In login ()");
-    console.log(user);
+
     this.apiService.id = this.model.userid;
     this.apiService.pwd = this.model.password;
-    console.log(this.apiService.id);
+    
     this.apiService.getUser().subscribe(res => {
       if (res['errorcode']==0) {
         user.usertype = res['usertype'];
@@ -44,7 +45,6 @@ export class LoginComponent{
         }
       } else if (res['errorcode'] == 402) {
         // Enroll user!
-        console.log(res);
         alert(res['errormessage'] + "\n \nPlease make sure that an administrator has registered this user and that the user has enrolled.");
         this.router.navigate(['enroll']);
       } else {

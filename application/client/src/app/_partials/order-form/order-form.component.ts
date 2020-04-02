@@ -40,7 +40,7 @@ export class OrderFormComponent implements OnInit{
       return;
     }
 
-    this.api.body = { orderId: "order"+uuid(),
+    this.api.body = { orderId: "order-"+uuid(),
                       productId: this.messageForm.controls.productid.value,
                       price: this.messageForm.controls.price.value,
                       quantity: this.messageForm.controls.quantity.value,
@@ -82,6 +82,6 @@ export class OrderFormComponent implements OnInit{
 // Generate a random number to create orderId
 function uuid() {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-  return `-${s4()}`
+  return `${s4()}`
 }
 

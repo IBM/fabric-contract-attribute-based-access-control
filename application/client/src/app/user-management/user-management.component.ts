@@ -37,7 +37,7 @@ export class UserManagementComponent implements OnInit{
     this.loadUserList(0);
     
     // First time around, don't want error message to appear
-    if (!this.newUser) { this.newUser = {errorCode:1};}
+    if (!this.newUser) { this.newUser = { errorCode : 0 };}
   }
 
   onSubmit(){
@@ -49,7 +49,7 @@ export class UserManagementComponent implements OnInit{
 
     if (this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
       console.log("the passwords don't match");
-      this.newUser = {errorCode:0};
+      this.newUser = { errorCode: 1 };
       return;
     }
 
@@ -62,14 +62,13 @@ export class UserManagementComponent implements OnInit{
     console.log(user);
     this.auth.register(user).subscribe(res => {
       console.log (res);
-      // this.newUser = res;
+      this.newUser = { errorCode: 0 };
     }, error => {
       console.log(error)
-      this.newUser = {errorCode:0};
-      alert ("Problem creating User")
+      this.newUser = { errorCode: 1 };
     })
 
-    if (!this.newUser) { this.newUser = {errorCode:0}; }
+    if (!this.newUser) { this.newUser = { errorCode: 1 }; }
   }
 
   loadUserList(tab) {

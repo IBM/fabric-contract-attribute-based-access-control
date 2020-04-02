@@ -71,10 +71,11 @@ export class ApiService {
     return this.httpClient.get(this.baseUrl + '/api/is-user-enrolled/' + this.id, {headers:headers});
   }
 
+  // NOTE: This API isn't invoked by the UI application.  It is provided to be invoked by URL only
   queryOrder() {
     let headers = new HttpHeaders();
     headers = this.createUserAuthorizationHeader(headers);
-    return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id,{headers:headers})
+    return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id, {headers:headers})
   }
 
   queryOrders() {
