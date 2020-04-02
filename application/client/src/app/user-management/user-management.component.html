@@ -64,7 +64,7 @@
 
           </form>
           <div *ngIf="submitted" class="results">
-            <p *ngIf="!newUser.errorCode; else elseBlock">User Registered Successfully!</p>
+            <p *ngIf="registered; else elseBlock">User Registered Successfully!</p>
             <ng-template #elseBlock>ERROR registering user please make sure the passwords match.</ng-template>
           </div>
         </div>
