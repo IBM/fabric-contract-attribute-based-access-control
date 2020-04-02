@@ -72,9 +72,12 @@ export class ApiService {
   }
 
   // NOTE: This API isn't invoked by the UI application.  It is provided to be invoked by URL only
+  // As a result, an admin identity needs to call this
+
   queryOrder() {
     let headers = new HttpHeaders();
-    headers = this.createUserAuthorizationHeader(headers);
+    //headers = this.createUserAuthorizationHeader(headers);
+    headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
     return this.httpClient.get(this.baseUrl + '/api/orders/' + this.id, {headers:headers})
   }
 
