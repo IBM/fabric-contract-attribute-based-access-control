@@ -13,7 +13,7 @@
 </div>
 
 <div *ngIf="submitted" class="results">
-  <div *ngIf="!order.errorCode; else elseBlock">
+  <div *ngIf="success; else elseBlock">
     <table>
       <tr>
         <th>orderId</th>
@@ -40,6 +40,6 @@
 </div>
 
 <div *ngIf="submitted" class="results">
-    <p *ngIf="!order.errorCode; else elseBlock"></p>
-    <ng-template #elseBlock> Error Querying Order {{order.errorMsgDisplay}}</ng-template>
+    <p *ngIf="success; else elseBlock" ></p>
+    <ng-template #elseBlock ></ng-template>
 </div>

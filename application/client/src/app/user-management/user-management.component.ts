@@ -13,11 +13,11 @@ import {MatTableDataSource} from '@angular/material/table';
 
 export class UserManagementComponent implements OnInit{
   newUser: Object;
-  registered: Boolean;
   types: any[];
 
   newUserForm: FormGroup;
   submitted = false;
+  success = false;
 
   allUsers: MatTableDataSource<EditUser[]>;
   columnsToDisplay = ['id', 'usertype', 'enrolled'];
@@ -36,9 +36,6 @@ export class UserManagementComponent implements OnInit{
 
     // get all users
     this.loadUserList(0);
-    
-    // First time around, don't want error message to appear
-    this.registered = false;
   }
 
   onSubmit(){
@@ -50,7 +47,7 @@ export class UserManagementComponent implements OnInit{
 
     if (this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
       console.log("the passwords don't match");
-      this.registered = false;
+      this.success = false;
       return;
     }
 
@@ -63,10 +60,10 @@ export class UserManagementComponent implements OnInit{
     console.log(user);
     this.auth.register(user).subscribe(res => {
       console.log (res);
-      this.registered = true;
+      this.success = true;
     }, error => {
       console.log(error)
-      this.registered = false;
+      this.success = false;
     })
   }
 
