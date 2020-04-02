@@ -22,7 +22,7 @@ export class OrderHistoryComponent implements OnInit{
       console.log("OrderId: "+this.orderId);
       this.api.id = this.orderId;
       this.api.getOrderHistory().subscribe(history => {
-        console.log(history);
+        //console.log(history);
         this.history = history;
       }, error => {
         alert ("Problem getting order history. Either order doesn't exist or isn't in the correct state for this user");
@@ -35,7 +35,7 @@ export class OrderHistoryComponent implements OnInit{
     console.log(id);
     this.api.id = id;
     this.api.getOrderHistory().subscribe(history => {
-      console.log(history);
+      //console.log(history);
       this.history = history;
     }, error => {
       alert ("Problem getting order history. Either order doesn't exist or isn't in the correct state for this user");

@@ -1,7 +1,6 @@
 <h3>Query Order</h3>
 <div class="formstyle">
   <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-
     <label>
       Order ID:
       <input type="text" formControlName="orderid">
@@ -14,7 +13,7 @@
 </div>
 
 <div *ngIf="submitted" class="results">
-  <div *ngIf="order.errorCode; else elseBlock">   
+  <div *ngIf="!order.errorCode; else elseBlock">
     <table>
       <tr>
         <th>orderId</th>
@@ -27,21 +26,20 @@
         <th>trackingInfo</th>
       </tr>
       <tr>
-          <td>{{order.orderId}}</td>
-          <td>{{order.productId}}</td>
-          <td>{{order.price}}</td>
-          <td>{{order.quantity}}</td>
-          <td>{{order.producerId}}</td>
-          <td>{{order.retailerId}}</td>
-          <td>{{order.currentOrderState}}</td>
-          <td>{{order.trackingInfo}}</td>
+        <td>{{order.orderId}}</td>
+        <td>{{order.productId}}</td>
+        <td>{{order.price}}</td>
+        <td>{{order.quantity}}</td>
+        <td>{{order.producerId}}</td>
+        <td>{{order.retailerId}}</td>
+        <td>{{order.currentOrderState}}</td>
+        <td>{{order.trackingInfo}}</td>
       </tr>
     </table>
   </div>
 </div>
 
 <div *ngIf="submitted" class="results">
-      <p *ngIf="order.errorCode; else elseBlock"></p>
-      <ng-template #elseBlock>Error Querying Order</ng-template>
+    <p *ngIf="!order.errorCode; else elseBlock"></p>
+    <ng-template #elseBlock> Error Querying Order {{order.errorMsgDisplay}}</ng-template>
 </div>
-  
