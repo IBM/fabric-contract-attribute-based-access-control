@@ -6,6 +6,30 @@
 echo "What is the IP address for the API server (default is localhost:3000)?"
 read API_URL
 API_URL=${API_URL:-http://localhost:3000}
+echo "Do you want to register identities? [yes or no]"
+read yn
+case $yn in
+    [[yY] | [yY][Ee][Ss] )
+        echo running ./create_identities.sh
+        ./create_identities.sh
+    ;;
+    [nN] | [n|N][O|o] )
+	break;;
+    *) echo "Invalid input"
+    ;;
+esac
+echo "Do you want to enroll identities? [yes or no]"
+read yn
+case $yn in
+    [yY] | [yY][Ee][Ss] )
+        echo running ./enroll_identities.sh
+        ./enroll_identities.sh
+    ;;
+    [[nN] | [n|N][O|o] ) 
+	break;;
+    *) echo "Invalid input"
+    ;;
+esac
 echo ""
 echo "********** Get all identities (admin)"
 # base64 encoded string 'YWRtaW46YWRtaW5wdw==' for 'admin:admin' added to authorization header
