@@ -1,3 +1,8 @@
+/*
+* Copyright IBM Corp All Rights Reserved
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
 'use strict';
 
 // Classes for Node Express
@@ -5,7 +10,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const utils = require('./utils.js');
-const supplychainRoute = require('./supplychain');
+const supplychainRoute = require('./supplychain.js');
 
 
 // Start up the Express functions to listen on server side

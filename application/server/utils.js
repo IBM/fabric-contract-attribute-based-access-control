@@ -1,3 +1,8 @@
+/*
+* Copyright IBM Corp All Rights Reserved
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
 'use strict';
 
 // Bring key classes into scope, most importantly Fabric SDK network class
@@ -22,7 +27,7 @@ const utils = {};
 
 // Main program function
 utils.connectGatewayFromConfig = async () => {
-    console.log("--------------- connectGatewayFromConfig: --------------- ");
+    console.log(">>>connectGatewayFromConfig:  ");
 
     // A gateway defines the peers used to access Fabric networks
     gateway = new Gateway();
@@ -92,7 +97,7 @@ utils.connectGatewayFromConfig = async () => {
         contract = await network.getContract(configdata["smart_contract_name"]);
 
     } catch (error) {
-        console.log(`Error processing transaction. ${error}`);
+        console.log(`Error connecting to Fabric network. ${error}`);
         console.log(error.stack);
     } finally {
     }
@@ -137,7 +142,7 @@ utils.events = async () => {
                 //let event_payload = JSON.parse(event.payload.toString());
 
                 console.log("Event payload: " + event.payload.toString());
-                console.log("\n\n------------------------------------\n");
+                console.log("\n------------------------------------");
             }, (err) => {
                 // this is the callback if something goes wrong with the event registration or processing
                 reject(new Error('There was a problem with the eventhub in registerTxEvent ::' + err));
@@ -157,12 +162,12 @@ utils.submitTx = async(contract, txName, ...args) => {
     let result = contract.submitTransaction(txName, ...args);
     return result.then (response => {
         // console.log ('Transaction submitted successfully;  Response: ', response.toString());
-        console.log ('Transaction submitted  successfully');
-        return Promise.resolve(response.toString()); 
+        console.log ('utils.js: Transaction submitted successfully');
+        return Promise.resolve(response.toString());
     },(error) =>
         {
-        console.log('Error thrown from tx promise',error);
-        return Promise.reject(error);
+          console.log ('\nutils.js: Error:');
+          return Promise.reject(error);
         });
 }
 
@@ -258,7 +263,7 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
 //              available in the wallet)
 //  Output:     no explicit output;  (Global variable) contract will be set to this user's context
 utils.setUserContext = async (userid, pwd) => {
-    console.log('>>>setUserContext...');
+    console.log('\n>>>setUserContext...');
 
     // It is possible that the user has been registered and enrolled in Fabric CA earlier
     // and the certificates (in the wallet) could have been removed.
@@ -307,7 +312,7 @@ utils.getUser = async (userid, adminIdentity) => {
     let idService = fabric_ca_client.newIdentityService();
     let user = await idService.getOne(userid, gateway.getCurrentIdentity());
     let result = {"id": userid};
- 
+
     // for admin, usertype is "admin";
     if (userid == "admin") {
         result.usertype = userid;
@@ -316,8 +321,8 @@ utils.getUser = async (userid, adminIdentity) => {
         while (user.result.attrs[j].name !== "usertype") j++;
             result.usertype = user.result.attrs[j].value;
     }
-    console.log (result); 
-    return result;
+    console.log (result);
+    return Promise.resolve(result);
 }  //  end of function getUser
 
 //  function getAllUsers
@@ -361,9 +366,9 @@ utils.getAllUsers = async (adminIdentity) => {
 
 //  function getRandomNum
 //  Purpose: Provide a random tracking number for the createShipment transaction
-utils.getRandomNum = () => {	
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)	
-    return `${s4()}${s4()}${s4()}${s4()}`	
+utils.getRandomNum = () => {
+    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+    return `${s4()}${s4()}${s4()}${s4()}`
 }
 
 module.exports = utils;
