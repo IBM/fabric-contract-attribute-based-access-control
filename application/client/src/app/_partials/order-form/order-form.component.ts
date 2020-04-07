@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService, UserService } from './../../_services/index';
 import { MatDialog } from '@angular/material';
@@ -9,16 +10,22 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./order-form.component.scss']
 })
 
-export class OrderFormComponent implements OnInit{
+export class OrderFormComponent implements OnInit {
   messageForm: FormGroup;
   submitted = false;
+  success = false;
   order: Object;
   messages: String[];
   currentUser: any;
   producerId: String;
   producers: any[];
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, private user: UserService, public dialog: MatDialog){}
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private api: ApiService,
+    private user: UserService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.currentUser = this.user.getCurrentUser();
@@ -40,20 +47,24 @@ export class OrderFormComponent implements OnInit{
       return;
     }
 
-    this.api.body = { orderId: "order-"+uuid(),
-                      productId: this.messageForm.controls.productid.value,
-                      price: this.messageForm.controls.price.value,
-                      quantity: this.messageForm.controls.quantity.value,
-                      producerId: this.messageForm.controls.producerid.value,
-                      retailerId: this.currentUser.userid}
+    this.api.body = {
+      orderId: "order-" + uuid(),
+      productId: this.messageForm.controls.productid.value,
+      price: this.messageForm.controls.price.value,
+      quantity: this.messageForm.controls.quantity.value,
+      producerId: this.messageForm.controls.producerid.value,
+      retailerId: this.currentUser.userid
+    }
 
     this.api.orderProduct().subscribe(api => {
       this.order = api
-      console.log (this.order);
+      console.log(this.order);
       this.api.queryOrders();
-      alert ("Order Created Successfully!")
+      this.success = true;
+      //alert ("Order Created Successfully!")
     }, error => {
-      alert ("Problem creating Order: "+error)
+      this.success = false;
+      alert("Problem creating Order: " + error['error']['message'])
     })
   }
 
@@ -61,10 +72,10 @@ export class OrderFormComponent implements OnInit{
   getProducers() {
     this.producers = [];
     this.api.getAllUsers().subscribe(allUsers => {
-      var userArray = Object.keys(allUsers).map(function(userIndex){
-          let user = allUsers[userIndex];
-          // do something with person
-          return user;
+      var userArray = Object.keys(allUsers).map(function (userIndex) {
+        let user = allUsers[userIndex];
+        // do something with person
+        return user;
       });
 
       for (let u of userArray) {
@@ -72,9 +83,11 @@ export class OrderFormComponent implements OnInit{
           this.producers.push(u);
         }
       }
+      console.log("List of Producers: ");
       console.log(this.producers);
     }, error => {
-      console.log(error);
+      console.log(JSON.stringify(error));
+      alert("Problem getting list of users: " + error['error']['message']);
     });
   }
 }

@@ -59,10 +59,10 @@ export class UserManagementComponent implements OnInit{
 
     console.log(user);
     this.auth.register(user).subscribe(res => {
-      console.log (res);
+      console.log(JSON.stringify(res));
       this.success = true;
     }, error => {
-      console.log(error)
+      console.log(JSON.stringify(error));
       this.success = false;
     })
   }
@@ -70,27 +70,25 @@ export class UserManagementComponent implements OnInit{
   loadUserList(tab) {
     if (tab == 0) {
       this.api.getAllUsers().subscribe(res => {
-        console.log(res);
-
         var userArray = Object.keys(res).map(function (userIndex) {
           let user = res[userIndex];
           // do something with person
           return user;
         });
-        console.log(userArray);
+        //console.log(userArray);
         for (let user of userArray) {
           this.api.id = user.id;
           this.api.isUserEnrolled().subscribe(res => {
             // NOTE: adding a new user attribute called enrolled
             user.enrolled = res;
           }, error => {
-            console.log(error);
+            console.log(JSON.stringify(error));
           });
         }
         this.allUsers = new MatTableDataSource(userArray);
       }, error => {
-        console.log(error);
-        alert("Problem loading user list.")
+        console.log(JSON.stringify(error));
+        alert("Problem loading user list: " + error['error']['message']);
       });
     }
   }

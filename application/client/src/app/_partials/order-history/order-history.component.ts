@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiService } from './../../_services/index';
-import { PubNubAngular } from 'pubnub-angular2';
 
 @Component({
   selector: 'order-history',
@@ -25,8 +24,8 @@ export class OrderHistoryComponent implements OnInit{
         //console.log(history);
         this.history = history;
       }, error => {
-        alert ("Problem getting order history. Either order doesn't exist or isn't in the correct state for this user");
-        console.log(error);
+        console.log(JSON.stringify(error));
+        alert("Problem getting order history: " + error['error']['message']);
       });
     }
   }
@@ -38,8 +37,8 @@ export class OrderHistoryComponent implements OnInit{
       //console.log(history);
       this.history = history;
     }, error => {
-      alert ("Problem getting order history. Either order doesn't exist or isn't in the correct state for this user");
-      console.log(error);
+      console.log(JSON.stringify(error));
+      alert("Problem getting order history: " + error['error']['message']);
     });
   }
 

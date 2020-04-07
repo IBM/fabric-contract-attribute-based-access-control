@@ -41,16 +41,8 @@ export class QueryorderComponent implements OnInit {
       console.log(this.order)
     }, error => {
       this.success = false;
-      let errorArray = [];
-      // Convert error object into array
-      for (let field in error) {
-        if (error.hasOwnProperty(field)) {
-          errorArray.push(error[field]);
-        }
-      }
-      // Pull error message out
-      console.log(errorArray[7].endorsements[0].message);
-      alert(errorArray[7].endorsements[0].message);
+      console.log(JSON.stringify(error));
+      alert("Query order failed: " + error['error']['message']);
     });
   }
 }
