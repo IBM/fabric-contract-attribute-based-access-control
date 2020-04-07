@@ -1,4 +1,4 @@
-import { Component,Inject,Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService, UserService } from '../../_services/index';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, TooltipPosition } from '@angular/material';
@@ -11,8 +11,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   providers: [],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -26,7 +26,7 @@ export class OrdersTableComponent implements OnInit {
 
   @Input('regulator') regulator: boolean;
 
-  constructor(private api: ApiService, private user: UserService, private cd: ChangeDetectorRef, public dialog: MatDialog) {}
+  constructor(private api: ApiService, private user: UserService, private cd: ChangeDetectorRef, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.currentUser = this.user.getCurrentUser();
@@ -35,7 +35,7 @@ export class OrdersTableComponent implements OnInit {
     //console.log(`Regulator Boolean attribute is ${this.regulator ? '' : 'non-'}present!`);
 
     // Load up the Orders from backend
-    this.api.orders$.subscribe ( currentOrders => {
+    this.api.orders$.subscribe(currentOrders => {
       this.orders = new MatTableDataSource(currentOrders);
       this.cd.markForCheck();
     })
@@ -52,7 +52,8 @@ export class OrdersTableComponent implements OnInit {
     this.api.receiveOrder().subscribe(api => {
       this.api.queryOrders();
     }, error => {
-      alert ("Producer is having a problem accepting order: " + orderid)
+      console.log(JSON.stringify(error));
+      alert("Problem accepting order: " + error['error']['message'])
     });
   }
 
@@ -61,10 +62,10 @@ export class OrdersTableComponent implements OnInit {
     let shippers = [];
     this.api.getAllUsers().subscribe(allUsers => {
       //console.log(allUsers);
-      var userArray = Object.keys(allUsers).map(function(userIndex){
-          let user = allUsers[userIndex];
-          // do something with person
-          return user;
+      var userArray = Object.keys(allUsers).map(function (userIndex) {
+        let user = allUsers[userIndex];
+        // do something with person
+        return user;
       });
 
       for (let u of userArray) {
@@ -73,14 +74,15 @@ export class OrdersTableComponent implements OnInit {
         }
       }
     }, error => {
-      console.log(error);
+      console.log(JSON.stringify(error));
+      alert("Problem choosing shipper: " + error['error']['message'])
     });
 
     // Open ToShipper Dialog
     const dialogRef = this.dialog.open(ToShipperDialog, {
       disableClose: false,
       width: '600px',
-      data: {shippers: shippers}
+      data: { shippers: shippers }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -97,7 +99,8 @@ export class OrdersTableComponent implements OnInit {
     this.api.assignShipper().subscribe(api => {
       this.api.queryOrders();
     }, error => {
-      alert ("Producer is having a problem packaging items of order: " + orderid)
+      console.log(JSON.stringify(error));
+      alert("Problem assigning shipper: " + error['error']['message'])
     });
   }
 
@@ -107,7 +110,8 @@ export class OrdersTableComponent implements OnInit {
     this.api.createShipment().subscribe(api => {
       this.api.queryOrders();
     }, error => {
-      alert ("Producer is having a problem creating shipment for order: " + orderid)
+      console.log(JSON.stringify(error));
+      alert("Problem creating shipment: " + error['error']['message'])
     });
   }
 
@@ -117,7 +121,8 @@ export class OrdersTableComponent implements OnInit {
     this.api.transportShipment().subscribe(api => {
       this.api.queryOrders();
     }, error => {
-      alert ("Producer is having a problem shipping shipment for order: " + orderid)
+      console.log(JSON.stringify(error));
+      alert("Problem transporting shipment: " + error['error']['message'])
     });
   }
 
@@ -127,17 +132,18 @@ export class OrdersTableComponent implements OnInit {
     this.api.receiveShipment().subscribe(api => {
       this.api.queryOrders();
     }, error => {
-      alert ("Problem receiving shipment")
+      console.log(JSON.stringify(error));
+      alert("Problem receiving shipment: " + error['error']['message'])
     })
   }
 
   // delete order
-  deleteOrder (order) {
+  deleteOrder(order) {
     // Open Tile Dialog
     const dialogRef = this.dialog.open(DeleteOrderDialog, {
       disableClose: false,
       width: '600px',
-      data: {order: order}
+      data: { order: order }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -148,7 +154,8 @@ export class OrdersTableComponent implements OnInit {
           console.log(res);
           this.api.queryOrders();
         }, error => {
-          console.log(error);
+          console.log(JSON.stringify(error));
+          alert("Problem deleting order: " + error['error']['message'])
         });
       }
     });
@@ -180,9 +187,9 @@ export class ToShipperDialog implements OnInit {
   model: any;
   constructor(
     public dialogRef: MatDialogRef<ToShipperDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: ShipperDialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: ShipperDialogData) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.model = {};
   }
 }
@@ -201,5 +208,5 @@ export class DeleteOrderDialog {
   model: any;
   constructor(
     public dialogRef: MatDialogRef<DeleteOrderDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData) { }
 }

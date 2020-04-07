@@ -11,7 +11,6 @@ RUN npm install -g @angular/cli@1.7.1
 #copy app directory
 COPY ./src /app/src
 COPY ./e2e /app/e2e
-COPY ./Pubnub.png /app/Pubnub.png
 COPY ./angular.json /app/angular.json
 COPY ./tsconfig.json /app/tsconfig.json
 COPY ./tslint.json /app/tslint.json

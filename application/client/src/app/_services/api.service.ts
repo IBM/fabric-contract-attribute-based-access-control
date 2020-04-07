@@ -92,8 +92,8 @@ export class ApiService {
       }
       this.OrdersData.next(orders);
     }, error => {
-      console.log(error);
-      alert ("Problem getting orders")
+      console.log(JSON.stringify(error));
+      alert("Problem getting orders: " + error['error']['message']);
     })
   }
 

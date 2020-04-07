@@ -9,7 +9,7 @@ import { ApiService, UserService } from '../_services/index';
   providers: []
 })
 
-export class LoginComponent{
+export class LoginComponent {
   model: any = {};
   loading = false;
   returnUrl: string;
@@ -32,28 +32,19 @@ export class LoginComponent{
 
     this.apiService.id = this.model.userid;
     this.apiService.pwd = this.model.password;
-    
+
     this.apiService.getUser().subscribe(res => {
-      if (res['errorcode']==0) {
-        user.usertype = res['usertype'];
-        this.userService.setCurrentUser(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        if (res['usertype'] == "admin") {
-          this.router.navigate(['users']);
-        } else {
-          this.router.navigate([res['usertype']]);
-        }
-      } else if (res['errorcode'] == 402) {
-        // Enroll user!
-        alert(res['errormessage'] + "\n \nPlease make sure that an administrator has registered this user and that the user has enrolled.");
-        this.router.navigate(['enroll']);
+      user.usertype = res['usertype'];
+      this.userService.setCurrentUser(user);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      if (res['usertype'] == "admin") {
+        this.router.navigate(['users']);
       } else {
-        alert("Either "+res['userid']+" needs to be registered or enrolled before they are able to log in \n \n -OR- \n \n double check the spelling of the userid and password.");
-        this.router.navigate(['enroll']);
+        this.router.navigate([res['usertype']]);
       }
     }, error => {
-      console.log(error);
-      alert("Login failed.");
+      console.log(JSON.stringify(error));
+      alert("Login failed: " + error['error']['message']);
       this.loading = false;
     });
   }
