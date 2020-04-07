@@ -42,7 +42,7 @@ curl -X POST "http://localhost:${PORT}/api/register-user" -H "authorization: Bas
 ```
 As retailer 'Walmart:Walmart' enroll into wallet:
 ```
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
+curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"usertype\":\"retailer\"}"
 ```
 As 'admin:adminpw', get all registered users:
 ```
