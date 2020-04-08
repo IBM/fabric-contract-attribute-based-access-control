@@ -97,8 +97,7 @@ utils.connectGatewayFromConfig = async () => {
         contract = await network.getContract(configdata["smart_contract_name"]);
 
     } catch (error) {
-        console.log(`Error connecting to Fabric network. ${error}`);
-        console.log(error.stack);
+        console.log('Error connecting to Fabric network. ' + error.toString());
     } finally {
     }
     return contract;
@@ -166,7 +165,7 @@ utils.submitTx = async(contract, txName, ...args) => {
         return Promise.resolve(response.toString());
     },(error) =>
         {
-          console.log ('\nutils.js: Error:');
+          console.log ('utils.js: Error:' + error.toString());
           return Promise.reject(error);
         });
 }
@@ -204,7 +203,7 @@ utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
     };
 
     //  Register is done using admin signing authority
-    ca.register(newUserDetails, gateway.getCurrentIdentity())
+    return ca.register(newUserDetails, gateway.getCurrentIdentity())
         .then(newPwd => {
             //  if a password was set in 'enrollmentSecret' field of newUserDetails,
             //  the same password is returned by "register".
@@ -213,8 +212,8 @@ utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
             console.log('\n Secret returned: ' + newPwd);
             return newPwd;
         }, error => {
-            console.log('Error in register();  ERROR returned: ' + error);
-            return error;
+            console.log('Error in register();  ERROR returned: ' + error.toString());
+            return Promise.reject(error);
         });
 }  //  end of function registerUser
 
@@ -246,7 +245,7 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
         return wallet.import(userid, identity).then(notused => {
             return console.log('msg: Successfully enrolled user, ' + userid + ' and imported into the wallet');
         }, error => {
-            console.log("error in wallet.import\n" + error);
+            console.log("error in wallet.import\n" + error.toString());
             throw error;
         });
     }, error => {
@@ -295,7 +294,7 @@ utils.isUserEnrolled = async (userid) => {
     return wallet.exists(userid).then(result => {
         return result;
     }, error => {
-        console.log("error in wallet.exists\n" + error);
+        console.log("error in wallet.exists\n" + error.toString());
         throw error;
     });
 }
