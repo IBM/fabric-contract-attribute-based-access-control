@@ -6,7 +6,7 @@
 echo "What is the IP address for the API server (default is localhost:3000)?"
 read API_URL
 API_URL=${API_URL:-http://localhost:3000}
-echo "Do you want to register identities? [yes or no]"
+echo "Do you want to register identities? [y,n]"
 read yn
 case $yn in
     [[yY] | [yY][Ee][Ss] )
@@ -14,11 +14,11 @@ case $yn in
         ./create_identities.sh
     ;;
     [nN] | [n|N][O|o] )
-	break;;
+	;;
     *) echo "Invalid input"
     ;;
 esac
-echo "Do you want to enroll identities? [yes or no]"
+echo "Do you want to enroll identities? [y,n]"
 read yn
 case $yn in
     [yY] | [yY][Ee][Ss] )
@@ -26,7 +26,7 @@ case $yn in
         ./enroll_identities.sh
     ;;
     [[nN] | [n|N][O|o] ) 
-	break;;
+	;;
     *) echo "Invalid input"
     ;;
 esac
