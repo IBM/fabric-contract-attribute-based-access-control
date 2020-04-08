@@ -26,6 +26,7 @@ case $yn in
     [nN] | [n|N][O|o] )
     ;;
     *) echo "Invalid input"
+    exit 1
     ;;
 esac
 echo "Do you want to enroll identities? [y,n]"
@@ -38,6 +39,7 @@ case $yn in
     [[nN] | [n|N][O|o] )
     ;;
     *) echo "Invalid input"
+    exit 1
     ;;
 esac
 echo ""
