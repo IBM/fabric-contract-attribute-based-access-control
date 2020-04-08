@@ -16,6 +16,7 @@ case $yn in
     [nN] | [n|N][O|o] )
 	;;
     *) echo "Invalid input"
+    exit 1
     ;;
 esac
 echo "Do you want to enroll identities? [y,n]"
@@ -28,6 +29,7 @@ case $yn in
     [[nN] | [n|N][O|o] ) 
 	;;
     *) echo "Invalid input"
+    exit 1
     ;;
 esac
 echo ""
@@ -71,11 +73,8 @@ echo ""
 curl -X GET -H "authorization: Basic SEVCOkhFQg==" "${API_URL}/api/orders/order-0001" 
 echo ""
 echo ""
-echo "********** Producer 'ABFarm' views orders assigned to them and receives order-0002"
-# base64 encoded string 'QUJGYXJtOkFCRmFybQ==' for 'ABFarm:ABFarm' added to authorization header
-echo ""
-echo ""
 echo "********** Producer 'ABFarm' lists all orders assigned to them "
+# base64 encoded string 'QUJGYXJtOkFCRmFybQ==' for 'ABFarm:ABFarm' added to authorization header
 echo ""
 curl -X GET -H "authorization: Basic QUJGYXJtOkFCRmFybQ==" "${API_URL}/api/orders/"
 echo ""
@@ -133,18 +132,27 @@ echo ""
 curl -X GET -H "authorization: Basic RkRBOkZEQQ==" "${API_URL}/api/orders/" 
 echo ""
 echo ""
+echo "********** Regulator 'FDA' can see history from different retailers"
+echo ""
 curl -X GET -H "authorization: Basic RkRBOkZEQQ==" "${API_URL}/api/order-history/order-0001" 
 echo ""
+echo ""
+echo "********** Regulator 'FDA' can see history from different retailers"
 echo ""
 curl -X GET -H "authorization: Basic RkRBOkZEQQ==" "${API_URL}/api/order-history/order-0002" 
 echo ""
 echo ""
-#echo "********** Retailer 'Walmart' deletes order-0001"
-#echo ""
-#curl -X DELETE -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" "${API_URL}/api/orders/order-0001" 
-#echo ""
-#echo ""
-#echo "********** Retailer 'HEB' deletes order-0002"
-#echo ""
-#curl -X DELETE -H "authorization: Basic SEVCOkhFQg==" "${API_URL}/api/orders/order-0002" 
+echo "********** Retailer 'Walmart' deletes order-0001"
+echo ""
+curl -X DELETE -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" "${API_URL}/api/orders/order-0001" 
+echo ""
+echo ""
+echo "********** Retailer 'HEB' deletes order-0002"
+echo ""
+curl -X DELETE -H "authorization: Basic SEVCOkhFQg==" "${API_URL}/api/orders/order-0002" 
+echo ""
+echo ""
+echo "********** Retailer 'HEB' deletes order-0003"
+echo ""
+curl -X DELETE -H "authorization: Basic SEVCOkhFQg==" "${API_URL}/api/orders/order-0003" 
 
