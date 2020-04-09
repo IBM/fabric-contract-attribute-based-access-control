@@ -20,9 +20,8 @@ var wallet;
 var bLocalHost;
 var ccp;
 var orgMSPID;
-const EVENT_TYPE = "bcpocevent";  //  HLFabric EVENT
+const EVENT_TYPE = "bc_event";  //  HLFabric EVENT
 
-const SUCCESS = 0;
 const utils = {};
 
 // Main program function
@@ -97,7 +96,7 @@ utils.connectGatewayFromConfig = async () => {
         contract = await network.getContract(configdata["smart_contract_name"]);
 
     } catch (error) {
-        console.log('Error connecting to Fabric network. ' + error.toString());
+        console.log('Error connecting to Fabric network: ' + error.toString());
     } finally {
     }
     return contract;
@@ -114,7 +113,7 @@ utils.events = async () => {
     var channel = client.getChannel(configdata["channel_name"]);
     var peers = channel.getChannelPeers();
     if (peers.length == 0) {
-        throw new Error("Error after call to channel.getChannelPeers(): Channel has no peers !");
+        throw new Error("Error after call to channel.getChannelPeers(): Channel has no peers!");
     }
 
     console.log("Connecting to event hub..." + peers[0].getName());
@@ -144,7 +143,7 @@ utils.events = async () => {
                 console.log("\n------------------------------------");
             }, (err) => {
                 // this is the callback if something goes wrong with the event registration or processing
-                reject(new Error('There was a problem with the eventhub in registerTxEvent ::' + err));
+                reject(new Error('There was a problem with the eventhub in registerChaincodeEvent:' + err));
             },
             { disconnect: false } //continue to listen and not disconnect when complete
         );
@@ -161,11 +160,11 @@ utils.submitTx = async(contract, txName, ...args) => {
     let result = contract.submitTransaction(txName, ...args);
     return result.then (response => {
         // console.log ('Transaction submitted successfully;  Response: ', response.toString());
-        console.log ('utils.js: Transaction submitted successfully');
+        console.log ('Transaction submitted successfully');
         return Promise.resolve(response.toString());
     },(error) =>
         {
-          console.log ('utils.js: Error:' + error.toString());
+          console.log ('Error submitting transaction:' + error.toString());
           return Promise.reject(error);
         });
 }
@@ -209,10 +208,10 @@ utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
             //  the same password is returned by "register".
             //  if a password was not set in 'enrollmentSecret' field of newUserDetails,
             //  then a generated password is returned by "register".
-            console.log('\n Secret returned: ' + newPwd);
+            console.log('Secret returned: ' + newPwd);
             return newPwd;
         }, error => {
-            console.log('Error in register();  ERROR returned: ' + error.toString());
+            console.log('Error in register():' + error.toString());
             return Promise.reject(error);
         });
 }  //  end of function registerUser
@@ -243,9 +242,9 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
         //console.log("\n Successful enrollment; Data returned by enroll", enrollment.certificate);
         var identity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
         return wallet.import(userid, identity).then(notused => {
-            return console.log('msg: Successfully enrolled user, ' + userid + ' and imported into the wallet');
+            return console.log('Successfully enrolled user, ' + userid + ' and imported into the wallet');
         }, error => {
-            console.log("error in wallet.import\n" + error.toString());
+            console.log("Error in wallet.import\n" + error.toString());
             throw error;
         });
     }, error => {
@@ -294,7 +293,7 @@ utils.isUserEnrolled = async (userid) => {
     return wallet.exists(userid).then(result => {
         return result;
     }, error => {
-        console.log("error in wallet.exists\n" + error.toString());
+        console.log("Error in wallet.exists\n" + error.toString());
         throw error;
     });
 }
