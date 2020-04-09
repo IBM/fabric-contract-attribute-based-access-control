@@ -166,7 +166,6 @@ structure should look like below:
 ### Test Scenario - automatic, using curl against API server
 ```
 cd fabric-contract-attribute-based-access-control/scripts
-./create_identities.sh
 ./testcase.sh
 ```
 ### Test Scenario - Manual, using client side UI

@@ -7,7 +7,7 @@ import { AuthService } from './_services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
-  title = 'Generic Supply Chain PoC';
+  title = 'Generic Supplychain Blockchain Sample';
 
   constructor(private authService: AuthService){}
 

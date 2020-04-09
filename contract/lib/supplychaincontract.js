@@ -141,7 +141,7 @@ class SupplychainContract extends Contract {
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from Tx_ReceiveOrder:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from receiveOrder: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Convert order so we can modify fields
@@ -190,7 +190,7 @@ class SupplychainContract extends Contract {
         //  Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from Tx_AssignShipper:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from assignShipper: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Convert order so we can modify fields
@@ -242,7 +242,7 @@ class SupplychainContract extends Contract {
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from createShipment:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from createShipment: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Convert order so we can modify fields
@@ -287,7 +287,7 @@ class SupplychainContract extends Contract {
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from transportShipment:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from transportShipment: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Retrieve the current order using key provided
@@ -330,7 +330,7 @@ class SupplychainContract extends Contract {
         // Retrieve the current order using key provided
         var orderAsBytes = await ctx.stub.getState(orderId);
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from receiveShipment:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from receiveShipment: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Retrieve the current order using key provided
@@ -382,7 +382,7 @@ class SupplychainContract extends Contract {
         await ctx.stub.setEvent(EVENT_TYPE, Buffer.from(JSON.stringify(queryEvent)));
 
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from queryOrder:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from queryOrder: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Access Control:
@@ -516,7 +516,7 @@ class SupplychainContract extends Contract {
         var orderAsBytes = await ctx.stub.getState(orderId);
 
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from getOrderHistory:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from getOrderHistory: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Access Control: Only those associated with this order
@@ -536,9 +536,9 @@ class SupplychainContract extends Contract {
 
         // Customer can only view order history if order has completed cycle
         if ((userType == "customer") && (order.currentOrderState != OrderStates.SHIPMENT_RECEIVED))
-            throw new Error(`Information about order ${orderId} is not available to ${userId} yet`);
+            throw new Error(`Information about order ${orderId} is not available to ${userId} yet. Order status needs to be SHIPMENT_RECEIVED.`);
 
-        console.info('start GetHistoryForOrder: %s\n', orderId);
+        console.info('start GetHistoryForOrder: %s', orderId);
 
         // Get list of transactions for order
         const iterator = await ctx.stub.getHistoryForKey(orderId);
@@ -596,7 +596,7 @@ class SupplychainContract extends Contract {
         var orderAsBytes = await ctx.stub.getState(orderId);
 
         if (!orderAsBytes || orderAsBytes.length === 0) {
-            throw new Error(`Error Message from deleteOrder:\nOrder with orderId = ${orderId} does not exist.`);
+            throw new Error(`Error Message from deleteOrder: Order with orderId = ${orderId} does not exist.`);
         }
 
         // Access Control: This transaction should only be invoked by designated originating Retailer or Producer
