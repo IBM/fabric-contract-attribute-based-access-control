@@ -1,11 +1,11 @@
 # Generic Supply Chain Test Scenario
 
- - create_identities - Register identities used in the Generic Supply Chain demo:
+ - create_identities.sh - Register identities used in the Generic Supply Chain demo:
     ```
     $ chmod +x create_identities.sh
     $ ./create_identities.sh
     ```
- - enroll_identities - Enroll identities into wallet used in the Generic Supply Chain demo:
+ - enroll_identities.sh - Enroll identities into wallet used in the Generic Supply Chain demo:
     ```
     $ chmod +x enroll_identities.sh
     $ ./enroll_identities.sh
