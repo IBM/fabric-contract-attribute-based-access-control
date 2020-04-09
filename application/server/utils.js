@@ -1,3 +1,8 @@
+/*
+* Copyright IBM Corp All Rights Reserved
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
 'use strict';
 
 // Bring key classes into scope, most importantly Fabric SDK network class
@@ -22,7 +27,7 @@ const utils = {};
 
 // Main program function
 utils.connectGatewayFromConfig = async () => {
-    console.log("--------------- connectGatewayFromConfig function: --------------- ");
+    console.log(">>>connectGatewayFromConfig:  ");
 
     // A gateway defines the peers used to access Fabric networks
     gateway = new Gateway();
@@ -92,8 +97,7 @@ utils.connectGatewayFromConfig = async () => {
         contract = await network.getContract(configdata["smart_contract_name"]);
 
     } catch (error) {
-        console.log(`Error processing transaction. ${error}`);
-        console.log(error.stack);
+        console.log('Error connecting to Fabric network. ' + error.toString());
     } finally {
     }
     return contract;
@@ -110,7 +114,6 @@ utils.events = async () => {
     var channel = client.getChannel(configdata["channel_name"]);
     var peers = channel.getChannelPeers();
     if (peers.length == 0) {
-        //console.log("\nError after call to channel.getChannelPeers(): Channel has no peers !\n")
         throw new Error("Error after call to channel.getChannelPeers(): Channel has no peers !");
     }
 
@@ -118,12 +121,9 @@ utils.events = async () => {
     //  Assuming that we want to connect to the first peer in the peers list
     var channel_event_hub = channel.getChannelEventHub(peers[0].getName());
 
+    // to see the event payload, use 'true' in the call to channel_event_hub.connect(boolean)
     channel_event_hub.connect(true);
 
-    //**************************************************************** */
-    // using resolve the promise so that result status may be processed
-    // under the then clause rather than having the catch clause process
-    // the status
     let event_monitor = new Promise((resolve, reject) => {
         /*  Sample usage of registerChaincodeEvent
         registerChaincodeEvent ('chaincodename', 'regularExpressionForEventName',
@@ -138,17 +138,10 @@ utils.events = async () => {
                 // within a block that will match on the second parameter in the registration
                 // from the chaincode with the ID of the first parameter.
 
-                let event_payload = JSON.parse(event.payload.toString());
+                //let event_payload = JSON.parse(event.payload.toString());
 
                 console.log("Event payload: " + event.payload.toString());
-                console.log("\n\n------------------------------------\n");
-                // utils.publishMessage("Blockchain Event: ", event_payload.event_type, bcChannelName);
-
-                // to see the event payload, use 'true' in the call to channel_event_hub.connect(boolean)
-                console.log("\n\nEvent payload: " + event.payload.toString());
-
-                // parse the event and relay it onto pubnub channel for UI updates
-                //  utils.parseAndRelay(event.payload.toString());
+                console.log("\n------------------------------------");
             }, (err) => {
                 // this is the callback if something goes wrong with the event registration or processing
                 reject(new Error('There was a problem with the eventhub in registerTxEvent ::' + err));
@@ -164,21 +157,23 @@ utils.events = async () => {
 }  //  end of events()
 
 utils.submitTx = async(contract, txName, ...args) => {
-    console.log("utils.submitTx ")
-    console.log(txName);
-    console.log(args);
+    console.log(">>>utils.submitTx..."+txName+" ("+args+")");
     let result = contract.submitTransaction(txName, ...args);
     return result.then (response => {
-        return Promise.resolve(response);
-    });
-    //return await contract.submitTransaction(txName, ...args);
+        // console.log ('Transaction submitted successfully;  Response: ', response.toString());
+        console.log ('utils.js: Transaction submitted successfully');
+        return Promise.resolve(response.toString());
+    },(error) =>
+        {
+          console.log ('utils.js: Error:' + error.toString());
+          return Promise.reject(error);
+        });
 }
 
 //  function registerUser
 //  Purpose: Utility function for registering users with HL Fabric CA.
-//  See POST api for details
 utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
-    console.log("\n------------  function registerUser ---------------");
+    console.log("\n------------  utils.registerUser ---------------");
     console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype: " + usertype)
 
     const gateway = new Gateway();
@@ -208,31 +203,25 @@ utils.registerUser = async (userid, userpwd, usertype, adminIdentity) => {
     };
 
     //  Register is done using admin signing authority
-    ca.register(newUserDetails, gateway.getCurrentIdentity())
+    return ca.register(newUserDetails, gateway.getCurrentIdentity())
         .then(newPwd => {
             //  if a password was set in 'enrollmentSecret' field of newUserDetails,
             //  the same password is returned by "register".
             //  if a password was not set in 'enrollmentSecret' field of newUserDetails,
             //  then a generated password is returned by "register".
-            console.log("\n---------------------------------------------------");
             console.log('\n Secret returned: ' + newPwd);
-            console.log("\n---------------------------------------------------");
-
             return newPwd;
         }, error => {
-            console.log("\n----------------------------------------");
-            console.log('Error in register();  ERROR returned: ' + error);
-            console.log("\n----------------------------------------");
-            return error;
+            console.log('Error in register();  ERROR returned: ' + error.toString());
+            return Promise.reject(error);
         });
 }  //  end of function registerUser
 
 utils.enrollUser = async (userid, userpwd, usertype) => {
-    console.log("\n------------  function enrollUser -----------------");
-    console.log("\n userid: " + userid + ", pwd: " + userpwd + ", usertype:" + usertype);
+    console.log("\n------------  utils.enrollUser -----------------");
+    console.log("userid: " + userid + ", pwd: " + userpwd + ", usertype:" + usertype);
 
-    // get certification authority
-    console.log('Getting CA');
+    // get certificate authority
     const orgs = ccp.organizations;
     const CAs = ccp.certificateAuthorities;
     const fabricCAKey = orgs[orgMSPID].certificateAuthorities[0];
@@ -250,16 +239,13 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
             }]
     };
 
-    console.log("User Details: " + JSON.stringify(newUserDetails))
     return ca.enroll(newUserDetails).then(enrollment => {
-        console.log("\n Successful enrollment; Data returned by enroll", enrollment.certificate);
-
+        //console.log("\n Successful enrollment; Data returned by enroll", enrollment.certificate);
         var identity = X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
-
         return wallet.import(userid, identity).then(notused => {
-            console.log("msg: Successfully enrolled user, ' + userid + ' and imported into the wallet");
+            return console.log('msg: Successfully enrolled user, ' + userid + ' and imported into the wallet');
         }, error => {
-            console.log("error in wallet.import\n" + error);
+            console.log("error in wallet.import\n" + error.toString());
             throw error;
         });
     }, error => {
@@ -276,7 +262,7 @@ utils.enrollUser = async (userid, userpwd, usertype) => {
 //              available in the wallet)
 //  Output:     no explicit output;  (Global variable) contract will be set to this user's context
 utils.setUserContext = async (userid, pwd) => {
-    console.log('In function: setUserContext ....');
+    console.log('\n>>>setUserContext...');
 
     // It is possible that the user has been registered and enrolled in Fabric CA earlier
     // and the certificates (in the wallet) could have been removed.
@@ -305,15 +291,10 @@ utils.setUserContext = async (userid, pwd) => {
 }  //  end of setUserContext(userid)
 
 utils.isUserEnrolled = async (userid) => {
-    //console.log("\n---------------  function isUserEnrolled ------------------------------------");
-    console.log("\n userid: " + userid);
-
     return wallet.exists(userid).then(result => {
-        //console.log("is User Enrolled: " + result);
-        //console.log("\n---------------  end of function isUserEnrolled ------------------------------------");
         return result;
     }, error => {
-        console.log("error in wallet.exists\n" + error);
+        console.log("error in wallet.exists\n" + error.toString());
         throw error;
     });
 }
@@ -321,9 +302,8 @@ utils.isUserEnrolled = async (userid) => {
 //  function getUser
 //  Purpose: get specific registered user
 utils.getUser = async (userid, adminIdentity) => {
+    console.log(">>>getUser...");
     const gateway = new Gateway();
-    console.log("in utils.getUser before connecting to Gateway. id = ",userid)
-
     // Connect to gateway as admin
     await gateway.connect(ccp, { wallet, identity: adminIdentity, discovery: { enabled: false, asLocalhost: bLocalHost } });
     let client = gateway.getClient();
@@ -331,18 +311,17 @@ utils.getUser = async (userid, adminIdentity) => {
     let idService = fabric_ca_client.newIdentityService();
     let user = await idService.getOne(userid, gateway.getCurrentIdentity());
     let result = {"id": userid};
- 
-    // for all identities
+
+    // for admin, usertype is "admin";
     if (userid == "admin") {
         result.usertype = userid;
     } else { // look through user attributes for "usertype"
         let j = 0;
         while (user.result.attrs[j].name !== "usertype") j++;
-        result.usertype = user.result.attrs[j].value;
+            result.usertype = user.result.attrs[j].value;
     }
-    console.log("********************************** utils.getUser *************************************")
-    console.log(result);
-    return result;
+    console.log (result);
+    return Promise.resolve(result);
 }  //  end of function getUser
 
 //  function getAllUsers
@@ -386,9 +365,9 @@ utils.getAllUsers = async (adminIdentity) => {
 
 //  function getRandomNum
 //  Purpose: Provide a random tracking number for the createShipment transaction
-utils.getRandomNum = () => {	
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)	
-    return `${s4()}${s4()}${s4()}${s4()}`	
+utils.getRandomNum = () => {
+    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+    return `${s4()}${s4()}${s4()}${s4()}`
 }
 
 module.exports = utils;

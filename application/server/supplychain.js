@@ -1,8 +1,9 @@
+/*
+* Copyright IBM Corp All Rights Reserved
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
 'use strict';
-
-// ccRouter.js
-'use strict';
-
 const express = require('express');
 const utils = require('./utils.js');
 const supplychainRouter = express.Router();
@@ -10,12 +11,37 @@ const supplychainRouter = express.Router();
 // Bring key classes into scope, most importantly Fabric SDK network class
 const Order = require('../../contract/lib/order.js');
 
+const STATUS_SUCCESS = 200;
+const STATUS_CLIENT_ERROR = 400;
+const STATUS_SERVER_ERROR = 500;
+
+//  USER Management Errors
+const USER_NOT_ENROLLED = 1000;
+const INVALID_HEADER = 1001;
+
+//  application specific errors
 const SUCCESS = 0;
-const TRANSACTION_ERROR = 401;
-const USER_NOT_ENROLLED = 402;
+const ORDER_NOT_FOUND = 2000;
+
+function prepareErrorResponse(error, code, message) {
+
+    let errorMsg;
+    try {
+        // Pull specific fabric transaction error message out of error stack
+        let entries = Object.entries(error);
+        errorMsg = entries[0][1][0]["message"];
+    } catch (exception) {
+        // Error wasn't sent from fabric, so can't pull error out.
+        errorMsg = null;
+    }
+
+    let result = { "code": code, "message": errorMsg?errorMsg:message, "error": error };
+    console.log("supplychain.js:prepareErrorResponse(): " + message);
+    console.log(result);
+    return result;
+}
 
 async function getUsernamePassword(request) {
-    console.log(">>> getUsernamePassword:");
     // check for basic auth header
     if (!request.headers.authorization || request.headers.authorization.indexOf('Basic ') === -1) {
         return new Promise().reject('Missing Authorization Header');  //  status 401
@@ -50,255 +76,211 @@ async function submitTx(request, txName, ...args) {
         //  check header; get username and pwd from request
         //  does NOT verify auth credentials
         await getUsernamePassword(request);
-        utils.setUserContext(request.username, request.password).then((contract) => {
-            console.log("supplychain.js:submitTx - ")
-            console.log(txName);
-            console.log(args);
-            //console.log(contract);
+        return utils.setUserContext(request.username, request.password).then((contract) => {
             // Insert txName as args[0]
             args.unshift(txName);
             // Insert contract as args[0]
             args.unshift(contract);
-            // Convert args from an array to a list of strings
-            let buffer = utils.submitTx.apply ("unused", args);
-            console.log(buffer);
-            return buffer;
-            //return utils.submitTx(contract, txName, ...args);
+            // .apply applies the list entries as parameters to the called function
+            return utils.submitTx.apply("unused", args)
+                .then(buffer => {
+                    return buffer;
+                }, error => {
+                    return Promise.reject(error);
+                });
         }, error => {
-            return console.log(error);
+            return Promise.reject(error);
         });
-
     }
-    catch (error) { return console.log(error); }
+    catch (error) {
+        return Promise.reject(error);
+    }
 }
 
-//app.post('/api/orders', (request, res) => {
-//contract.submitTransaction('orderProduct', JSON.stringify(request.body))
-supplychainRouter.route('/orders').post(function (request, res) {
-    submitTx(request, 'orderProduct', JSON.stringify(request.body))
-        .then((orderProdResponse) => {
-            // process response
-            console.log('Process orderProduct transaction.');
-            let order = Order.fromBuffer(orderProdResponse);
-            console.log(`order ${order.orderId} : price = ${order.price}, quantity = ${order.quantity}, producer = ${order.producerId}, consumer = ${order.retailerId}, trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
-            order.errorCode = 1;
-            res.send(order);
+supplychainRouter.route('/orders').get(function (request, response) {
+    submitTx(request, 'queryAllOrders', '')
+        .then((queryOrderResponse) => {
+            //  response is already a string;  not a buffer
+            let orders = queryOrderResponse;
+            response.status(STATUS_SUCCESS);
+            response.send(orders);
         }, (error) => {
-            // handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem getting the list of orders."));
         });
-});
+});  //  process route orders/
 
-//app.get('/api/orders/:id', (request, res) => {
-//  contract.submitTransaction('queryOrder', request.params.id)
-supplychainRouter.route('/orders/:id').get(function (request, res) {
-    let order;
+supplychainRouter.route('/orders/:id').get(function (request, response) {
     submitTx(request, 'queryOrder', request.params.id)
         .then((queryOrderResponse) => {
             // process response
-            console.log('Process QueryOrder transaction. ');
-
-            order = Order.fromBuffer(queryOrderResponse);
-
+            let order = Order.fromBuffer(queryOrderResponse);
             console.log(`order ${order.orderId} : price = ${order.price}, quantity = ${order.quantity}, producer = ${order.producerId}, consumer = ${order.retailerId}, trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
-            console.log('Transaction complete.');
-            order.errorCode = 1;
-            res.send(order);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, ORDER_NOT_FOUND,
+                'Order id, ' + request.params.id +
+                ' does not exist or the user does not have access to order details at this time.'));
         });
 });
 
-//  SJ: TODO:  More change in this api than other functions
-//  So, refer to older version of the file for previous version of this function
-
-// app.get('/api/orders', (request, res) => {
-//  gateway_contract.submitTransaction('queryAllOrders', '')
-supplychainRouter.route('/orders').get(function (request, res) {
-    let orders;
-    submitTx(request, 'queryAllOrders', '')
-        .then((queryOrderResponse) => {
+supplychainRouter.route('/orders').post(function (request, response) {
+    submitTx(request, 'orderProduct', JSON.stringify(request.body))
+        .then((result) => {
             // process response
-            orders = queryOrderResponse;
-            orders.errorCode = 1;
-            res.send(orders);
+            console.log('\nProcess orderProduct transaction.');
+            let order = Order.fromBuffer(result);
+            console.log(`order ${order.orderId} : price = ${order.price}, quantity = ${order.quantity}, producer = ${order.producerId}, consumer = ${order.retailerId}, trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            // handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem placing the order."));
         });
-});  //  process route queryorders/
+});
 
-//app.get('/api/order-history/:id', (request, res) => {
-//contract.submitTransaction('getOrderHistory', request.params.id)
-supplychainRouter.route('/order-history/:id').get(function (request, res) {
-    // process response
-    console.log('Process OrderHistory transaction.');
+
+supplychainRouter.route('/order-history/:id').get(function (request, response) {
     submitTx(request, 'getOrderHistory', request.params.id)
         .then((orderHistoryResponse) => {
-            console.log('Transaction complete.');
-            res.send(orderHistoryResponse);
+            console.log('\n>>>Process getOrderHistory response', orderHistoryResponse);
+            //  response is already a string;  not a buffer
+            //  no need of conversion from buffer to string
+            response.status(STATUS_SUCCESS);
+            response.send(orderHistoryResponse);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise', error);
-            res.status(404);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem fetching history for order, ", request.params.id));
         });
 });
 
 // Change status to ORDER_RECEIVED
-//app.put('/api/receive-order/:id', (request, res) => {
-//  contract.submitTransaction('receiveOrder', request.params.id)
-supplychainRouter.route('/receive-order/:id').put(function (request, res) {
+supplychainRouter.route('/receive-order/:id').put(function (request, response) {
     submitTx(request, 'receiveOrder', request.params.id)
         .then((receiveOrderResponse) => {
             // process response
             console.log('Process ReceiveOrder transaction.');
             let order = Order.fromBuffer(receiveOrderResponse);
             console.log(`order ${order.orderId} : state = ${order.currentOrderState}`);
-            order.errorCode = 1;
-            res.send(order);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem in receiving order, ", request.params.id));
         });
 
 });  //  process route /
 
-// Change status to ORDER_RECEIVED the name of a shipper to the order.
-//  app.put('/api/assign-shipper/:id', (request, res) => {
-//  contract.submitTransaction('assignShipper', request.params.id, request.query.shipperid)
-supplychainRouter.route('/assign-shipper/:id').put(function (request, res) {
+// Change status to ORDER_RECEIVED, add name of a shipper to order.
+supplychainRouter.route('/assign-shipper/:id').put(function (request, response) {
     submitTx(request, 'assignShipper', request.params.id, request.query.shipperid)
         .then((assignShipperResponse) => {
-            // process response
             console.log('Process AssignShipper transaction.');
             let order = Order.fromBuffer(assignShipperResponse);
             console.log(`order ${order.orderId} : shipper = ${order.shipperId}, state = ${order.currentOrderState}`);
-            order.errorCode = 1;
-            res.send(order);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem in assigning shipper for order, ", request.params.id));
         });
 });  //  process route /
 
 // This changes the status on the order, and adds a ship id
-// app.put('/api/create-shipment-for-order/:id', (request, res) => {
-// contract.submitTransaction('createShipment', request.params.id, utils.getRandomNum())
-supplychainRouter.route('/create-shipment-for-order/:id').put(function (request, res) {
-    res.send("supplychain.js: route: /create-shipment-for-order/:id:  This route not fixed yet.  ");
-
-      submitTx (request, 'createShipment', request.params.id, utils.getRandomNum())
+supplychainRouter.route('/create-shipment-for-order/:id').put(function (request, response) {
+    submitTx (request, 'createShipment', request.params.id, utils.getRandomNum())
       .then((createShipmentResponse) => {
-          // process response
           console.log('Process CreateShipment transaction.');
           let order = Order.fromBuffer(createShipmentResponse);
           console.log(`order ${order.orderId} : trackingInfo = ${order.trackingInfo}, state = ${order.currentOrderState}`);
-          order.errorCode = 1;
-          res.send(order);
+          response.status(STATUS_SUCCESS);
+          response.send(order);
       }, (error) => {
-          //  handle error if transaction failed
-          error.errorCode = 0;
-          console.log('Error thrown from tx promise: ', error);
-          res.send(error);
+          response.status(STATUS_SERVER_ERROR);
+          response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+              "There was a problem in creating shipment for order," + request.params.id));
       });
 });  //  process route /
 
 // This changes the status on the order
-// app.put('/api/transport-shipment/:id', (request, res) => {
-// contract.submitTransaction('transportShipment', request.params.id)
-supplychainRouter.route('/transport-shipment/:id').put(function (request, res) {
+supplychainRouter.route('/transport-shipment/:id').put(function (request, response) {
     submitTx(request, 'transportShipment', request.params.id)
         .then((transportShipmentResponse) => {
-            // process response
             console.log('Process TransportShipment transaction.');
             let order = Order.fromBuffer(transportShipmentResponse);
             console.log(`order ${order.orderId} : state = ${order.currentOrderState}`);
-            order.errorCode = 1;
-            res.send(order);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem in initiating shipment for order," + request.params.id));
         });
 });  //  process route /
 
 // This changes the status on the order
-//  app.put('/api/receive-shipment/:id', (request, res) => {
-//  contract.submitTransaction('receiveShipment', request.params.id)
-supplychainRouter.route('/receive-shipment/:id').put(function (request, res) {
+supplychainRouter.route('/receive-shipment/:id').put(function (request, response) {
     submitTx(request, 'receiveShipment', request.params.id)
         .then((receiveShipmentResponse) => {
             // process response
             console.log('Process ReceiveShipment transaction.');
             let order = Order.fromBuffer(receiveShipmentResponse);
             console.log(`order ${order.orderId} : state = ${order.currentOrderState}`);
-            order.errorCode = 1;
-            res.send(order);
+            response.status(STATUS_SUCCESS);
+            response.send(order);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem in receiving shipment for order," + request.params.id));
         });
 });
 
 // Delete designated order with id
-//  app.delete('/api/orders/:id', (request, res) => {
+//  app.delete('/api/orders/:id', (request, response) => {
 //  contract.submitTransaction('deleteOrder', request.params.id)
-supplychainRouter.route('/orders/:id').delete(function (request, res) {
+supplychainRouter.route('/orders/:id').delete(function (request, response) {
     submitTx(request, 'deleteOrder', request.params.id)
         .then((deleteOrderResponse) => {
             // process response
             console.log('Process DeleteOrder transaction.');
             console.log('Transaction complete.');
-            res.send(deleteOrderResponse);
+            response.status(STATUS_SUCCESS);
+            response.send(deleteOrderResponse);
         }, (error) => {
-            //  handle error if transaction failed
-            error.errorCode = 0;
-            console.log('Error thrown from tx promise: ', error);
-            res.send(error);
+            response.status(STATUS_SERVER_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                "There was a problem in deleting order, " + request.params.id));
         });
 });
 
 ////////////////////////////////// User Management APIs ///////////////////////////////////////
 
 //  Purpose:    POST api to register new users with Hyperledger Fabric CA;
-//  Note:       After registeration, users have to enroll to get certificates
+//  Note:       After registration, users have to enroll to get certificates
 //              to be able to submit transactions to Hyperledger Fabric Peer.
 //  Input:      request.body = {username (string), password (string), usertype (string)}
 //              usertype = {"admin", "producer", "shipper", "retailer", "customer", "regulator"}
+//              An admin identity is required to make this call to CA and
+//              should be passed in authorization header.
 //  Output:     pwd; If password was "", a generated password is returned in response
 //  Usage 1:    "smith", "smithpw", "producer"
 //  Usage 2:    "smith", "",        "producer"
-// app.post('/api/register-user/', (request, response) => {
 supplychainRouter.route('/register-user').post(function (request, response) {
     try {
-        console.log("\n\n--------------  api/registeruser --------------------------");
         let userId = request.body.userid;
         let userPwd = request.body.password;
         let userType = request.body.usertype;
-        console.log("\n userid: " + userId);
-        console.log("\n pwd: " + userPwd);
-        console.log("\n usertype: " + userType);
 
         //  only admin can call this api;  get admin username and pwd from request header
         getUsernamePassword(request)
             .then(request => {
-
                 //  1.  No need to call setUserContext
                 //  Fabric CA client is used for register-user;
                 //  2.  In this demo application UI, only admin sees the page "Manage Users"
@@ -307,47 +289,50 @@ supplychainRouter.route('/register-user').post(function (request, response) {
 
                 utils.registerUser(userId, userPwd, userType, request.username).
                     then((result) => {
+                        response.status(STATUS_SUCCESS);
                         response.send(result);
                     }, (error) => {
-                        response.send(console.log("\n Error returned from registerUser: " + error));
+                        response.status(STATUS_CLIENT_ERROR);
+                        response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+                            "User, " + userId + " could not be registered. "
+                            + "Verify if calling identity has admin privileges."));
                     });
             }, error => {
-                response.send(console.log("\n Error returned from registerUser: " + error));
+                response.status(STATUS_CLIENT_ERROR);
+                response.send(prepareErrorResponse(error, INVALID_HEADER,
+                    "Invalid header;  User, " + userId + " could not be registered."));
             });
     } catch (error) {
-        response.send(console.log('\n Unexpected error in /api/register-user: ', error));
+        response.status(STATUS_SERVER_ERROR);
+        response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            "Internal server error; User, " + userId + " could not be registered."));
     }
 });  //  process route register-user
 
 //  Purpose:    To enroll registered users with Fabric CA;
-//              A call to enrollUser to Fabric CA generates (and returns) certificates for the given (registered) user;
-//              These certificates are need for subsequent calls to Fabric Peers.
-//  Input:  request.body = { userid, password, usertype }
-//  Iutput:  Certificate on successful enrollment
+//  A call to enrollUser to Fabric CA generates (and returns) certificates for the given (registered) user;
+//  These certificates are need for subsequent calls to Fabric Peers.
+//  Input: { userid, password } in header and request.body.usertype
+//  Output:  Certificate on successful enrollment
 //  Usage:  "smith", "smithpw", "producer"
-//app.post('/api/enroll-user/', (request, response) => {
 supplychainRouter.route('/enroll-user/').post(function (request, response) {
-    console.log("\n--------------  api/enrollUser --------------------------");
-    let userId = request.body.userid;
-    let userPwd = request.body.password;
     let userType = request.body.usertype;
-
-    console.log("\n userId: " + userId);
-    console.log("\n userPwd: " + userPwd);
-    console.log("\n userType: " + userType);
-    console.log("\n---------------------------------------------------");
-
-    utils.enrollUser(userId, userPwd, userType).then(result => {
-        console.log("\n result from enrollUser = \n", result)
-        console.log("\n----------------- api/enrollUser --------------------------");
-        response.send(result);
-    }, error => {
-        console.log("\n Error returned from enrollUser: \n" + error);
-        console.log("\n----------------- api/enrollUser --------------------------");
-        response.status(500).send(error.toString());
+    //  retrieve username, password of the called from authorization header
+    getUsernamePassword(request).then(request => {
+        utils.enrollUser(request.username, request.password, userType).then(result => {
+            response.status(STATUS_SUCCESS);
+            response.send(result);
+        }, error => {
+            response.status(STATUS_CLIENT_ERROR);
+            response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+                "User, " + request.username + " could not be enrolled. Check that user is registered."));
+        });
+    }), (error => {
+        response.status(STATUS_CLIENT_ERROR);
+        response.send(prepareErrorResponse(error, INVALID_HEADER,
+            "Invalid header;  User, " + request.username + " could not be enrolled."));
     });
-
-});  //  post('/api/enroll-user/', (request, res) )
+});  //  post('/api/enroll-user/', (request, response) )
 
 //  Purpose:    To check if user is enrolled with Fabric CA;
 //  Input:  request.params.id = { userid }
@@ -356,82 +341,80 @@ supplychainRouter.route('/enroll-user/').post(function (request, response) {
 /*
 app.get('/api/is-user-enrolled/:id', (request, response) => {
 */
-supplychainRouter.route('/is-user-enrolled/:id').get(function (request, res) {
-    //  only admin can call this api;  get admin username and pwd from request header
+supplychainRouter.route('/is-user-enrolled/:id').get(function (request, response) {
+    //  only admin can call this api;  But this is not verified here
+    //  get admin username and pwd from request header
+    //
     getUsernamePassword(request)
         .then(request => {
             let userId = request.params.id;
-            console.log("\n userid: " + userId);
             utils.isUserEnrolled(userId).then(result => {
-                console.log("\n result from is-user-enrolled = \n", result)
-                //console.log("\n----------------- api/is-user-enrolled --------------------------");
-                res.send(result);
+                response.status(STATUS_SUCCESS);
+                response.send(result);
             }, error => {
-                console.log("\n Error returned from is-user-enrolled: \n" + error);
-                //console.log("\n----------------- api/is-user-enrolled --------------------------");
-                res.status(500).send(error.toString());
+                response.status(STATUS_CLIENT_ERROR);
+                response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+                  "Error checking enrollment for user, " + request.params.id));
             });
         }, ((error) => {
-            console.log('Error returned function is-user-enrolled:  ', error);
-            res.send(error);
+            response.status(STATUS_CLIENT_ERROR);
+            response.send(prepareErrorResponse(error, INVALID_HEADER,
+                "Invalid header; Error checking enrollment for user, " + request.params.id));
         }));
 })  //  end of is-user-enrolled
 
 //  Purpose: Get list of all users
 //  Output:  array of all registered users
 //  Usage:  ""
-//app.get('/api/users', (req, res) => {
-supplychainRouter.route('/users').get(function (request, res) {
+supplychainRouter.route('/users').get(function (request, response) {
     getUsernamePassword(request)
         .then(request => {
             utils.getAllUsers(request.username).then((result) => {
-                // process response
-                console.log('Process getAllUsers response');
-                result.errorcode = 0;
-                res.send(result);
+                response.status(STATUS_SUCCESS);
+                response.send(result);
             }, (error) => {
-                //  handle error if transaction failed
-                error.errorcode = 1;
-                console.log('Error returned function getAllUsers:  ', error);
-                res.send(error);
+                response.status(STATUS_SERVER_ERROR);
+                response.send(prepareErrorResponse (error, STATUS_SERVER_ERROR,
+                    "Problem getting list of users."));
             });
         }, ((error) => {
-            console.log('Error returned ', error.url);
-            res.send(error);
+            response.status(STATUS_CLIENT_ERROR);
+            response.send(prepareErrorResponse(error, INVALID_HEADER,
+                "Invalid header;  User, " + request.username + " could not be enrolled."));
         }));
 });
 
 supplychainRouter.route('/users/:id').get(function (request, response) {
-    //  only admin can call this api;  get admin username and pwd from request header
-
+    //  Get admin username and pwd from request header
+    //  Only admin can call this api; this is not verified here;
+    //  Possible future enhancement
     getUsernamePassword(request)
         .then(request => {
-            console.log ("In supplychainRouter.route('/users/:id').get")
-            utils.isUserEnrolled(request.params.id).then(result => {
-                if (result == true) {
-                    utils.getUser(request.params.id,request.username).then((res) => {
-                        // process response
-                        console.log('Process getUser response');
-                        res.errorcode = 0;
-                        response.send(res);
+            utils.isUserEnrolled(request.params.id).then(result1 => {
+                if (result1 == true) {
+                    utils.getUser(request.params.id, request.username).then((result2) => {
+                        response.status(STATUS_SUCCESS);
+                        response.send(result2);
                     }, (error) => {
-                        //  handle error if transaction failed
-                        error.errorcode = 1;
-                        console.log('Error returned from: ', error.url);
-                        response.send(error);
+                        response.status(STATUS_SERVER_ERROR);
+                        response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                            "Could not get user details for user, " + request.params.id));
                     });
                 } else {
-                    const errorStr = 'Problem getting details for userid '+request.params.id;
-                    response.send({errormessage:errorStr,errorcode:402});
+                    let error = {};
+                    response.status(STATUS_CLIENT_ERROR);
+                    response.send(prepareErrorResponse(error, USER_NOT_ENROLLED,
+                        "Verify if the user is registered and enrolled."));
                 }
             }, error => {
-                console.log("\n Error returned from is-user-enrolled: \n" + error);
-                //console.log("\n----------------- api/is-user-enrolled --------------------------");
-                response.status(500).send(error.toString());
+                response.status(STATUS_SERVER_ERROR);
+                response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                    "Problem checking for user enrollment."));
             });
         }, ((error) => {
-            console.log('Error returned ', error.url);
-            response.send(error);
+            response.status(STATUS_CLIENT_ERROR);
+            response.send(prepareErrorResponse(error, INVALID_HEADER,
+                "Invalid header;  User, " + request.params.id + " could not be enrolled."));
         }));
 });
 
