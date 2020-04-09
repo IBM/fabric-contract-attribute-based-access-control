@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component,Inject,Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService, UserService } from '../../_services/index';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, TooltipPosition } from '@angular/material';
@@ -11,8 +11,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   providers: [],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -26,22 +26,21 @@ export class OrdersTableComponent implements OnInit {
 
   @Input('regulator') regulator: boolean;
 
-  constructor(private api: ApiService, private user: UserService, private cd: ChangeDetectorRef, public dialog: MatDialog) { }
+  constructor(private api: ApiService, private user: UserService, private cd: ChangeDetectorRef, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.currentUser = this.user.getCurrentUser();
-    //console.log("currentUser: "+this.currentUser);
+    console.log("currentUser: "+this.currentUser);
     this.regulator = this.regulator !== undefined;
-    //console.log(`Regulator Boolean attribute is ${this.regulator ? '' : 'non-'}present!`);
+    console.log(`Regulator Boolean attribute is ${this.regulator ? '' : 'non-'}present!`);
 
     // Load up the Orders from backend
-    this.api.orders$.subscribe(currentOrders => {
+    this.api.orders$.subscribe ( currentOrders => {
       this.orders = new MatTableDataSource(currentOrders);
       this.cd.markForCheck();
     })
-    this.api.queryOrders();
+    this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
   }
-
   applyFilter(filterValue: string) {
     this.orders.filter = filterValue.trim().toLowerCase();
   }
@@ -50,43 +49,41 @@ export class OrdersTableComponent implements OnInit {
   acceptOrder(orderid) {
     this.api.id = orderid;
     this.api.receiveOrder().subscribe(api => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem accepting order: " + error['error']['message'])
+      alert ("Producer is having a problem accepting order: " + orderid)
     });
   }
 
   // create dialog with shipper select menu
-  chooseShipper(orderid) {
+  chooseShipper(orderid){
     let shippers = [];
     this.api.getAllUsers().subscribe(allUsers => {
-      //console.log(allUsers);
-      var userArray = Object.keys(allUsers).map(function (userIndex) {
-        let user = allUsers[userIndex];
-        // do something with person
-        return user;
+      console.log(allUsers);
+      var userArray = Object.keys(allUsers).map(function(userIndex){
+          let user = allUsers[userIndex];
+          // do something with person
+          return user;
       });
 
-      for (let u of userArray) {
-        if (u['usertype'] == "shipper") {
+      for(let u of userArray){
+        if(u['usertype'] == "shipper"){
           shippers.push(u);
         }
       }
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem choosing shipper: " + error['error']['message'])
+      console.log(error);
     });
 
     // Open ToShipper Dialog
     const dialogRef = this.dialog.open(ToShipperDialog, {
       disableClose: false,
       width: '600px',
-      data: { shippers: shippers }
+      data: {shippers: shippers}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if(result){
         this.assignShipper(orderid, result['id']);
       }
     });
@@ -97,10 +94,9 @@ export class OrdersTableComponent implements OnInit {
     this.api.id = orderid;
     this.api.shipperid = shipperid;
     this.api.assignShipper().subscribe(api => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem assigning shipper: " + error['error']['message'])
+      alert ("Producer is having a problem packaging items of order: " + orderid)
     });
   }
 
@@ -108,10 +104,9 @@ export class OrdersTableComponent implements OnInit {
   createShipment(orderid) {
     this.api.id = orderid;
     this.api.createShipment().subscribe(api => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem creating shipment: " + error['error']['message'])
+      alert ("Producer is having a problem creating shipment for order: " + orderid)
     });
   }
 
@@ -119,10 +114,9 @@ export class OrdersTableComponent implements OnInit {
   transportShipment(orderid) {
     this.api.id = orderid;
     this.api.transportShipment().subscribe(api => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem transporting shipment: " + error['error']['message'])
+      alert ("Producer is having a problem shipping shipment for order: " + orderid)
     });
   }
 
@@ -130,32 +124,30 @@ export class OrdersTableComponent implements OnInit {
   receiveShipment(orderid) {
     this.api.id = orderid;
     this.api.receiveShipment().subscribe(api => {
-      this.api.queryOrders();
+      this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
     }, error => {
-      console.log(JSON.stringify(error));
-      alert("Problem receiving shipment: " + error['error']['message'])
+      alert ("Problem receiving shipment")
     })
   }
 
   // delete order
-  deleteOrder(order) {
+  deleteOrder(order){
     // Open Tile Dialog
     const dialogRef = this.dialog.open(DeleteOrderDialog, {
       disableClose: false,
       width: '600px',
-      data: { order: order }
+      data: {order: order}
     });
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result) {
+      if(result){
         this.api.id = order.orderId;
         this.api.deleteOrder().subscribe(res => {
           console.log(res);
-          this.api.queryOrders();
+          this.api.queryOrders(this.currentUser.userid, this.currentUser.password);
         }, error => {
-          console.log(JSON.stringify(error));
-          alert("Problem deleting order: " + error['error']['message'])
+          console.log(error);
         });
       }
     });
@@ -182,16 +174,16 @@ export interface ShipperDialogData {
   templateUrl: './../dialogs/to-shipper-dialog.html',
   styleUrls: ['./orders-table.component.scss'],
 })
-
-export class ToShipperDialog implements OnInit {
+export class ToShipperDialog implements OnInit{
   model: any;
   constructor(
     public dialogRef: MatDialogRef<ToShipperDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: ShipperDialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: ShipperDialogData) {}
 
-  ngOnInit() {
+  ngOnInit(){
     this.model = {};
   }
+
 }
 
 export interface DeleteDialogData {
@@ -203,10 +195,10 @@ export interface DeleteDialogData {
   templateUrl: './../dialogs/delete-order-dialog.html',
   styleUrls: ['./orders-table.component.scss'],
 })
-
-export class DeleteOrderDialog {
+export class DeleteOrderDialog{
   model: any;
   constructor(
     public dialogRef: MatDialogRef<DeleteOrderDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DeleteDialogData) {}
+
 }
