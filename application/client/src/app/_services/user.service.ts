@@ -28,7 +28,9 @@ export class UserService {
     //   usertype: "admin"
     // }
     let user = localStorage.getItem('currentUser');
-    if (user){
+    if(user){
+      // For debugging:
+      // console.log("user: " + user);
       this.currentUser = JSON.parse(user);
     }
   }
@@ -37,12 +39,12 @@ export class UserService {
     this.currentUser = user;
   }
 
-  getCurrentUser() {
-    //console.log("in getCurrentUser, this.currentUser: " + this.currentUser.userid);
+  getCurrentUser(){
+    console.log("in getCurrentUser, this.currentUser: " + this.currentUser.userid);
     return this.currentUser;
   }
 
-  clearCurrentUser() {
+  clearCurrentUser(){
     this.currentUser = null;
   }
 }
