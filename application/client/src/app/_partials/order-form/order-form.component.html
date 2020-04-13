@@ -39,5 +39,9 @@
       <input type="submit" style="width:100%" value="Create Order" class="form-button">
 
     </form>
+    <div *ngIf="submitted" class="results">
+        <p *ngIf="success; else elseBlock">Order Created Successfully!</p>
+        <ng-template #elseBlock></ng-template>
+      </div>
   </div>
 </div>

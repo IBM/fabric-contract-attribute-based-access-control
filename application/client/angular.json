@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pubnubapp": {
+    "genericapp": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pubnubapp",
+            "outputPath": "dist/genericapp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pubnubapp:build"
+            "browserTarget": "genericapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pubnubapp:build:production"
+              "browserTarget": "genericapp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pubnubapp:build"
+            "browserTarget": "genericapp:build"
           }
         },
         "test": {
@@ -108,7 +108,7 @@
         }
       }
     },
-    "pubnubapp-e2e": {
+    "genericapp-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -117,11 +117,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "pubnubapp:serve"
+            "devServerTarget": "genericapp:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "pubnubapp:serve:production"
+              "devServerTarget": "genericapp:serve:production"
             }
           }
         },
@@ -137,5 +137,5 @@
       }
     }
   },
-  "defaultProject": "pubnubapp"
+  "defaultProject": "genericapp"
 }

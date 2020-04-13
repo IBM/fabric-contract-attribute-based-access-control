@@ -24,9 +24,9 @@ export class EnrollComponent{
       alert("Enrollment was successful. User can log in to be taken to their portal.");
       this.router.navigate(['/login']);
     }, error => {
-      console.log(error);
       this.loading = false;
-      alert("Something went wrong and we were unable to enroll you correctly." + '\n \n' + "Please be sure that an app administrater has registered you in our blockchain app first BEFORE enrolling.");
+      console.log(JSON.stringify(error));
+      alert("Enrollment failed: " + error['error']['message']);
     });
   }
 }
