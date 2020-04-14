@@ -31,79 +31,75 @@ Navigate to `http://localhost:$PORT`
 
 The following are the supporteed APIs for this application:
 
+NOTE: To create header token for a user issue the command 
+```
+echo -n "userid:userpwd" | base64
+```
 #### User Management:
-Register a user with the Certificate Authority:
+As 'admin:adminpw', register 'Walmart:Walmart' retailer with the Certificate Authority:
 ```
-curl -X POST "http://localhost:${PORT}/api/register-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"<userid>\",\"password\":\"<password>\",\"usertype\":\"<usertype>\"}"
+curl -X POST "http://localhost:${PORT}/api/register-user" -H "authorization: Basic YWRtaW46YWRtaW5wdw==" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"Walmart\",\"password\":\"Walmart\",\"usertype\":\"retailer\"}"
 ```
-Enroll a user into wallet:
+As retailer 'Walmart:Walmart' enroll into wallet:
 ```
-curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"userid\":\"<userid>\",\"password\":\"<password>\",\"usertype\":\"<usertype>\"}"
+curl -X POST "http://localhost:${PORT}/api/enroll-user" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"usertype\":\"retailer\"}"
 ```
-Log in as a specific user (must be registered and enrolled):
+As 'admin:adminpw', get all registered users:
 ```
-curl -X GET "http://localhost:${PORT}/api/login?userid=Walmart&password=Walmart"
+curl -X GET -H "authorization: Basic YWRtaW46YWRtaW5wdw==" "http://localhost:${PORT}/api/users/" 
 ```
-Get current user:
+As 'admin:adminpw', determine if a user is enrolled
 ```
-curl -X GET "http://localhost:${PORT}/api/current-user/" 
-```
-Get all registered users:
-```
-curl -X GET "http://localhost:${PORT}/api/users/" 
-```
-Determine if a user is enrolled
-```
-curl -X GET "http://localhost:${PORT}/api/is-user-enrolled/<userid>"
+curl -X GET -H "authorization: Basic YWRtaW46YWRtaW5wdw==" "http://localhost:${PORT}/api/is-user-enrolled/Walmart"
 ```
 #### Order Management:
-Create an order, status is set to ORDER_CREATED:
+As retailer 'Walmart:Walmart', create an order which sets status to ORDER_CREATED:
 ```
-curl -X POST "http://localhost:${PORT}/api/orders/" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"orderId\":\"order-0001\",\"productId\":\"tomato\",\"price\":3,\"quantity\":10,\"producerId\":\"GHFarm\",\"retailerId\":\"Walmart\"}"
+curl -X POST "http://localhost:${PORT}/api/orders/" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" -H "accept: application/json" -H "Content-Type: application/json" -d "{\"orderId\":\"order-0001\",\"productId\":\"tomato\",\"price\":3,\"quantity\":10,\"producerId\":\"ABFarm\",\"retailerId\":\"Walmart\"}"
 ```
-Get details of a specific order:
+As retailer 'Walmart:Walmart', get details of a specific order:
 ```
-curl -X GET "http://localhost:${PORT}/api/orders/order-0001"
+curl -X GET "http://localhost:${PORT}/api/orders/order-0001" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" 
 ```
-Get all orders associated with current user:
+As retailer 'Walmart:Walmart', get all orders associated with current user:
 ```
-curl -X GET "http://localhost:${PORT}/api/orders"
+curl -X GET "http://localhost:${PORT}/api/orders" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" 
 ```
-Get all orders associated with specific user:
+As retailer 'Walmart:Walmart', get all orders associated with 'Walmart:Walmart':
 ```
-curl -X GET "http://localhost:${PORT}/api/orders?userid=HEB&password=HEB"
+curl -X GET "http://localhost:${PORT}/api/orders?userid=Walmart&password=Walmart" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" 
 ```
-Get order transaction history:
+As retailer 'Walmart:Walmart', get order transaction history:
 ```
-curl -X GET "http://localhost:${PORT}/api/orders-history/order-0001"
+curl -X GET "http://localhost:${PORT}/api/orders-history/order-0001" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0" 
 ```
-Change order status to ORDER_RECEIVED:
+As producer 'ABFarm:ABFarm', change order status to ORDER_RECEIVED:
 ```
-curl -X PUT "http://localhost:${PORT}/api/receive-order/order-0001"
+curl -X PUT "http://localhost:${PORT}/api/receive-order/order-0001" -H "authorization: Basic QUJGYXJtOkFCRmFybQ==" 
 ```
-Assign to a Shipper, status is changed to SHIPMENT_ASSIGNED:
+As producer 'ABFarm:ABFarm', assign to a Shipper, status is changed to SHIPMENT_ASSIGNED:
 ```
-curl -X PUT "http://localhost:${PORT}/api/assign-shipper/order-0001?shipperid=Fedex" 
+curl -X PUT "http://localhost:${PORT}/api/assign-shipper/order-0001?shipperid=Fedex" -H "authorization: Basic QUJGYXJtOkFCRmFybQ==" 
 ```
-Create a shipment for order (assign a tracking #), status is changed to SHIPMENT_CREATED:
+As shipper 'Fedex:Fedex', create a shipment for order (assign a tracking #), status is changed to SHIPMENT_CREATED:
 ```
-curl -X PUT "http://localhost:${PORT}/api/create-shipment-for-order/order-0001" 
+curl -X PUT "http://localhost:${PORT}/api/create-shipment-for-order/order-0001" -H "authorization: Basic RmVkZXg6RmVkZXg=" 
 ```
-Change order status to SHIPMENT_IN_TRANSIT:
+As shipper 'Fedex:Fedex', change order status to SHIPMENT_IN_TRANSIT:
 ```
-curl -X PUT "http://localhost:${PORT}/api/transport-shipment/order-0001" 
+curl -X PUT "http://localhost:${PORT}/api/transport-shipment/order-0001" -H "authorization: Basic RmVkZXg6RmVkZXg=" 
 ```
-Change order status to SHIPMENT_RECEIVED:
+As retailer 'Walmart:Walmart', change order status to SHIPMENT_RECEIVED:
 ```
-curl -X PUT "http://localhost:${PORT}/api/receive-shipment/order-0001" 
+curl -X PUT "http://localhost:${PORT}/api/receive-shipment/order-0001" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0"  
 ```
-Delete order:
+As retailer 'Walmart:Walmart', delete order:
 ```
-curl -X DELETE "http://localhost:${PORT}/api/orders/order-0001" 
+curl -X DELETE "http://localhost:${PORT}/api/orders/order-0001" -H "authorization: Basic V2FsbWFydDpXYWxtYXJ0"  
 ```
 
 ## Testcase scenario
 
 A test case scenario that runs through the process is available at 
-https://github.ibm.com/customer-success/Blockchain-GenSupplyChain/blob/master/scripts/testcase.sh
+https://github.com/IBM/fabric-contract-attribute-based-access-control/blob/master/scripts/testcase.sh
 
