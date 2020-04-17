@@ -26,6 +26,26 @@ const SUCCESS = 0;
 const utils = {};
 
 // Main program function
+
+utils.prepareErrorResponse = (error, code, message) => {
+
+    let errorMsg;
+    try {
+        // Pull specific fabric transaction error message out of error stack
+        let entries = Object.entries(error);
+        errorMsg = entries[0][1][0]["message"];
+    } catch (exception) {
+        // Error wasn't sent from fabric, so can't pull error out.
+        errorMsg = null;
+    }
+
+    let result = { "code": code, "message": errorMsg?errorMsg:message, "error": error };
+    console.log("supplychain.js:prepareErrorResponse(): " + message);
+    console.log(result);
+    return result;
+}
+
+
 utils.connectGatewayFromConfig = async () => {
     console.log(">>>connectGatewayFromConfig:  ");
 
