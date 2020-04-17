@@ -44,7 +44,7 @@ export class LoginComponent {
       }
     }, error => {
       console.log(JSON.stringify(error));
-      alert("Login failed: " + error['error']['message']);
+      alert("Login failed: ");
       this.loading = false;
     });
   }

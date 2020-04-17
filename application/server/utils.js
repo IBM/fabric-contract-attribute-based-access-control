@@ -40,7 +40,7 @@ utils.prepareErrorResponse = (error, code, message) => {
     }
 
     let result = { "code": code, "message": errorMsg?errorMsg:message, "error": error };
-    console.log("supplychain.js:prepareErrorResponse(): " + message);
+    console.log("utils.js:prepareErrorResponse(): " + message);
     console.log(result);
     return result;
 }
