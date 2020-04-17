@@ -23,13 +23,13 @@ export class AuthService {
   register(user){
     let headers = new HttpHeaders();
     headers = headers.append('Authorization', 'Basic ' + btoa('admin:adminpw')); 
-    return this.httpClient.post(this.baseUrl + '/api/register-user', user, {headers:headers});
+    return this.httpClient.post(this.baseUrl + '/api/register-user', user, {headers:headers,responseType:'text'});
   }
 
   enroll(user){
     let headers = new HttpHeaders();
     headers = headers.append('Authorization', 'Basic ' + btoa(user.userid+':'+user.password)); 
-    return this.httpClient.post(this.baseUrl + '/api/enroll-user', {usertype:user.usertype}, {headers:headers});
+    return this.httpClient.post(this.baseUrl + '/api/enroll-user', {usertype:user.usertype}, {headers:headers,responseType:'text'});
   }
 
   logout() {
