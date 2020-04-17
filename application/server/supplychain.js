@@ -23,24 +23,6 @@ const INVALID_HEADER = 1001;
 const SUCCESS = 0;
 const ORDER_NOT_FOUND = 2000;
 
-function prepareErrorResponse(error, code, message) {
-
-    let errorMsg;
-    try {
-        // Pull specific fabric transaction error message out of error stack
-        let entries = Object.entries(error);
-        errorMsg = entries[0][1][0]["message"];
-    } catch (exception) {
-        // Error wasn't sent from fabric, so can't pull error out.
-        errorMsg = null;
-    }
-
-    let result = { "code": code, "message": errorMsg?errorMsg:message, "error": error };
-    console.log("supplychain.js:prepareErrorResponse(): " + message);
-    console.log(result);
-    return result;
-}
-
 async function getUsernamePassword(request) {
     // check for basic auth header
     if (!request.headers.authorization || request.headers.authorization.indexOf('Basic ') === -1) {
@@ -106,7 +88,7 @@ supplychainRouter.route('/orders').get(function (request, response) {
             response.send(orders);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem getting the list of orders."));
         });
 });  //  process route orders/
@@ -121,7 +103,7 @@ supplychainRouter.route('/orders/:id').get(function (request, response) {
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, ORDER_NOT_FOUND,
+            response.send(utils.prepareErrorResponse(error, ORDER_NOT_FOUND,
                 'Order id, ' + request.params.id +
                 ' does not exist or the user does not have access to order details at this time.'));
         });
@@ -138,7 +120,7 @@ supplychainRouter.route('/orders').post(function (request, response) {
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem placing the order."));
         });
 });
@@ -154,7 +136,7 @@ supplychainRouter.route('/order-history/:id').get(function (request, response) {
             response.send(orderHistoryResponse);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem fetching history for order, ", request.params.id));
         });
 });
@@ -171,7 +153,7 @@ supplychainRouter.route('/receive-order/:id').put(function (request, response) {
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem in receiving order, ", request.params.id));
         });
 
@@ -188,7 +170,7 @@ supplychainRouter.route('/assign-shipper/:id').put(function (request, response) 
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem in assigning shipper for order, ", request.params.id));
         });
 });  //  process route /
@@ -204,7 +186,7 @@ supplychainRouter.route('/create-shipment-for-order/:id').put(function (request,
           response.send(order);
       }, (error) => {
           response.status(STATUS_SERVER_ERROR);
-          response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+          response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
               "There was a problem in creating shipment for order," + request.params.id));
       });
 });  //  process route /
@@ -220,7 +202,7 @@ supplychainRouter.route('/transport-shipment/:id').put(function (request, respon
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem in initiating shipment for order," + request.params.id));
         });
 });  //  process route /
@@ -237,7 +219,7 @@ supplychainRouter.route('/receive-shipment/:id').put(function (request, response
             response.send(order);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem in receiving shipment for order," + request.params.id));
         });
 });
@@ -255,7 +237,7 @@ supplychainRouter.route('/orders/:id').delete(function (request, response) {
             response.send(deleteOrderResponse);
         }, (error) => {
             response.status(STATUS_SERVER_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                 "There was a problem in deleting order, " + request.params.id));
         });
 });
@@ -293,18 +275,18 @@ supplychainRouter.route('/register-user').post(function (request, response) {
                         response.send(result);
                     }, (error) => {
                         response.status(STATUS_CLIENT_ERROR);
-                        response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+                        response.send(utils.prepareErrorResponse(error, STATUS_CLIENT_ERROR,
                             "User, " + userId + " could not be registered. "
                             + "Verify if calling identity has admin privileges."));
                     });
             }, error => {
                 response.status(STATUS_CLIENT_ERROR);
-                response.send(prepareErrorResponse(error, INVALID_HEADER,
+                response.send(utils.prepareErrorResponse(error, INVALID_HEADER,
                     "Invalid header;  User, " + userId + " could not be registered."));
             });
     } catch (error) {
         response.status(STATUS_SERVER_ERROR);
-        response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+        response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
             "Internal server error; User, " + userId + " could not be registered."));
     }
 });  //  process route register-user
@@ -324,12 +306,12 @@ supplychainRouter.route('/enroll-user/').post(function (request, response) {
             response.send(result);
         }, error => {
             response.status(STATUS_CLIENT_ERROR);
-            response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+            response.send(utils.prepareErrorResponse(error, STATUS_CLIENT_ERROR,
                 "User, " + request.username + " could not be enrolled. Check that user is registered."));
         });
     }), (error => {
         response.status(STATUS_CLIENT_ERROR);
-        response.send(prepareErrorResponse(error, INVALID_HEADER,
+        response.send(utils.prepareErrorResponse(error, INVALID_HEADER,
             "Invalid header;  User, " + request.username + " could not be enrolled."));
     });
 });  //  post('/api/enroll-user/', (request, response) )
@@ -353,12 +335,12 @@ supplychainRouter.route('/is-user-enrolled/:id').get(function (request, response
                 response.send(result);
             }, error => {
                 response.status(STATUS_CLIENT_ERROR);
-                response.send(prepareErrorResponse(error, STATUS_CLIENT_ERROR,
+                response.send(utils.prepareErrorResponse(error, STATUS_CLIENT_ERROR,
                   "Error checking enrollment for user, " + request.params.id));
             });
         }, ((error) => {
             response.status(STATUS_CLIENT_ERROR);
-            response.send(prepareErrorResponse(error, INVALID_HEADER,
+            response.send(utils.prepareErrorResponse(error, INVALID_HEADER,
                 "Invalid header; Error checking enrollment for user, " + request.params.id));
         }));
 })  //  end of is-user-enrolled
@@ -374,12 +356,12 @@ supplychainRouter.route('/users').get(function (request, response) {
                 response.send(result);
             }, (error) => {
                 response.status(STATUS_SERVER_ERROR);
-                response.send(prepareErrorResponse (error, STATUS_SERVER_ERROR,
+                response.send(utils.prepareErrorResponse (error, STATUS_SERVER_ERROR,
                     "Problem getting list of users."));
             });
         }, ((error) => {
             response.status(STATUS_CLIENT_ERROR);
-            response.send(prepareErrorResponse(error, INVALID_HEADER,
+            response.send(utils.prepareErrorResponse(error, INVALID_HEADER,
                 "Invalid header;  User, " + request.username + " could not be enrolled."));
         }));
 });
@@ -397,23 +379,23 @@ supplychainRouter.route('/users/:id').get(function (request, response) {
                         response.send(result2);
                     }, (error) => {
                         response.status(STATUS_SERVER_ERROR);
-                        response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                        response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                             "Could not get user details for user, " + request.params.id));
                     });
                 } else {
                     let error = {};
                     response.status(STATUS_CLIENT_ERROR);
-                    response.send(prepareErrorResponse(error, USER_NOT_ENROLLED,
+                    response.send(utils.prepareErrorResponse(error, USER_NOT_ENROLLED,
                         "Verify if the user is registered and enrolled."));
                 }
             }, error => {
                 response.status(STATUS_SERVER_ERROR);
-                response.send(prepareErrorResponse(error, STATUS_SERVER_ERROR,
+                response.send(utils.prepareErrorResponse(error, STATUS_SERVER_ERROR,
                     "Problem checking for user enrollment."));
             });
         }, ((error) => {
             response.status(STATUS_CLIENT_ERROR);
-            response.send(prepareErrorResponse(error, INVALID_HEADER,
+            response.send(utils.prepareErrorResponse(error, INVALID_HEADER,
                 "Invalid header;  User, " + request.params.id + " could not be enrolled."));
         }));
 });
