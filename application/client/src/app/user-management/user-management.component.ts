@@ -17,6 +17,7 @@ export class UserManagementComponent implements OnInit{
 
   newUserForm: FormGroup;
   submitted = false;
+  success = false;
 
   allUsers: MatTableDataSource<EditUser[]>;
   columnsToDisplay = ['id', 'usertype', 'enrolled'];
@@ -35,9 +36,6 @@ export class UserManagementComponent implements OnInit{
 
     // get all users
     this.loadUserList(0);
-    
-    // First time around, don't want error message to appear
-    if (!this.newUser) { this.newUser = {errorCode:1};}
   }
 
   onSubmit(){
@@ -47,9 +45,9 @@ export class UserManagementComponent implements OnInit{
       return;
     }
 
-    if(this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
+    if (this.newUserForm.controls.password.value != this.newUserForm.controls.confirm_password.value){
       console.log("the passwords don't match");
-      this.newUser = {errorCode:0};
+      this.success = false;
       return;
     }
 
@@ -59,15 +57,14 @@ export class UserManagementComponent implements OnInit{
       usertype: this.newUserForm.controls.usertype.value,
     }
 
+    console.log(user);
     this.auth.register(user).subscribe(res => {
-      console.log (res);
-      // this.newUser = res;
+      console.log(JSON.stringify(res));
+      this.success = true;
     }, error => {
-      console.log(error)
-      alert ("Problem creating User")
+      console.log(JSON.stringify(error));
+      this.success = false;
     })
-
-    if (!this.newUser) { this.newUser = {errorCode:0}; }
   }
 
   loadUserList(tab) {
@@ -78,19 +75,20 @@ export class UserManagementComponent implements OnInit{
           // do something with person
           return user;
         });
+        //console.log(userArray);
         for (let user of userArray) {
           this.api.id = user.id;
           this.api.isUserEnrolled().subscribe(res => {
             // NOTE: adding a new user attribute called enrolled
             user.enrolled = res;
           }, error => {
-            console.log(error);
+            console.log(JSON.stringify(error));
           });
         }
         this.allUsers = new MatTableDataSource(userArray);
       }, error => {
-        console.log(error);
-        alert("Problem loading user list.")
+        console.log(JSON.stringify(error));
+        alert("Problem loading user list: " + error['error']['message']);
       });
     }
   }

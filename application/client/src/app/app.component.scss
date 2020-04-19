@@ -15,7 +15,15 @@ header {
     background-color: $dark-grey;
     color: white;
   }
+  a {
+    color: white;
+  }
+  /* mouse over link */
+  a:hover {
+    color: $cool-teal;
+  }
 }
+
 .nav-button{
   background: $bright-green;
   margin: 8px !important;
