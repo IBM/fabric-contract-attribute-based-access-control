@@ -71,7 +71,7 @@ The value of running this network on the IBM Blockchain Platform is that one can
 ## Prerequisites (Local)
 If you want to run this pattern locally, without any Cloud services, then all you need is VSCode and the
 IBM Blockchain Platform extension. 
-- [Install VSCode version 1.38.0 or greater](https://code.visualstudio.com/download)
+- [Install VSCode version 1.39](https://code.visualstudio.com/download)
 - [Install IBM Blockchain Platform Extension for VSCode](https://github.com/IBM-Blockchain/blockchain-vscode-extension)
 - [Node v8.x or greater and npm v5.x or greater](https://nodejs.org/en/download/)
 # Steps (Cloud Deployment)
