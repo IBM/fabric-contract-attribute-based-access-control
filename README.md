@@ -1,3 +1,7 @@
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. I will check periodically for pull requests, but do not expect a quick response. 
+
 # Implement attribute based access control to provide end to end visibility into the supply chain history of a particular product 
 ![appDemo](https://media.github.ibm.com/user/79254/files/07a8c100-6786-11ea-91bb-b87d07dc71b7)
 
