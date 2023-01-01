@@ -9,7 +9,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "config": "^2.0.1",
+    "config": "^3.3.8",
     "cors": "^2.8.5",
     "express": "~4.16.0",
     "fabric-ca-client": "1.4.0",
