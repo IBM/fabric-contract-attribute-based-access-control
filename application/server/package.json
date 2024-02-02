@@ -11,7 +11,7 @@
   "dependencies": {
     "config": "^2.0.1",
     "cors": "^2.8.5",
-    "express": "~4.16.0",
+    "express": "~4.18.2",
     "fabric-ca-client": "1.4.0",
     "fabric-client": "1.4.0",
     "fabric-network": "1.4.0",
